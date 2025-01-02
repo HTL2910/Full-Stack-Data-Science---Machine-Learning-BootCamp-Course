@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Fare Prediction</title>
+</head>
+<body>
+    <h1>Flight Fare Prediction</h1>
+    <form action="/predict" method="post">
+        <label for="Dep_Time">Departure Time:</label>
+        <input type="datetime-local" id="Dep_Time" name="Dep_Time" required>
+        <br>
+        <label for="Arrival_Time">Arrival Time:</label>
+        <input type="datetime-local" id="Arrival_Time" name="Arrival_Time" required>
+        <br>
+        <label for="stops">Total Stops:</label>
+        <input type="number" id="stops" name="stops" required>
+        <br>
+        <label for="airline">Airline:</label>
+        <select id="airline" name="airline" required>
+            <option value="Jet Airways">Jet Airways</option>
+            <option value="IndiGo">IndiGo</option>
+            <option value="Air India">Air India</option>
+            <!-- Thêm các hãng hàng không khác tại đây -->
+        </select>
+        <br>
+        <label for="Source">Source:</label>
+        <select id="Source" name="Source" required>
+            <option value="Delhi">Delhi</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Chennai">Chennai</option>
+        </select>
+        <br>
+        <label for="Destination">Destination:</label>
+        <select id="Destination" name="Destination" required>
+            <option value="Cochin">Cochin</option>
+            <option value="Delhi">Delhi</option>
+            <option value="New_Delhi">New Delhi</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Kolkata">Kolkata</option>
+        </select>
+        <br>
+        <button type="submit">Predict Fare</button>
+    </form>
+
+    {% if prediction_text %}
+        <h2>{{ prediction_text }}</h2>
+    {% endif %}
+</body>
+</html>
