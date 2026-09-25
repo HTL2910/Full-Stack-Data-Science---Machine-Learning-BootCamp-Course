@@ -143,7 +143,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; l
 /* Layout */
 .layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 36px; padding-block: 12px 60px; }
 @media (max-width: 960px) { .layout { grid-template-columns: minmax(0, 1fr); } }
-.sidenav { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 70px); align-self: start; max-height: calc(100vh - 90px); overflow-y: auto; padding-right: 6px; font-size: 13.5px; }
+.sidenav { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 122px); align-self: start; max-height: calc(100vh - 140px); overflow-y: auto; padding-right: 6px; font-size: 13.5px; }
 @media (max-width: 960px) { .sidenav { display: none; } }
 .sidenav h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-family: var(--f-body); margin: 0 0 10px; }
 .sidenav ol { list-style: none; margin: 0; padding: 0; }
@@ -171,7 +171,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; l
 .empty { padding: 30px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 12px; }
 
 /* Stage */
-.stage { margin-bottom: 44px; scroll-margin-top: 80px; }
+.stage { margin-bottom: 44px; scroll-margin-top: 130px; }
 .stage-head { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; align-items: start; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
 .stage-no { grid-row: span 3; width: 46px; height: 46px; border-radius: 50%; border: 5px solid var(--tc); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 17px; font-variant-numeric: tabular-nums; background: var(--surface); }
 .stage-head h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 700; line-height: 1.2; }
@@ -185,7 +185,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; l
 
 /* Module card */
 .mods { display: grid; gap: 10px; }
-.mod { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; scroll-margin-top: 80px; position: relative; }
+.mod { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; scroll-margin-top: 130px; position: relative; }
 .mod::before { content: ""; position: absolute; left: -1px; top: 16px; width: 4px; height: 22px; border-radius: 0 3px 3px 0; background: var(--tc); }
 .mod.open { box-shadow: var(--shadow); }
 .mod-head { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px 14px 20px; }
@@ -235,7 +235,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; l
 .res a::after { content: " ↗"; font-size: 11px; }
 
 /* Guide table */
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 44px; scroll-margin-top: 80px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-block: 24px 32px; scroll-margin-top: 130px; }
 .panel h2 { font-size: 24px; margin-bottom: 4px; }
 .panel > p { color: var(--ink-2); margin: 0 0 14px; }
 .table-wrap { overflow-x: auto; }
@@ -419,6 +419,104 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
 .ai-col.decide { --k: var(--ink); }
 @media print { .quiz-btns { display: none; } .quiz-res[hidden] { display: block !important; } }
 
+/* Nhánh nghề */
+.fam-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 900px) { .fam-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .fam-grid { grid-template-columns: minmax(0, 1fr); } }
+.fam-card { text-align: left; border: 1px solid var(--line); border-top: 4px solid var(--tc); border-radius: 10px; padding: 12px 14px; background: var(--surface); cursor: pointer; display: flex; flex-direction: column; gap: 4px; font: inherit; color: var(--ink); }
+.fam-card:hover { border-color: var(--tc); }
+.fam-card[aria-pressed="true"] { box-shadow: var(--shadow); background: var(--surface-2); }
+.fam-card b { font-family: var(--f-display); font-size: 16px; }
+.fam-card span { font-size: 13.5px; color: var(--ink-2); }
+.fam-card small { font-size: 12px; color: var(--muted); }
+.branch-table tr.is-sel td { background: var(--surface-2); }
+.branch-table tr.is-dim { opacity: .45; }
+.linkish { background: none; border: 0; padding: 0; font: inherit; font-weight: 600; color: var(--accent); cursor: pointer; text-align: left; display: inline-flex; gap: 6px; align-items: center; }
+.linkish i, .br-chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--tc); flex: none; }
+.br-chip { display: inline-flex; align-items: center; gap: 6px; }
+.br-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.dots3 { display: inline-flex; gap: 3px; vertical-align: middle; }
+.dots3 b { width: 8px; height: 8px; border-radius: 50%; background: var(--line); display: block; }
+.dots3 b.on { background: var(--ink-2); }
+.br-card { border: 1px solid var(--line); border-top: 5px solid var(--tc); border-radius: 12px; padding: 16px 18px 18px; background: var(--surface); }
+.br-card h4 { font-family: var(--f-body); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; margin: 18px 0 8px; }
+.br-card p { margin: 0; max-width: 80ch; }
+.br-top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.br-top h3 { font-size: 24px; margin: 2px 0 6px; }
+.br-top p { color: var(--ink-2); }
+.br-fam { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--tc); }
+.br-actions { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
+.br-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; margin: 14px 0 0; }
+@media (max-width: 900px) { .br-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.br-facts dt { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.br-facts dd { margin: 2px 0 0; font-size: 14px; }
+.br-progress { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; font-size: 13.5px; color: var(--ink-2); }
+.br-progress .progress { margin: 0; width: 200px; }
+.br-legend { font-size: 12.5px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 8px !important; }
+.mchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mchip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; padding: 3px 10px; border-radius: 999px; text-decoration: none; color: var(--ink); border: 1px solid var(--line); }
+.mchip.core { border-color: var(--tc, var(--accent)); font-weight: 600; }
+.mchip.useful { border-style: dashed; color: var(--ink-2); }
+.mchip i { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--sc, var(--muted)); }
+.mchip[data-status="doing"] i, .mchip[data-status="done"] i, .mchip[data-status="review"] i { background: var(--sc); }
+.br-tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 700px) { .br-tools { grid-template-columns: minmax(0, 1fr); } }
+.tools.churn span { border: 1px dashed var(--line); background: transparent; }
+.br-cases { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+.br-cases a { font-size: 12.5px; white-space: nowrap; }
+.br-filter { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.br-filter select { font: inherit; font-size: 13px; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); max-width: 220px; }
+.br-badge:empty { display: none; }
+.br-badge { font-weight: 600; font-size: 11.5px; border-radius: 999px; padding: 0 8px; border: 1px solid var(--accent); color: var(--accent); }
+.br-badge[data-role="useful"] { border-style: dashed; color: var(--muted); border-color: var(--muted); }
+
+
+/* Tab chính */
+.tabbar { border-top: 1px solid var(--line); }
+.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-block: 0; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: none; background: none; border: 0; border-bottom: 3px solid transparent; padding: 11px 14px 9px; font: inherit; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+[data-panel] { min-height: 60vh; }
+[data-panel="roadmap"] .layout { padding-block: 24px 60px; }
+
+/* Trang tổng quan */
+.start { padding-block: 4px 8px; }
+.start-h { font-size: 22px; margin-bottom: 12px; }
+.start-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .start-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .start-grid { grid-template-columns: minmax(0, 1fr); } }
+.start-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid var(--line); border-left: 4px solid var(--tc); border-radius: 12px; background: var(--surface); text-decoration: none; color: var(--ink); }
+.start-card:hover { box-shadow: var(--shadow); }
+.start-card b { font-family: var(--f-display); font-size: 17px; }
+.start-card span { font-size: 14px; color: var(--ink-2); }
+
+/* Tab con */
+.subtabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.subtab { border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 13.5px; cursor: pointer; }
+.subtab:hover { border-color: var(--muted); color: var(--ink); }
+.subtab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.mod-tabs { margin: 14px 0 12px; }
+.mod-tabs .subtab { font-size: 13px; padding: 5px 12px; }
+.subpanel > h4:first-child, .subpanel > .sub-h:first-child { margin-top: 0; }
+
+/* Chọn giai đoạn */
+.stage-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 18px; scrollbar-width: thin; }
+.stab { flex: none; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 10px; font: inherit; font-size: 13px; color: var(--ink-2); cursor: pointer; max-width: 220px; }
+.stab i { width: 8px; height: 8px; border-radius: 50%; background: var(--tc, var(--muted)); flex: none; }
+.stab b { font-family: var(--f-display); font-variant-numeric: tabular-nums; }
+.stab span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stab small { color: var(--muted); font-variant-numeric: tabular-nums; }
+.stab[aria-selected="true"] { border-color: var(--tc, var(--ink)); background: var(--surface-2); color: var(--ink); box-shadow: inset 0 -3px 0 var(--tc, var(--ink)); }
+.stage-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.stage-nav:empty { display: none; }
+
+@media print {
+  .tabbar, .subtabs, .stage-tabs, .stage-nav, .start { display: none !important; }
+  [data-panel][hidden], [data-subpanel][hidden], .stage[hidden] { display: block !important; }
+}
+
 </style>
 
 <header class="topbar">
@@ -436,13 +534,15 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
       <span>Xuất PDF</span>
     </button>
   </div>
+<nav class="tabbar" aria-label="Các phần của trang"><div class="wrap tabs" role="tablist"><button class="tab" type="button" role="tab" data-tab="home" aria-selected="true">Tổng quan</button><button class="tab" type="button" role="tab" data-tab="ai" aria-selected="false">Làm chủ AI</button><button class="tab" type="button" role="tab" data-tab="branches" aria-selected="false">Nhánh nghề</button><button class="tab" type="button" role="tab" data-tab="learn" aria-selected="false">Học từ đầu</button><button class="tab" type="button" role="tab" data-tab="roadmap" aria-selected="false">Lộ trình</button><button class="tab" type="button" role="tab" data-tab="guide" aria-selected="false">Chọn thuật toán</button><button class="tab" type="button" role="tab" data-tab="apps" aria-selected="false">Ứng dụng thực tế</button><button class="tab" type="button" role="tab" data-tab="refs" aria-selected="false">Nguồn</button></div></nav>
 </header>
 
 <main id="top">
+  <div data-panel="home">
   <section class="hero wrap">
     <div class="eyebrow">Full Stack Data Science &amp; Machine Learning BootCamp</div>
     <h1>Lộ trình Data Science &amp; Machine Learning</h1>
-    <p class="lede">Hiểu đủ nền tảng để dùng AI viết code đúng hướng: giao việc rõ ràng, tự kiểm chứng, ra quyết định và phản biện được đề xuất của AI. Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đã áp dụng nó ra sao, kèm số liệu, nguồn và cả những thất bại. Phần lớn chủ đề có sơ đồ luồng hoặc sequence diagram để thấy các bước và các bên tương tác. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
+    <p class="lede">Hiểu đủ nền tảng để dùng AI viết code đúng hướng: giao việc rõ ràng, tự kiểm chứng, ra quyết định và phản biện được đề xuất của AI. Từ toán và Python đến mô hình, LLM và triển khai. Mỗi phần nằm trong một tab riêng: chọn tab ở thanh trên để đi thẳng tới phần bạn cần.</p>
     <div class="stats">
       <div class="stat"><b id="stat-stages">0</b><span>giai đoạn</span></div>
       <div class="stat"><b id="stat-mods">0</b><span>chủ đề</span></div>
@@ -452,30 +552,35 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
     <div class="status-counts" id="status-counts" aria-label="Số chủ đề theo trạng thái"></div>
     <div class="hero-actions">
       <a class="btn primary" id="next-btn" href="#s0">Bắt đầu</a>
-      <a class="btn" href="#ai">Học để làm chủ AI</a>
-      <a class="btn" href="#learn">Hướng dẫn học từ đầu</a>
-      <a class="btn" href="#overview">Sơ đồ tổng quan</a>
-      <a class="btn" href="#guide">Chọn thuật toán nhanh</a>
-      <a class="btn" href="#apps">Ứng dụng theo ngành</a>
-      <a class="btn" href="#s13">Xem case study của repo</a>
+      <a class="btn" href="#stages">Mở lộ trình</a>
     </div>
     <nav class="metro" id="metro" aria-label="Các giai đoạn"></nav>
     <div class="legend" id="legend"></div>
   </section>
+  <section class="wrap start" aria-label="Bắt đầu từ đâu">
+    <h2 class="start-h">Bắt đầu từ đâu</h2>
+    <div class="start-grid">
+      <a class="start-card" href="#ai" data-track="dl"><b>Học để làm chủ AI</b><span>Vì sao phải hiểu nền tảng, quy trình làm việc với AI, checklist và 24 tình huống luyện phản biện.</span></a>
+      <a class="start-card" href="#branches" data-track="ops"><b>Chọn nhánh nghề</b><span>10 nhánh AI và dữ liệu: nhánh nào hợp với bạn, cần học gì, thị trường Việt Nam ra sao.</span></a>
+      <a class="start-card" href="#learn" data-track="found"><b>Hướng dẫn học từ đầu</b><span>Sáu bước học, bốn trạng thái, lịch Gantt theo số giờ mỗi tuần, dự án ở các mốc.</span></a>
+      <a class="start-card" href="#stages" data-track="ml"><b>Lộ trình 59 chủ đề</b><span>Học từng giai đoạn: khái niệm, khi nào dùng, case thực tế, code, làm việc với AI.</span></a>
+      <a class="start-card" href="#guide" data-track="data"><b>Chọn thuật toán nhanh</b><span>Cây quyết định và bảng tra từ nhu cầu tới thuật toán nên thử.</span></a>
+      <a class="start-card" href="#apps" data-track="dl"><b>Ứng dụng thực tế</b><span>109 case doanh nghiệp có nguồn, gồm cả 14 thất bại kèm bài học.</span></a>
+    </div>
+  </section>
+  <div class="wrap"><section class="panel" id="overview">
+        <h2>Sơ đồ tổng quan</h2>
+        <p>Mũi tên cho biết giai đoạn nào cần học trước. Các ô tô màu là những mốc quan trọng nhất.</p>
+        <div id="overview-fig"></div>
+      </section></div>
+  </div>
 
-  <div class="wrap layout">
-    <aside class="sidenav" aria-label="Mục lục">
-      <h2>Mục lục</h2>
-      <ol id="sidenav-list"></ol>
-    </aside>
-
-    <div>
-      <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
-
-      <section class="panel" id="ai">
+  <div data-panel="ai" hidden><div class="wrap"><section class="panel" id="ai" data-subroot>
         <h2>Học để làm chủ AI</h2>
         <p>Bộ tài liệu này không dạy bạn tự viết mọi dòng code. Nó giúp bạn hiểu đủ nền tảng để giao việc cho AI rõ ràng, đọc và kiểm chứng được code AI viết, tự ra quyết định, và phản biện khi AI đề xuất sai. Các nghiên cứu gần đây cho thấy AI chỉ giúp khi người dùng hiểu việc mình đang làm.</p>
-        <div class="evidence" id="ai-evidence"></div>
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="ai-why" aria-selected="true">Vì sao và ba mức hiểu</button><button class="subtab" type="button" role="tab" data-sub="ai-flow" aria-selected="false">Quy trình</button><button class="subtab" type="button" role="tab" data-sub="ai-check" aria-selected="false">Checklist và prompt</button><button class="subtab" type="button" role="tab" data-sub="ai-quiz" aria-selected="false">Luyện phản biện</button></div>
+<div class="subpanel" data-subpanel="ai-why">
+<div class="evidence" id="ai-evidence"></div>
 
         <h3 class="sub-h">Ba mức hiểu bạn cần ở mỗi chủ đề</h3>
         <ol class="steps">
@@ -484,10 +589,15 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
           <li><b>Quyết định.</b> Chọn được phương án dựa trên đánh đổi, và nói được vì sao không chọn phương án khác. Mỗi chủ đề có mục "Làm việc với AI" để luyện ba mức này.</li>
         </ol>
 
-        <h3 class="sub-h">Quy trình làm việc với AI</h3>
-        <div id="ai-flow"></div>
+        
+</div>
+<div class="subpanel" data-subpanel="ai-flow" hidden>
+<div id="ai-flow"></div>
 
-        <div class="ai-two">
+        
+</div>
+<div class="subpanel" data-subpanel="ai-check" hidden>
+<div class="ai-two">
           <div>
             <h3 class="sub-h">10 câu hỏi kiểm tra mọi đề xuất của AI</h3>
             <ol class="checklist" id="ai-checklist">
@@ -522,16 +632,80 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
           </div>
         </div>
 
-        <h3 class="sub-h">Luyện phản biện AI</h3>
-        <p class="plan-summary" id="quiz-score"></p>
+        
+</div>
+<div class="subpanel" data-subpanel="ai-quiz" hidden>
+<p class="plan-summary" id="quiz-score"></p>
         <div class="quiz-grid" id="ai-quiz"></div>
-      </section>
+      
+</div>
+</section></div></div>
+  <div data-panel="branches" hidden><div class="wrap"><section class="panel" id="branches" data-subroot>
+        <h2>Chọn nhánh nghề AI và dữ liệu</h2>
+        <p>Các nghề AI và dữ liệu khác nhau ở thứ họ giao ra, không ở công cụ. Nhưng lỗi AI mắc khi viết code cho các nghề này lại cùng một họ: sai grain và join, rò rỉ dữ liệu, chọn sai metric, lệch lúc huấn luyện và lúc chạy thật, thiếu test, lỏng bảo mật, chi phí vượt kiểm soát. Vì vậy hãy học chắc nền chung trước, rồi mới rẽ nhánh.</p>
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="br-map" aria-selected="true">Bản đồ và so sánh</button><button class="subtab" type="button" role="tab" data-sub="br-detail" aria-selected="false">Chi tiết từng nhánh</button><button class="subtab" type="button" role="tab" data-sub="br-found" aria-selected="false">Nền chung</button><button class="subtab" type="button" role="tab" data-sub="br-market" aria-selected="false">Thị trường</button><button class="subtab" type="button" role="tab" data-sub="br-inter" aria-selected="false">Phỏng vấn và chuyển nhánh</button></div>
+<div class="subpanel" data-subpanel="br-map">
+<div id="branch-map"></div>
 
-      <section class="panel" id="learn">
+        <h3 class="sub-h">Bạn thích làm gì hơn?</h3>
+        <div class="fam-grid" id="branch-families"></div>
+
+        <h3 class="sub-h">So sánh nhanh 10 nhánh</h3>
+        <div class="table-wrap">
+          <table class="branch-table">
+            <thead><tr><th>Nhánh</th><th>Câu hỏi cốt lõi</th><th>Giao ra</th><th>Được đo bằng</th><th>Toán</th><th>Phần mềm</th></tr></thead>
+            <tbody id="branch-table"></tbody>
+          </table>
+        </div>
+
+        
+</div>
+<div class="subpanel" data-subpanel="br-detail" hidden>
+<div class="br-chips" id="branch-chips" role="toolbar" aria-label="Chọn nhánh nghề"></div>
+        <div id="branch-detail"></div>
+
+        
+</div>
+<div class="subpanel" data-subpanel="br-found" hidden>
+<div class="table-wrap"><table><thead><tr><th>Khối nền</th><th>Nội dung tối thiểu</th><th>Giúp bạn bắt được lỗi AI nào</th></tr></thead><tbody id="foundation-body"></tbody></table></div>
+
+        
+</div>
+<div class="subpanel" data-subpanel="br-market" hidden>
+<p class="plan-summary">Toàn cầu</p>
+        <div class="evidence" id="market-global"></div>
+        <p class="plan-summary" style="margin-top:14px">Việt Nam</p>
+        <div class="evidence" id="market-vn"></div>
+        <div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Cấp</th><th>Lương tháng (gộp, Việt Nam)</th><th>Ghi chú</th></tr></thead><tbody id="market-ladder"></tbody></table></div>
+        <p class="sync-note" id="market-note"></p>
+
+        
+</div>
+<div class="subpanel" data-subpanel="br-inter" hidden>
+<div class="ai-two">
+          <div>
+            <h3 class="sub-h">Phỏng vấn kiểm tra gì</h3>
+            <div class="table-wrap"><table><thead><tr><th>Nhánh</th><th>Vòng đặc trưng</th></tr></thead><tbody id="interview-body"></tbody></table></div>
+            <p class="sync-note">Tổng hợp từ nguồn luyện phỏng vấn (vendor/blog). Portfolio có mục "những gì tôi đã bác bỏ trong đề xuất của AI và vì sao" vừa là bằng chứng kỹ năng, vừa khớp cách doanh nghiệp Việt đang tuyển.</p>
+          </div>
+          <div>
+            <h3 class="sub-h">Chuyển nhánh</h3>
+            <div id="trans-map"></div>
+            <div class="table-wrap"><table><thead><tr><th>Từ → sang</th><th>Cần bổ sung</th><th>Độ khó</th></tr></thead><tbody id="trans-body"></tbody></table></div>
+          </div>
+        </div>
+        
+</div>
+<p class="sync-note">Nguồn: báo cáo nghiên cứu "Lộ trình các nhánh ngành AI" (9/2026) trong thư mục reports/ của repo. Nhãn (qua snippet), (vendor/blog), (số liệu cũ), (chưa kiểm chứng) được giữ nguyên. Cây kỹ năng, dự án mốc và thời lượng là đề xuất tổng hợp, không phải số liệu đo lường.</p>
+      
+</section></div></div>
+  <div data-panel="learn" hidden><div class="wrap"><section class="panel" id="learn" data-subroot>
         <h2>Hướng dẫn học từ đầu</h2>
         <p>Nếu bạn bắt đầu từ con số 0, đi theo sáu bước dưới đây. Đánh trạng thái cho từng chủ đề để biết mình đang ở đâu, việc gì cần làm tiếp và phần nào cần ôn.</p>
 
-        <ol class="steps">
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="l-steps" aria-selected="true">Sáu bước</button><button class="subtab" type="button" role="tab" data-sub="l-status" aria-selected="false">Bốn trạng thái</button><button class="subtab" type="button" role="tab" data-sub="l-plan" aria-selected="false">Kế hoạch của bạn</button><button class="subtab" type="button" role="tab" data-sub="l-proj" aria-selected="false">Dự án ở các mốc</button></div>
+<div class="subpanel" data-subpanel="l-steps">
+<ol class="steps">
           <li><b>Kiểm tra đầu vào.</b> Bạn cần dùng được máy tính, cài được phần mềm, đọc được tài liệu tiếng Anh kỹ thuật cơ bản và nhớ toán phổ thông (hàm số, đạo hàm, xác suất cơ bản). Nếu đã biết một phần, mở chủ đề đó, làm lại code mẫu mà không nhìn: làm được thì đánh "Đã xong", chưa chắc thì đánh "Cần ôn lại".</li>
           <li><b>Đặt nhịp học.</b> Nhập số giờ bạn học được mỗi tuần và ngày bắt đầu ở ô bên dưới. Biểu đồ Gantt tự tính thời gian cho từng giai đoạn. Nhịp bền vững cho người đi làm là 8–12 giờ/tuần; học toàn thời gian là 25–35 giờ/tuần.</li>
           <li><b>Học theo thứ tự giai đoạn.</b> Giai đoạn 0 → 6 là phần lõi bắt buộc. Sau đó chọn nhánh theo mục tiêu: dữ liệu bảng và dự báo (7, 8), AI và LLM (9, 10), hoặc triển khai (11, 12). Xem sơ đồ tổng quan để biết giai đoạn nào phụ thuộc giai đoạn nào.</li>
@@ -540,11 +714,15 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
           <li><b>Ôn định kỳ.</b> Cuối mỗi tuần, lọc "Cần ôn lại" và làm lại code của các chủ đề đó. Cuối mỗi tháng, xuất PDF "Chủ đề chưa xong" kèm bảng theo dõi để in ra và ghi chú.</li>
         </ol>
 
-        <h3 class="sub-h">Bốn trạng thái và khi nào đổi</h3>
-        <ul class="status-legend" id="status-legend"></ul>
+        
+</div>
+<div class="subpanel" data-subpanel="l-status" hidden>
+<ul class="status-legend" id="status-legend"></ul>
 
-        <h3 class="sub-h">Kế hoạch của bạn</h3>
-        <div class="plan-controls">
+        
+</div>
+<div class="subpanel" data-subpanel="l-plan" hidden>
+<div class="plan-controls">
           <label for="plan-hpw">Số giờ học mỗi tuần <input type="number" id="plan-hpw" min="2" max="60" step="1" value="10"></label>
           <label for="plan-start">Ngày bắt đầu <input type="date" id="plan-start"></label>
         </div>
@@ -558,8 +736,10 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
         </div>
         <p class="sync-note" id="sync-note"></p>
 
-        <h3 class="sub-h">Dự án ở các mốc</h3>
-        <div class="table-wrap">
+        
+</div>
+<div class="subpanel" data-subpanel="l-proj" hidden>
+<div class="table-wrap">
           <table>
             <thead><tr><th>Sau giai đoạn</th><th>Dự án</th><th>Chứng minh được</th></tr></thead>
             <tbody>
@@ -572,39 +752,18 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
             </tbody>
           </table>
         </div>
-      </section>
+      
+</div>
+</section></div></div>
 
-      <section class="panel" id="overview">
-        <h2>Sơ đồ tổng quan</h2>
-        <p>Mũi tên cho biết giai đoạn nào cần học trước. Các ô tô màu là những mốc quan trọng nhất.</p>
-        <div id="overview-fig"></div>
-      </section>
-
-      <section class="panel" id="guide">
-        <h2>Chọn thuật toán nhanh</h2>
-        <p>Bắt đầu từ nhu cầu của bạn, đi theo cây quyết định hoặc tra bảng, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
-        <div id="guide-fig"></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead>
-            <tbody id="guide-body"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="panel" id="apps">
-        <h2>Ứng dụng thực tế theo ngành</h2>
-        <p>Các case doanh nghiệp đã công bố, gồm cả những thất bại lớn và bài học rút ra. Bấm tên chủ đề để xem chi tiết, cách làm và nguồn.</p>
-        <div class="apps-stats" id="apps-stats"></div>
-        <div class="apps-filter" id="apps-filter" role="toolbar" aria-label="Lọc theo ngành"></div>
-        <div class="table-wrap">
-          <table class="apps-table">
-            <thead><tr><th>Tổ chức</th><th>Ứng dụng</th><th>Kết quả</th><th>Chủ đề</th></tr></thead>
-            <tbody id="apps-body"></tbody>
-          </table>
-        </div>
-      </section>
-
+  <div data-panel="roadmap" hidden>
+  <div class="wrap layout">
+    <aside class="sidenav" aria-label="Mục lục">
+      <h2>Mục lục</h2>
+      <ol id="sidenav-list"></ol>
+    </aside>
+    <div>
+      <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
       <div class="filters" role="toolbar" aria-label="Lọc chủ đề">
         <button class="chip" type="button" data-level-filter="all" aria-pressed="true">Tất cả</button>
         <button class="chip" type="button" data-level-filter="1" aria-pressed="false">Cơ bản</button>
@@ -616,24 +775,54 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
         <button class="chip" type="button" data-status-filter="doing" aria-pressed="false">Đang học</button>
         <button class="chip" type="button" data-status-filter="done" aria-pressed="false">Đã xong</button>
         <button class="chip" type="button" data-status-filter="review" aria-pressed="false">Cần ôn lại</button>
+        <span class="chip-sep" aria-hidden="true"></span>
+        <label class="br-filter" for="branch-filter">Nhánh <select id="branch-filter"></select></label>
         <span class="sep"></span>
         <button class="btn small" type="button" id="toggle-all">Mở rộng tất cả</button>
       </div>
 
+      
+      <div class="stage-tabs" id="stage-tabs" role="tablist" aria-label="Chọn giai đoạn"></div>
       <div id="stages"></div>
-      <p class="empty" id="empty" hidden>Không có chủ đề nào khớp. Thử từ khoá khác hoặc bỏ bộ lọc trình độ.</p>
+      <p class="empty" id="empty" hidden>Không có chủ đề nào khớp. Thử từ khoá khác hoặc bỏ bộ lọc.</p>
+      <div class="stage-nav" id="stage-nav"></div>
+    </div>
+  </div>
+  </div>
 
-      <section class="panel" id="refs">
+  <div data-panel="guide" hidden><div class="wrap"><section class="panel" id="guide">
+        <h2>Chọn thuật toán nhanh</h2>
+        <p>Bắt đầu từ nhu cầu của bạn, đi theo cây quyết định hoặc tra bảng, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
+        <div id="guide-fig"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead>
+            <tbody id="guide-body"></tbody>
+          </table>
+        </div>
+      </section></div></div>
+  <div data-panel="apps" hidden><div class="wrap"><section class="panel" id="apps">
+        <h2>Ứng dụng thực tế theo ngành</h2>
+        <p>Các case doanh nghiệp đã công bố, gồm cả những thất bại lớn và bài học rút ra. Bấm tên chủ đề để xem chi tiết, cách làm và nguồn.</p>
+        <div class="apps-stats" id="apps-stats"></div>
+        <div class="apps-filter" id="apps-filter" role="toolbar" aria-label="Lọc theo ngành"></div>
+        <div class="table-wrap">
+          <table class="apps-table">
+            <thead><tr><th>Tổ chức</th><th>Ứng dụng</th><th>Kết quả</th><th>Chủ đề</th></tr></thead>
+            <tbody id="apps-body"></tbody>
+          </table>
+        </div>
+      </section></div></div>
+  <div data-panel="refs" hidden><div class="wrap"><section class="panel" id="refs">
         <h2>Nguồn tham khảo</h2>
         <p>Các nguồn đã tra cứu (tháng 9/2026) để đối chiếu thứ tự kỹ năng, công cụ MLOps và các khuyến nghị RAG, fine-tuning, gradient boosting.</p>
         <ol class="sources" id="sources"></ol>
-      </section>
-    </div>
-  </div>
+      </section></div></div>
 
   <footer class="foot">
     <div class="wrap">Trạng thái học lưu theo tài khoản khi mở trong Claude, hoặc trong trình duyệt khi mở file trực tiếp. Nội dung có thể xuất ra PDF theo toàn bộ lộ trình, từng giai đoạn, từng chủ đề hoặc các chủ đề chưa xong.</div>
   </footer>
+
 </main>
 
 <div class="modal-back" id="export" hidden>
@@ -654,6 +843,8 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
         <label class="opt"><input type="radio" name="scope" id="sc-all" value="all" checked><span>Toàn bộ lộ trình<small>Mọi giai đoạn và chủ đề</small></span></label>
         <label class="opt"><input type="radio" name="scope" id="sc-pick" value="pick"><span>Chọn giai đoạn<small>Chỉ những giai đoạn bạn đánh dấu</small></span></label>
         <div class="stage-picks" id="stage-picks" hidden></div>
+        <label class="opt"><input type="radio" name="scope" id="sc-branch" value="branch"><span>Theo nhánh nghề<small>Trang nhánh nghề và các chủ đề cốt lõi, nên biết của nhánh đó</small></span></label>
+        <div class="stage-picks"><select id="exp-branch" aria-label="Chọn nhánh nghề để xuất"></select></div>
         <label class="opt"><input type="radio" name="scope" id="sc-todo" value="todo"><span>Chủ đề chưa xong<small>Chưa học, đang học và cần ôn lại (bỏ qua chủ đề "Đã xong")</small></span></label>
       </fieldset>
       <fieldset>
@@ -662,6 +853,7 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
         <label class="opt"><input type="checkbox" id="o-toc" checked><span>Mục lục có số trang</span></label>
         <label class="opt"><input type="checkbox" id="o-plan" checked><span>Kế hoạch học và bảng theo dõi trạng thái<small>Biểu đồ Gantt, trạng thái từng chủ đề và cột ghi chú để in</small></span></label>
         <label class="opt"><input type="checkbox" id="o-guide" checked><span>Bảng chọn thuật toán nhanh</span></label>
+        <label class="opt"><input type="checkbox" id="o-branches" checked><span>Chọn nhánh nghề<small>Bảng so sánh nhánh, thị trường, và trang chi tiết từng nhánh</small></span></label>
         <label class="opt"><input type="checkbox" id="o-ai" checked><span>Làm việc với AI<small>Prompt mẫu, dấu hiệu AI sai, câu hỏi phản biện, tình huống kèm đáp án</small></span></label>
         <label class="opt"><input type="checkbox" id="o-apps" checked><span>Case doanh nghiệp đã áp dụng<small>Trong từng chủ đề, kèm bảng tra theo ngành</small></span></label>
         <label class="opt"><input type="checkbox" id="o-dgm" checked><span>Sơ đồ (flowchart, sequence diagram)</span></label>
@@ -4218,6 +4410,428 @@ window.ROADMAP_AI_EVIDENCE = [
   { n: "65% vs <40%", t: "Người mới học thư viện mới: nhóm dùng AI để hỏi khái niệm đạt từ 65% trở lên trong bài kiểm tra hiểu biết, nhóm giao hết việc viết code cho AI dưới 40%. Khoảng cách lớn nhất nằm ở kỹ năng debug.", src: ["Anthropic — How AI assistance impacts the formation of coding skills (2026)", "https://www.anthropic.com/research/AI-assistance-coding-skills"] }
 ];
 
+/* Các nhánh nghề AI và dữ liệu. Tổng hợp từ báo cáo reports/Lộ trình các nhánh ngành AI.md (9/2026).
+   Nhãn độ tin cậy giữ nguyên theo báo cáo: (qua snippet), (vendor/blog), (số liệu cũ), (chưa kiểm chứng).
+   Cây kỹ năng, dự án mốc và thời lượng là đề xuất tổng hợp, không phải số liệu đo lường. */
+window.ROADMAP_FAMILIES = {
+  analytics: { name: "Họ phân tích", hint: "Thích trả lời câu hỏi kinh doanh và thuyết phục người khác", track: "data" },
+  infra: { name: "Họ hạ tầng", hint: "Thích hệ thống chạy đúng, rẻ, bền", track: "ops" },
+  product: { name: "Họ sản phẩm AI", hint: "Thích xây tính năng AI cho người dùng cuối", track: "dl" },
+  research: { name: "Nghiên cứu", hint: "Thích tìm phương pháp mới, chịu được con đường học vị dài", track: "ml" }
+};
+
+window.ROADMAP_BRANCHES = [
+  {
+    id: "da", name: "Data Analyst", family: "analytics",
+    question: "Chuyện gì đã xảy ra, vì sao?", deliver: "Dashboard, phân tích ad-hoc, memo", measure: "Quyết định đúng và kịp thời", neighbor: "Analytics Engineer, Product DS",
+    math: 1, swe: 1, degree: "Không cần", vn: "Nhiều tin tuyển nhất, nhưng dễ bị AI thay thế nhất. Glassdoor: DA ở TP.HCM trung bình khoảng 21,8 triệu đồng/tháng, P25–P75 từ 15,1 đến 32,4 triệu (tự báo cáo, mẫu nhỏ).",
+    summary: "Trả lời câu hỏi kinh doanh bằng SQL, dashboard và memo ngắn, dựa trên dữ liệu đã được chuẩn bị. SQL là bộ lọc cứng, hiểu grain là kỹ năng sống còn.",
+    daily: "Viết SQL, dựng và bảo trì dashboard, định nghĩa KPI, trả lời câu hỏi \"vì sao số này khác số kia\", viết memo cho người không chuyên.",
+    levels: [
+      ["0 – Nền chung", "Bảng tính (pivot, lookup), SQL I (SELECT/JOIN/GROUP BY, hiểu grain), thống kê mô tả, Python và pandas cơ bản, diễn đạt câu hỏi thành metric", "Trả lời 15 câu hỏi kinh doanh bằng SQL trên một bộ dữ liệu công khai"],
+      ["1 – Analyst lõi", "SQL II (window, CTE, ngày giờ, NULL, khử trùng lặp), một công cụ BI (Power BI/Tableau/Looker), metric tỷ lệ, cohort, funnel, retention, memo một trang", "Dashboard thương mại điện tử (ví dụ dữ liệu Olist) kèm từ điển KPI; phân tích cohort retention bằng SQL"],
+      ["2 – Analyst vững", "Kiểm tra Simpson's paradox theo segment, trình bày độ bất định, kiến thức nghiệp vụ một ngành (ngân hàng, TMĐT, viễn thông)", "Phân tích funnel có kiểm tra Simpson; tự kiểm toán một báo cáo SQL do AI viết có cài sẵn ít nhất 3 lỗi"]
+    ],
+    order: "SQL trước công cụ BI, thống kê trước ML.",
+    resources: [["Google Data Analytics Certificate (9 khoá, hơn 180 giờ)", "https://www.coursera.org/professional-certificates/google-data-analytics"], ["Kaggle Learn — SQL", "https://www.kaggle.com/learn/intro-to-sql"], ["OpenIntro Statistics (miễn phí)", "https://www.openintro.org/book/os/"]],
+    stable: ["SQL", "Bảng tính", "Một công cụ BI", "pandas"],
+    churn: ["Agent phân tích trong notebook", "Hàm AI gọi LLM trong SQL"],
+    cases: [
+      ["Benchmark Spider 2.0 (ICLR 2025) dùng workflow doanh nghiệp thật: o1-preview chỉ giải được 21,3%, GPT-4o 10,1%, trong khi GPT-4o đạt 86,6% trên Spider 1.0 cũ. \"AI viết SQL\" chỉ đáng tin khi có người mã hoá sẵn định nghĩa nghiệp vụ (số liệu đầu 2025).", "https://proceedings.iclr.cc/paper_files/paper/2025/file/46c10f6c8ea5aa6f267bcdabcb123f97-Paper-Conference.pdf"]
+    ],
+    critique: [
+      ["Join bảng một dòng mỗi đơn với bảng nhiều dòng mỗi đơn (order_items, payments) rồi SUM doanh thu", "So COUNT(*) với COUNT(DISTINCT key) trước và sau join; ghi rõ grain"],
+      ["Sai mẫu số; nhầm tỷ lệ của trung bình với trung bình của tỷ lệ", "Tự viết định nghĩa metric trước rồi đối chiếu"],
+      ["Ngữ nghĩa NULL: COUNT(col) khác COUNT(*); NOT IN gặp NULL trả rỗng; WHERE trên bảng phải biến LEFT JOIN thành INNER JOIN", "Test với dữ liệu nhỏ có NULL"],
+      ["Lẫn múi giờ UTC và Asia/Ho_Chi_Minh; kỳ hiện tại chưa đủ dữ liệu; BETWEEN với timestamp", "Đối soát tổng theo ngày với một nguồn đã biết"],
+      ["Tự đặt định nghĩa \"active user\" thay vì dùng metric đã quản trị", "Bắt AI dùng metric có sẵn trong semantic layer"],
+      ["Quên lọc tài khoản test, đơn hoàn tiền, đơn huỷ", "Liệt kê sẵn bộ lọc bắt buộc trong đặc tả"],
+      ["Xu hướng tổng đảo chiều khi tách segment (Simpson)", "Luôn tách theo thiết bị, kênh, vùng"]
+    ],
+    core: ["framing", "probability", "statistics", "python-core", "pandas", "viz", "git-env", "sql", "cleaning", "eda", "metrics"],
+    useful: ["crisp-dm", "collection", "warehouse", "ts-basics", "kmeans", "llm-prompting"]
+  },
+  {
+    id: "ae", name: "Analytics Engineer", family: "analytics",
+    question: "Mọi người có tin và dùng lại được dữ liệu này không?", deliver: "Model dbt có test và tài liệu, metric trong semantic layer", measure: "Độ tin cậy, độ phủ test, số người tự phục vụ", neighbor: "Data Analyst, Data Engineer",
+    math: 1, swe: 2, degree: "Không cần", vn: "Chưa có số liệu lương Việt Nam đã kiểm chứng. Nhóm nghiên cứu nhận định đây là nhánh có đòn bẩy lớn nhất cho mục tiêu \"cầm lái AI\" trong họ phân tích.",
+    summary: "Làm chữ \"T\" trong ELT: biến bảng thô thành model sạch, có test và tài liệu. Họ viết ra ngữ cảnh nghiệp vụ giúp AI viết SQL đúng.",
+    daily: "Viết và review model dbt, thêm test, xử lý khi schema nguồn đổi, định nghĩa metric một lần để dùng mọi nơi, tối ưu chi phí warehouse.",
+    levels: [
+      ["1", "Nền của Data Analyst, cộng Git và pull request", "Đưa một bộ truy vấn phân tích vào repo Git có review"],
+      ["2", "Dimensional modeling (Kimball: quy trình → grain → dimension → fact), star schema, SCD 1/2/3, surrogate key; dbt: source, staging → intermediate → marts, test, docs, macro", "Dự án dbt trên DuckDB/BigQuery với ít nhất 20 test và trang tài liệu"],
+      ["3", "Incremental model, snapshot (SCD2), slim CI bằng GitHub Actions, semantic layer (MetricFlow/Cube/LookML), nhận biết chi phí", "Metric trong semantic layer được BI dùng; post-mortem một sự cố fan-out do khoá trùng được cài sẵn"]
+    ],
+    order: "SQL và grain → Git → Kimball → dbt → test và CI → semantic layer.",
+    resources: [["dbt Learn — dbt Fundamentals", "https://learn.getdbt.com/"], ["Coursera — Analytics Engineering with dbt", "https://www.coursera.org/specializations/analytics-engineering-with-dbt"], ["The Data Warehouse Toolkit (Kimball)", "https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/books/data-warehouse-dw-toolkit/"]],
+    stable: ["SQL", "Mô hình Kimball", "dbt", "Git", "Một warehouse"],
+    churn: ["Sản phẩm semantic layer", "Công cụ data observability", "AI trong IDE dữ liệu"],
+    cases: [
+      ["Airbnb Minerva: hơn 12.000 metric và 4.000 dimension theo nguyên tắc \"định nghĩa một lần, dùng mọi nơi\" (2021).", "https://medium.com/airbnb-engineering/how-airbnb-achieved-metric-consistency-at-scale-f23cc53dea70"],
+      ["Benchmark mở của Cube: thêm khoảng 4 KB mô tả semantic layer làm độ chính xác text-to-SQL tăng 17–23 điểm phần trăm (vendor).", "https://github.com/cubedevinc/semantic-layer-benchmark"],
+      ["Báo cáo dbt 2026: 72% đội ưu tiên AI viết code, chỉ 24% ưu tiên AI cho kiểm thử và giám sát; tỷ lệ coi niềm tin vào dữ liệu là quan trọng tăng từ 66% lên 83%.", "https://www.hpcwire.com/bigdatawire/2026/04/15/dbt-labs-report-72-of-data-teams-use-ai-71-fear-bad-data-data-systems-cant-keep-up/"],
+      ["Fivetran và dbt Labs hoàn tất sáp nhập ngày 1/6/2026, doanh thu định kỳ gần 600 triệu USD/năm, hơn 80.000 đội dữ liệu.", "https://www.fivetran.com/press/fivetran-dbt-labs-complete-merger-to-create-the-data-infrastructure-for-trusted-ai-agents"]
+    ],
+    critique: [
+      ["Không khai báo grain; mart bị nhân dòng", "Test unique trên khoá chính của mọi model"],
+      ["Join fact với dimension SCD2 không có điều kiện thời điểm", "Bắt buộc valid_from <= event_ts < valid_to"],
+      ["Incremental dùng now() thay mốc logic; không có lookback cho dữ liệu đến muộn", "Chạy lại cùng ngày hai lần, so kết quả"],
+      ["SELECT * từ nguồn vào mart", "Khoá schema bằng dbt contracts"],
+      ["Định nghĩa lại metric ngay trong model", "Metric chỉ định nghĩa ở một nơi"],
+      ["Full refresh bảng lớn theo lịch", "Ước tính số byte quét trước khi merge"]
+    ],
+    core: ["framing", "python-core", "pandas", "git-env", "sql", "cleaning", "eda", "metrics", "statistics", "warehouse", "pipelines-cicd"],
+    useful: ["viz", "collection", "spark", "monitoring", "llm-prompting"]
+  },
+  {
+    id: "pds", name: "Data Scientist (product/decision)", family: "analytics",
+    question: "Nên làm gì, và việc đó có hiệu quả thật (nhân quả) không?", deliver: "Thiết kế và kết quả thí nghiệm, phân tích nhân quả, định nghĩa metric", measure: "Mức tăng (lift) được chứng minh", neighbor: "Analyst, nhà kinh tế học",
+    math: 3, swe: 1, degree: "Thường có thạc sĩ nhưng không bắt buộc", vn: "Chưa tách được số liệu riêng; nhóm DA/DS theo ITviec khoảng 40,65 triệu đồng/tháng (qua snippet, chưa rõ trung vị hay theo kinh nghiệm).",
+    summary: "Thiết kế metric, thí nghiệm A/B và suy luận nhân quả để ra quyết định sản phẩm. Đây là nơi AI sai âm thầm nhất, và cũng là kỹ năng kiểm chứng dùng được cho mọi nhánh.",
+    daily: "Viết tài liệu thiết kế thí nghiệm, đọc kết quả A/B, phân tích nhân quả khi không random hoá được, viết memo chiến lược.",
+    levels: [
+      ["1", "Nền của Data Analyst, cộng kiểm định giả thuyết, khoảng tin cậy, bootstrap", "Phân tích A/B có tính power trước khi chạy"],
+      ["2", "Thí nghiệm: đơn vị random hoá, guardrail, kiểm tra SRM, novelty effect, CUPED, rủi ro peeking, so sánh bội", "Phân tích A/B có kiểm tra SRM và CUPED"],
+      ["3", "Nhân quả khi không random hoá được: DiD, regression discontinuity, biến công cụ, synthetic control, propensity score; cây metric", "DiD trên dữ liệu chính sách công khai; cây metric cho một ứng dụng kiểu Grab/Shopee"]
+    ],
+    order: "Học nhánh thống kê và thí nghiệm TRƯỚC ML: các khái niệm đánh giá ở đây sau này dùng để kiểm chứng mô hình.",
+    resources: [["Trustworthy Online Controlled Experiments (Kohavi, Tang, Xu)", "https://experimentguide.com/"], ["Causal Inference: The Mixtape (miễn phí)", "https://mixtape.scunning.com/"], ["Causal Inference for the Brave and True (miễn phí)", "https://matheusfacure.github.io/python-causality-handbook/"]],
+    stable: ["SQL", "Python/R", "statsmodels", "Nền tảng thí nghiệm nội bộ"],
+    churn: ["Notebook tích hợp AI", "Thư viện causal ML", "SaaS experimentation"],
+    cases: [
+      ["Bing: một ý tưởng kéo dài tiêu đề quảng cáo nằm trong backlog nhiều tháng, khi A/B test làm doanh thu tăng 12%, hơn 100 triệu USD/năm.", "https://hbr.org/2017/09/the-surprising-power-of-online-experiments"],
+      ["Microsoft: khoảng 6% thí nghiệm có sample ratio mismatch (3% đến 13–14% tuỳ sản phẩm) trên hơn 10.000 thí nghiệm (KDD 2019).", "https://www.microsoft.com/en-us/research/publication/diagnosing-sample-ratio-mismatch-in-online-controlled-experiments-a-taxonomy-and-rules-of-thumb-for-practitioners/"],
+      ["Tại Microsoft chỉ khoảng một phần ba thí nghiệm được thiết kế tốt thực sự cải thiện metric đích (số liệu cũ, 2009).", "https://ai.stanford.edu/~ronnyk/ExPThinkWeek2009Public.pdf"],
+      ["Netflix dùng DiD, double ML, A/B Bayes và công cụ quasi-experiment khi không A/B được.", "https://netflixtechblog.com/a-survey-of-causal-inference-applications-at-netflix-b62d25175e6f"]
+    ],
+    critique: [
+      ["Đọc kết quả mà không kiểm tra SRM", "Kiểm định chi-square tỷ lệ chia trước khi xem kết quả"],
+      ["Xem p-value nhiều lần rồi dừng khi \"có ý nghĩa\"", "Cố định thời lượng hoặc dùng phương pháp sequential đúng cách"],
+      ["Thử nhiều metric/segment không hiệu chỉnh; \"thắng\" ở segment chọn sau khi thấy kết quả", "Khai báo trước metric chính"],
+      ["Random hoá theo user nhưng tính phương sai theo session", "Delta method hoặc sai số chuẩn theo cụm"],
+      ["Kết luận \"không khác biệt\" từ test thiếu power", "Tính MDE và power trước khi chạy"],
+      ["Biến tương quan quan sát thành \"tác động\"; kiểm soát biến xảy ra sau can thiệp", "Hỏi: cơ chế random hoá hoặc giả định nhận dạng ở đâu?"]
+    ],
+    core: ["crisp-dm", "framing", "probability", "statistics", "python-core", "pandas", "viz", "sql", "cleaning", "eda", "metrics", "validation", "linear-regression", "logistic-regression"],
+    useful: ["explainability", "ts-basics", "kmeans", "boosting", "warehouse", "git-env"]
+  },
+  {
+    id: "mlds", name: "Data Scientist (ML)", family: "analytics",
+    question: "Có dự đoán hoặc tối ưu tự động được không?", deliver: "Mô hình, feature, đánh giá offline/online", measure: "Lift online, chi phí sai số", neighbor: "ML Engineer",
+    math: 2, swe: 2, degree: "Không bắt buộc", vn: "BLS Mỹ dự báo việc làm data scientist tăng 34% giai đoạn 2024–2034, lương trung vị 112.590 USD (qua snippet). Lương DS ở Mỹ theo phân tích thứ cấp Stack Overflow 2025 giảm khoảng 8,8% (chưa kiểm chứng).",
+    summary: "Xây mô hình dự đoán hoặc dự báo đưa vào sản phẩm; gần ML Engineer nhưng thường ít chịu trách nhiệm vận hành production. Lộ trình 14 giai đoạn của repo này bám sát nhánh này.",
+    daily: "Làm feature, huấn luyện và so sánh mô hình, phân tích lỗi theo lát cắt, lên kế hoạch A/B cho mô hình.",
+    levels: [
+      ["1", "Nền của Data Analyst, cộng bias/variance, cross-validation, leakage", "Kiểm toán leakage cho dự án Flight Fare của repo"],
+      ["2", "Hồi quy tuyến tính/logistic → cây và gradient boosting → mạng nơ-ron khi cần; calibration; chọn metric theo chi phí sai số", "Dự đoán churn có kiểm toán leakage và ngưỡng theo chi phí"],
+      ["3", "Dự báo: seasonal naive, ETS/ARIMA, Prophet/Orbit, GBM toàn cục, reconciliation phân cấp, backtest cuộn", "Dự báo bán hàng phân cấp kiểu M5, backtest so với seasonal naive"]
+    ],
+    order: "Giai đoạn 0 → 8 của lộ trình này, sau đó giai đoạn 11 để đưa mô hình vào vận hành.",
+    resources: [["An Introduction to Statistical Learning (miễn phí)", "https://www.statlearning.com/"], ["Forecasting: Principles and Practice (miễn phí)", "https://otexts.com/fpp3/"], ["scikit-learn — Common pitfalls", "https://scikit-learn.org/stable/common_pitfalls.html"]],
+    stable: ["SQL", "Python", "scikit-learn", "XGBoost/LightGBM", "statsmodels"],
+    churn: ["Notebook tích hợp AI", "AutoML", "Thư viện dự báo mới"],
+    cases: [
+      ["Cuộc thi M5 (Walmart): dự báo 42.840 chuỗi thời gian phân cấp; phần lớn đội top dùng LightGBM.", "https://www.sciencedirect.com/science/article/pii/S0169207021001874"],
+      ["Uber dùng Orbit (dự báo Bayes) cho kế hoạch ngân sách marketing và dung lượng hạ tầng (2021).", "https://www.uber.com/us/en/blog/orbit/"],
+      ["Booking.com giả định chỉ khoảng 10% thí nghiệm thành công với mức tăng trung bình khoảng 1% (số liệu cũ, 2017; nguồn thứ cấp).", "https://arxiv.org/pdf/1710.08217"]
+    ],
+    critique: [
+      ["Leakage từ feature suy ra từ target; chia ngẫu nhiên chuỗi thời gian; fit tiền xử lý trước khi chia", "Chia theo thời gian, Pipeline bên trong CV"],
+      ["Không có baseline; accuracy cho dữ liệu mất cân bằng; MAPE khi giá trị thực gần 0", "Luôn so với baseline naive; chọn metric theo chi phí sai số"],
+      ["Chọn feature (feature importance) trên toàn bộ dữ liệu trước khi chia, như notebook Flight Fare", "Chỉ fit trên train"],
+      ["Báo cáo một lần chia duy nhất", "Báo cáo độ dao động qua nhiều fold hoặc seed"]
+    ],
+    core: ["crisp-dm", "framing", "linear-algebra", "calculus", "probability", "statistics", "python-core", "numpy", "pandas", "viz", "git-env", "sql", "cleaning", "eda", "encoding", "scaling", "feature-selection", "imbalanced", "pipelines", "linear-regression", "logistic-regression", "decision-tree", "random-forest", "boosting", "metrics", "validation", "bias-variance", "tuning", "explainability", "kmeans", "ts-basics", "ts-ml", "case-current", "case-issues", "case-upgrade"],
+    useful: ["knn", "svm", "naive-bayes", "pca", "dbscan", "anomaly", "recsys", "nn-basics", "tracking", "serving-api"]
+  },
+  {
+    id: "de", name: "Data Engineer", family: "infra",
+    question: "Dữ liệu có đến đúng, đủ, kịp, rẻ không?", deliver: "Pipeline ingest/transform/serve, lakehouse, streaming", measure: "Độ tươi, độ đúng, chi phí, uptime", neighbor: "Analytics Engineer, ML Engineer",
+    math: 1, swe: 3, degree: "Không cần", vn: "ITviec 2025–26: trung vị 41,3 triệu đồng/tháng, 56,9 triệu ở mức 3–4 năm; tin tuyển tăng khoảng 38% so với năm trước, trong khi IT chung tăng khoảng 12% (qua snippet).",
+    summary: "Phụ trách vòng đời dữ liệu từ nguồn đến phục vụ, nay gồm cả pipeline cho RAG. Giá trị nằm ở idempotency, test và độ tin cậy, không còn ở việc viết code pipeline (AI đã viết nhanh).",
+    daily: "Xử lý DAG lỗi hoặc chậm, cảnh báo chất lượng dữ liệu, thêm connector, xử lý thay đổi schema, backfill, tối ưu partition và chi phí, quản lý quyền và PII.",
+    levels: [
+      ["Nền (~2–3 tháng)", "SQL (window, CTE, NULL, EXPLAIN), mô hình hoá (3NF, Kimball, SCD), Python và pytest, Linux/shell/Git, Docker", "Star schema trên DuckDB kèm 15 truy vấn đúng grain, không fan-out"],
+      ["Lõi (~3–4 tháng)", "ETL/ELT, batch và streaming, CDC; orchestration (idempotency, retry, backfill); warehouse cột; dbt; Parquet/Avro; một cloud, IAM, Terraform", "ELT API → Parquet → warehouse → dbt bằng Airflow 3: chạy lại một ngày hai lần ra cùng kết quả; backfill 30 ngày"],
+      ["Nâng cao (~4–6 tháng+)", "Lakehouse (Iceberg/Delta/Hudi), Spark (shuffle, skew), Kafka/Flink (event time, watermark, exactly-once), data contract, lineage, FinOps", "CDC → SCD2; lakehouse có rollback; streaming có sự kiện muộn và trùng; pipeline ingest cho RAG xử lý đổi embedder như migration"]
+    ],
+    order: "Đọc Fundamentals of Data Engineering để có bản đồ, học theo DE Zoomcamp, sau đó đọc DDIA bản 2 để hiểu cơ chế.",
+    resources: [["DataTalksClub — Data Engineering Zoomcamp (miễn phí)", "https://github.com/DataTalksClub/data-engineering-zoomcamp"], ["Fundamentals of Data Engineering (O'Reilly 2022)", "https://www.oreilly.com/library/view/fundamentals-of-data/9781098108298/"], ["Designing Data-Intensive Applications, 2e (3/2026)", "https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/"]],
+    stable: ["SQL", "Mô hình hoá chiều", "Parquet", "Spark", "Kafka (khái niệm)", "Airflow", "dbt", "Iceberg", "Docker", "Terraform"],
+    churn: ["Công cụ ingest SaaS", "Orchestrator mới (Dagster, Prefect, Kestra…)", "Vendor observability", "Vector DB"],
+    cases: [
+      ["Unity (2022): công cụ nhắm quảng cáo bằng ML giảm độ chính xác sau khi ingest dữ liệu xấu; thiệt hại khoảng 110 triệu USD, khoảng 8% doanh thu năm.", "https://www.sec.gov/Archives/edgar/data/1810806/000181080622000052/a2022q2ex-991.htm"],
+      ["Public Health England (10/2020): 15.841 ca COVID bị bỏ sót vì pipeline dùng định dạng .XLS cũ có giới hạn dòng.", "https://www.theregister.com/2020/10/05/excel_england_coronavirus_contact_error/"],
+      ["Uber: khoảng 6 nghìn tỷ dòng mỗi ngày vào khoảng 350 PB dữ liệu trên Hudi (1/2026, qua snippet).", "https://www.uber.com/us/en/blog/apache-hudi-at-uber/"],
+      ["Khảo sát Joe Reis 2026 (n=1.101): 82% data engineer dùng AI hằng ngày; nỗi khổ lớn nhất là áp lực phải nhanh (59%) và thiếu người chịu trách nhiệm (51%) (qua snippet).", "https://joereis.substack.com/p/the-2026-state-of-data-engineering"]
+    ],
+    critique: [
+      ["INSERT append không có khoá; CURRENT_DATE() thay ngày logic; ROW_NUMBER() không phá hoà", "Chạy lại cùng ngày hai lần, so từng dòng"],
+      ["High-water mark theo thời điểm ingest thay vì event time; không lookback; streaming không watermark", "Chèn thử sự kiện muộn và trùng"],
+      ["SELECT * vào bảng production; không xử lý upstream đổi tên hoặc kiểu cột", "Contract hoặc schema registry"],
+      ["Fan-out khi join; SCD2 thiếu mốc thời điểm", "Đối soát số dòng nguồn và đích"],
+      ["Hàm bọc cột partition làm mất pruning; quá nhiều file nhỏ", "Xem số byte quét; dry-run"],
+      ["Spark hoặc Kafka cho vài GB dữ liệu và SLA theo ngày", "Hỏi: DuckDB/Polars cộng batch hằng ngày có đủ không?"],
+      ["Credential trong code, IAM quá rộng, PII trong log, xoá không lan xuống embedding", "Checklist bảo mật; truy vết lineage"],
+      ["Pipeline không test, không cảnh báo, lỗi trôi qua im lặng", "Test khoá, freshness, volume; cảnh báo cho người trực"]
+    ],
+    core: ["python-core", "git-env", "sql", "collection", "cleaning", "pandas", "spark", "warehouse", "docker", "pipelines-cicd", "monitoring"],
+    useful: ["eda", "nlp-embeddings", "rag", "serving-api", "tracking", "numpy"]
+  },
+  {
+    id: "mle", name: "ML Engineer", family: "infra",
+    question: "Mô hình này có chạy tin cậy trong sản phẩm không?", deliver: "Mô hình production cùng pipeline train/serve", measure: "Metric online, latency, độ tin cậy", neighbor: "Data Scientist, MLOps",
+    math: 2, swe: 3, degree: "Không bắt buộc; thị trường lệch về người có kinh nghiệm", vn: "Chưa có số liệu lương riêng tại Việt Nam. Toàn cầu: phân tích hơn 10.000 tin cho thấy 78% yêu cầu từ 5 năm kinh nghiệm (qua snippet); Levels.fyi trung vị ML Engineer ở Mỹ khoảng 280.000 USD (nghiêng về big tech).",
+    summary: "Đưa một mô hình cụ thể từ dữ liệu thành dịch vụ production tin cậy: feature, huấn luyện, đánh giá, serving, giám sát. Code mô hình thường chỉ khoảng 5% hệ thống.",
+    daily: "Xử lý dữ liệu và feature, huấn luyện, triển khai, debug, đọc dashboard và kết quả A/B.",
+    levels: [
+      ["A – Nền (~2–4 tháng)", "Python cho kỹ sư (package, typing, logging, config), Git/pytest/lint, SQL, pandas/Polars, Parquet, đánh giá đúng, Linux, HTTP, Docker", "Repo huấn luyện có src/, pyproject.toml, pytest (gồm test leakage), seed cố định, một lệnh tái tạo mô hình"],
+      ["B – Lõi (~3–4 tháng)", "MLflow tracking và registry; serving batch và online (FastAPI/BentoML); orchestration; kiểm tra dữ liệu và drift (Evidently); CI/CD cho ML; một cloud, Terraform", "Mô hình dạng dịch vụ có schema, load test p50/p95; pipeline retrain cấp 1 có cổng so với mô hình production"],
+      ["C – Nâng cao (~4–6 tháng+)", "Kubernetes, KServe/Triton; feature store (point-in-time join); DDP/FSDP; canary/shadow; safetensors thay pickle; tối ưu chi phí (lượng tử hoá, ONNX)", "Triển khai lên K8s có autoscale, canary, ước tính chi phí mỗi 1 triệu dự đoán"]
+    ],
+    order: "Google MLCC (phần production) → Designing ML Systems → Made With ML → MLOps Zoomcamp → Rules of ML và Hidden Technical Debt.",
+    resources: [["Google ML Crash Course — Production ML systems", "https://developers.google.com/machine-learning/crash-course/production-ml-systems"], ["Chip Huyen — Designing Machine Learning Systems", "https://github.com/chiphuyen/dmls-book"], ["Made With ML", "https://github.com/GokuMohandas/Made-With-ML"], ["MLOps Zoomcamp (miễn phí, 9 tuần)", "https://github.com/DataTalksClub/mlops-zoomcamp"]],
+    stable: ["Python", "SQL", "Git", "Docker", "pytest", "Kubernetes cơ bản", "MLflow", "PyTorch", "FastAPI"],
+    churn: ["Feature store thương mại", "SaaS experiment tracking", "Công cụ LLMOps/eval"],
+    cases: [
+      ["Uber Michelangelo (2024): khoảng 400 dự án, hơn 5.000 mô hình production, đỉnh 10 triệu dự đoán/giây (qua snippet).", "https://www.uber.com/us/en/blog/from-predictive-to-generative-ai/"],
+      ["Zillow Offers ghi giảm tồn kho 304,4 triệu USD Q3/2021 rồi đóng mảng; thất bại đến từ cả mô hình lẫn quy trình.", "https://www.sec.gov/Archives/edgar/data/1617640/000161764021000085/q32021991.htm"],
+      ["Google Play: làm mới một bảng dữ liệu bị cũ 6 tháng làm tỷ lệ cài đặt tăng 2% (Rules of ML, số liệu cũ).", "https://github.com/thundergolfer/google-rules-of-machine-learning"],
+      ["JFrog tìm thấy hơn 100 mô hình độc hại trên Hugging Face (2/2024), khoảng 95% là PyTorch dạng pickle.", "https://jfrog.com/blog/data-scientists-targeted-by-malicious-hugging-face-ml-models-with-silent-backdoor/"]
+    ],
+    critique: [
+      ["fit (scaler, imputer, encoder, SMOTE, chọn feature) trên toàn bộ dữ liệu trước khi chia", "Tìm mọi lời gọi fit, xem nằm trước hay sau lời chia; Pipeline trong CV"],
+      ["Chia ngẫu nhiên dữ liệu thời gian; cùng user ở cả train và test; feature dùng thông tin tương lai", "Chia theo thời gian/nhóm; kiểm tra point-in-time"],
+      ["Logic feature viết hai lần (notebook và API), đúng như app.py của Flight Fare", "Một module feature dùng chung; schema đầu vào"],
+      ["Không seed, không khoá phiên bản, đường dẫn tuyệt đối", "Tái tạo mô hình trên máy khác bằng một lệnh"],
+      ["pickle.load / torch.load file không rõ nguồn; trust_remote_code=True", "safetensors/ONNX, kiểm tra hash"],
+      ["Nạp mô hình mỗi request; không timeout, health probe, resource limit", "Review manifest; load test"],
+      ["GPU cho mô hình chạy tốt trên CPU; endpoint bật liên tục cho việc chỉ cần batch", "Ước tính chi phí mỗi 1.000 dự đoán"],
+      ["Không cổng kiểm tra trước khi promote, không rollback/canary, không giám sát drift", "Mô phỏng drift xem có cảnh báo không"]
+    ],
+    core: ["python-core", "numpy", "pandas", "git-env", "sql", "encoding", "scaling", "pipelines", "random-forest", "boosting", "metrics", "validation", "bias-variance", "tuning", "nn-basics", "serving-api", "docker", "tracking", "pipelines-cicd", "monitoring", "case-issues", "case-upgrade"],
+    useful: ["linear-algebra", "calculus", "spark", "warehouse", "cnn", "transformer", "recsys", "ts-ml", "explainability"]
+  },
+  {
+    id: "mlops", name: "MLOps / ML Platform", family: "infra",
+    question: "Mọi đội có đưa mô hình lên production nhanh và an toàn không?", deliver: "Nền tảng dùng chung: registry, feature store, serving, monitoring", measure: "Mức sử dụng, thời gian ra production, chi phí", neighbor: "ML Engineer, DevOps/SRE",
+    math: 1, swe: 3, degree: "Không cần; cần kinh nghiệm backend/DevOps", vn: "Chưa có số liệu lương Việt Nam đã kiểm chứng. Nhóm nghiên cứu nhận định phần lớn startup Việt đang ở MLOps cấp 0–1.",
+    summary: "Xây phần dùng chung cho nhiều đội ML: pipeline, feature store, model registry, serving, giám sát, GPU. Gần với SRE và backend.",
+    daily: "Kubernetes, CI/CD, lập lịch GPU, trực sự cố, migration nền tảng, thiết kế SDK nội bộ cho các đội ML.",
+    levels: [
+      ["Nền", "Như giai đoạn A của ML Engineer, cộng Linux và mạng cơ bản", "Đóng gói một mô hình thành image có thể tái tạo"],
+      ["Lõi", "Ba cấp MLOps của Google (0: thủ công, 1: tự động huấn luyện liên tục có cổng kiểm tra, 2: CI/CD cho chính pipeline); registry, orchestration, giám sát", "Pipeline cấp 1: retrain theo lịch, cổng kiểm tra dữ liệu và mô hình, registry, metadata"],
+      ["Platform", "Kubernetes, Helm, KServe/Triton, KubeRay, feature store, GPU scheduling, governance, FinOps", "Nền tảng serving nhiều mô hình có canary, autoscale và báo cáo chi phí theo đội"]
+    ],
+    order: "Làm ML Engineer vững trước, sau đó chuyển dần sang phần dùng chung khi đã thấy nhiều đội lặp lại cùng một việc.",
+    resources: [["Google Cloud — MLOps: CD và tự động hoá pipeline", "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning"], ["NeurIPS 2015 — Hidden Technical Debt in ML Systems", "https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems"], ["MLOps Zoomcamp", "https://github.com/DataTalksClub/mlops-zoomcamp"]],
+    stable: ["Docker", "Kubernetes", "Terraform", "Prometheus/Grafana", "MLflow", "Các khái niệm cấp 0/1/2"],
+    churn: ["Kubeflow (đổi tên thành AI Reference Platform)", "Feature store thương mại (Databricks mua Tecton 8/2025)", "W&B (CoreWeave mua 5/2025)"],
+    cases: [
+      ["Grab chuyển nền tảng serving Catwalk sang NVIDIA Triton: hơn 50% triển khai online migrate trong 10 ngày, độ trễ đuôi giảm 50% ở một số hệ, chi phí giảm tới 90% với một số mô hình, trung bình 20% (10/2025, qua snippet).", "https://engineering.grab.com/modernising-grab-model-serving-platform"],
+      ["DoorDash Sibyl đạt đỉnh khoảng 900.000 lượt đánh giá/giây; Fabricator tăng tốc pipeline feature tới 12 lần.", "https://careersatdoordash.com/blog/introducing-fabricator-a-declarative-feature-engineering-framework/"],
+      ["Spotify Hendrix: tỷ lệ kỹ sư ML dùng nền tảng tăng từ 16% lên 71% (tóm tắt thứ cấp).", "https://www.zenml.io/mlops-database/spotify-hendrix-ray-based-ml-platform-hendrix-unified-ml-platform-consolidating-feature-workflow-and-model-serving-with"],
+      ["Airbnb 2016: mỗi mô hình mất 8–12 tuần mới lên production, lý do ra đời nền tảng nội bộ (số liệu cũ).", "https://conferences.oreilly.com/strata/strata-ny-2018/public/schedule/detail/69383.html"]
+    ],
+    critique: [
+      ["Không có cổng kiểm tra dữ liệu và mô hình trước khi promote", "Pipeline cấp 1 phải có cổng tự động"],
+      ["Manifest thiếu resource limit, health probe, timeout", "Review manifest; chaos test đơn giản"],
+      ["Secret trong image hoặc biến môi trường lộ ra log", "Quét image; dùng secret manager"],
+      ["Tự động retrain mỗi khi có drift mà không điều tra", "Phân biệt lỗi pipeline dữ liệu với thay đổi thật"],
+      ["Chi phí GPU không được gắn nhãn theo đội", "Báo cáo chi phí theo đội và theo mô hình"]
+    ],
+    core: ["python-core", "git-env", "sql", "pipelines", "validation", "metrics", "serving-api", "docker", "tracking", "pipelines-cicd", "monitoring", "spark", "warehouse"],
+    useful: ["boosting", "nn-basics", "rag", "agents-eval", "case-upgrade"]
+  },
+  {
+    id: "aie", name: "AI Engineer", family: "product",
+    question: "Sản phẩm dùng LLM này có đúng, an toàn, rẻ không?", deliver: "Tính năng hoặc agent dựa trên foundation model", measure: "Điểm eval, chi phí mỗi request, sự cố", neighbor: "Software Engineer, ML Engineer",
+    math: 1, swe: 3, degree: "Không cần", vn: "TopDev 2024–25: kỹ sư AI nhận 1.110–2.060 USD/tháng, đứng đầu 5 vị trí khó tuyển nhất; mới tốt nghiệp 11–20 triệu đồng/tháng. CareerViet: nhu cầu kỹ sư AI năm 2025 tăng gấp đôi (qua snippet).",
+    summary: "Xây sản phẩm trên foundation model: context, RAG, tool và agent, eval, guardrail; chỉ fine-tune khi thật cần. Đánh giá đầu ra mang tính xác suất là kỹ năng khó nhất, và cũng là kỹ năng để kiểm chứng code AI viết.",
+    daily: "Viết và version prompt cùng schema tool, xây retrieval, đọc trace và phân tích lỗi, duy trì bộ eval và LLM judge, chọn mô hình theo chi phí và độ trễ, thêm guardrail, và nhiều việc backend thông thường.",
+    levels: [
+      ["0 – Tiên quyết", "Python (async, typing, Pydantic), HTTP/JSON, Git, SQL, FastAPI, Docker, quản lý secret; thống kê cho eval (tỷ lệ, khoảng tin cậy, cỡ mẫu, precision/recall)", "Đo chi phí và độ trễ trên 3 mô hình × 3 temperature × 20 prompt, báo cáo phương sai"],
+      ["1 – Lõi", "Token, context, sampling, giá; structured output; tool calling; RAG (chunk, embedding, hybrid BM25 + vector, rerank, trích dẫn, recall@k); eval (phân tích lỗi trên trace, golden set, tiêu chí nhị phân, judge đối chiếu nhãn người); 5 mẫu workflow; OWASP LLM Top 10", "Trích xuất có cấu trúc trên 100 tài liệu tiếng Việt có nhãn; RAG trên văn bản quy chế có trích dẫn và biết từ chối"],
+      ["2 – Nâng cao", "Agent có memory, MCP, compaction, tracing OpenTelemetry GenAI, caching, rate limit, human-in-the-loop, eval online", "Mini text-to-SQL role chỉ đọc; agent kèm MCP server quyền tối thiểu và bộ test prompt injection; eval chạy trong CI"],
+      ["3 – Chuyên sâu", "LoRA/QLoRA, distillation, vLLM, lượng tử hoá, multimodal, DSPy, multi-agent", "Fine-tune hoặc distil mô hình nhỏ, serve bằng vLLM, so với API cộng prompt về chất lượng, chi phí, độ trễ"]
+    ],
+    order: "Gọi API trực tiếp (2 tuần) → eval ngay sau prototype đầu tiên (2 tuần) → RAG (3 tuần) → tool, workflow, agent, MCP (3 tuần) → bảo mật và observability (2 tuần) → fine-tune và serving (tuỳ chọn). Tổng khoảng 4–6 tháng bán thời gian (ước lượng).",
+    resources: [["Chip Huyen — AI Engineering (O'Reilly 2025)", "https://github.com/chiphuyen/aie-book"], ["Anthropic — Building effective agents", "https://www.anthropic.com/engineering/building-effective-agents"], ["Hugging Face — Agents course", "https://huggingface.co/learn/agents-course/en/unit0/introduction"], ["OWASP Top 10 for LLM Applications 2025", "https://genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025/"], ["Husain & Shankar — Evals FAQ", "https://hamel.dev/blog/posts/evals-faq/evals-faq.pdf"]],
+    stable: ["Tokenization, sampling", "Embedding, BM25/hybrid, rerank", "Phương pháp eval", "Mẫu workflow, thiết kế tool", "OWASP", "JSON Schema/Pydantic"],
+    churn: ["Tên và giá mô hình", "API framework agent (LangChain đã đổi create_react_agent sau khoảng một năm)", "Vendor vector DB", "SaaS observability", "Mẹo prompt theo phiên bản mô hình"],
+    cases: [
+      ["Klarna: 2,3 triệu hội thoại tháng đầu, tương đương 700 nhân viên; đến 5/2025 thừa nhận đã \"đi quá xa\" và tuyển lại người.", "https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/"],
+      ["Morgan Stanley: hơn 98% đội cố vấn dùng trợ lý; bộ eval xây từ câu hỏi thật và do cố vấn chấm.", "https://openai.com/index/morgan-stanley/"],
+      ["Anthropic Contextual Retrieval: giảm lỗi truy xuất top-20 49%, 67% khi thêm reranker.", "https://www.anthropic.com/engineering/contextual-retrieval"],
+      ["Replit: agent xoá database production trong lúc đang đóng băng code rồi báo cáo sai về việc mình đã làm (7/2025).", "https://www.theregister.com/2025/07/21/replit_saastr_vibe_coding_incident/"],
+      ["Duolingo ra 148 khoá học làm bằng GenAI trong chưa đầy một năm, trong khi 100 khoá đầu mất khoảng 12 năm.", "https://investors.duolingo.com/news-releases/news-release-details/duolingo-launches-148-new-language-courses"]
+    ],
+    critique: [
+      ["Nội dung người dùng hoặc tài liệu truy xuất nối thẳng vào chỉ dẫn; hội đủ \"bộ ba chết người\": dữ liệu riêng tư + nội dung không tin cậy + kênh gửi ra ngoài", "OWASP LLM01; Simon Willison — lethal trifecta"],
+      ["Output LLM đưa thẳng vào SQL, shell, eval, HTML; text-to-SQL không dùng role chỉ đọc", "OWASP LLM05; structured output và validate schema"],
+      ["Tool quyền rộng, không dry-run, không người duyệt hành động không đảo ngược được", "OWASP LLM06; sự cố Replit"],
+      ["Secret trong system prompt; PII ghi vào trace", "OWASP LLM02, LLM07"],
+      ["Không max_tokens, không giới hạn số bước agent, retry không trần", "OWASP LLM10 — unbounded consumption"],
+      ["Không trích nguồn, không đường từ chối, không phân quyền lúc truy xuất", "Air Canada, NYC MyCity; OWASP LLM08"],
+      ["Không golden set, judge chưa đối chiếu nhãn người, cỡ mẫu nhỏ, lẫn ví dụ eval vào prompt", "Husain & Shankar; Morgan Stanley"],
+      ["Test giả định output giống hệt nhau; dùng API đã deprecate; không khoá phiên bản", "LangChain 1.0"],
+      ["Nhồi toàn bộ kho tài liệu vào prompt", "Context rot (Anthropic)"],
+      ["Không có đường chuyển cho người thật", "Klarna, Air Canada"]
+    ],
+    core: ["framing", "probability", "statistics", "python-core", "git-env", "sql", "metrics", "validation", "nlp-embeddings", "transformer", "llm-prompting", "rag", "finetuning", "agents-eval", "serving-api", "docker", "monitoring"],
+    useful: ["pandas", "collection", "knn", "recsys", "nn-basics", "tracking", "pipelines-cicd"]
+  },
+  {
+    id: "spec", name: "CV / NLP / RecSys", family: "product",
+    question: "Mô hình chuyên biệt cho ảnh, ngôn ngữ, gợi ý có chạy tốt ngoài đời không?", deliver: "Mô hình fine-tune, hệ retrieve-rank", measure: "mAP/WER/NDCG, rồi A/B online", neighbor: "ML Engineer, Research Engineer",
+    math: 2, swe: 2, degree: "Ứng dụng: portfolio là đủ; lab nghiên cứu: thường cần thạc sĩ/tiến sĩ", vn: "Hệ sinh thái Việt: PhoBERT, PhoGPT, PhoWhisper (VinAI), VT-Super-120B (Viettel, tự công bố). Qualcomm mua bộ phận GenAI của VinAI ngày 1/4/2025.",
+    summary: "Ba nhánh dùng chung lõi PyTorch và kỷ luật chia dữ liệu, khác nhau ở kiểu dữ liệu và metric. Điểm offline cao chưa bảo đảm kết quả ngoài đời.",
+    daily: "CV: fine-tune backbone có sẵn (ViT/DINOv2, CLIP, SAM, YOLO), làm dữ liệu và gán nhãn. NLP/Speech: phần lớn đã hoà vào LLM engineering, NLP cổ điển vẫn có giá trị cho tiếng Việt. RecSys: hệ hai tầng retrieve rồi rank, cuối cùng phán xét bằng A/B.",
+    levels: [
+      ["CV", "OpenCV → CNN từ đầu (CS231n) → transfer learning → YOLO/SAM → ViT/CLIP/VLM → ONNX/TensorRT", "Phát hiện lỗi trên MVTec AD kèm phân tích nhầm lẫn; fine-tune YOLO, xuất ONNX, đo độ trễ CPU"],
+      ["NLP/Speech", "Tokenization (BPE, tách từ tiếng Việt) → embedding → Transformer (CS224n) → Hugging Face → fine-tune PhoBERT/ViT5 → LoRA, RAG → Whisper/PhoWhisper", "Phân loại hate speech UIT-ViHSD so sánh PhoBERT (tách từ đúng) với XLM-R; fine-tune PhoWhisper, báo WER theo vùng giọng"],
+      ["RecSys", "Baseline độ phổ biến → item-item CF → matrix factorization → LightGBM lambdarank → two-tower + FAISS → DLRM/DCN → SASRec → real-time → A/B", "Hệ hai tầng trên MovieLens chia theo thời gian, NDCG@10 so với baseline độ phổ biến"]
+    ],
+    order: "Giai đoạn 0–6 và 9 của lộ trình, sau đó đi sâu một trong ba nhánh.",
+    resources: [["Stanford CS231n", "https://cs231n.github.io/"], ["Stanford CS224n", "https://web.stanford.edu/class/cs224n/"], ["GitHub — VinAIResearch/PhoBERT", "https://github.com/VinAIResearch/PhoBERT"], ["Google — Recommendation Systems course", "https://developers.google.com/machine-learning/recommendation"]],
+    stable: ["PyTorch", "Transfer learning", "Metric: mAP/IoU, WER/CER, NDCG/Recall@K", "Kỷ luật chia dữ liệu theo nhóm/thời gian"],
+    churn: ["Backbone mới", "Mô hình nền đa phương thức", "Framework recsys"],
+    cases: [
+      ["Google võng mạc tiểu đường: AUC 0,991 (JAMA 2016); triển khai ở 11 phòng khám Thái Lan từ chối khoảng 21% trong khoảng 1.840 ảnh vì không đủ chất lượng.", "https://dl.acm.org/doi/fullHtml/10.1145/3313831.3376718"],
+      ["Waymo: qua 56,7 triệu dặm, giảm 85% va chạm có thương tích nghiêm trọng so với người lái (khoảng tin cậy 39–99%).", "https://www.tandfonline.com/doi/full/10.1080/15389588.2025.2499887"],
+      ["PhoWhisper: fine-tune Whisper trên 844 giờ tiếng Việt nhiều vùng giọng.", "https://arxiv.org/abs/2406.02555"],
+      ["YouTube xếp hạng theo thời gian xem thay vì CTR vì CTR đẩy clickbait lên.", "https://blog.acolyer.org/2016/09/19/deep-neural-networks-for-youtube-recommendations/"],
+      ["PinSage (Pinterest): đồ thị 3 tỷ nút, 18 tỷ cạnh, tăng 25–30% tương tác trong A/B.", "https://medium.com/pinterest-engineering/pinsage-a-new-graph-convolutional-neural-network-for-web-scale-recommender-systems-88795a107f48"]
+    ],
+    critique: [
+      ["CV: augment trước khi chia; ảnh cùng bệnh nhân hoặc cùng video ở cả train và test; nhầm mAP@0.5 với mAP@[.5:.95]; tiền xử lý ONNX lệch lúc train; không đánh giá lại sau INT8", "GroupKFold; so tiền xử lý hai phía; đánh giá lại sau lượng tử hoá"],
+      ["NLP: đưa text thô vào PhoBERT không tách từ; tính WER khi chưa chuẩn hoá Unicode (NFC/NFD), dấu câu, số; cùng người nói ở cả hai tập", "Đọc model card; chuẩn hoá trước khi tính metric"],
+      ["RecSys: chia ngẫu nhiên thay vì theo thời gian; NDCG trên 100 negative lấy mẫu; feature từ tương lai; không baseline độ phổ biến", "Chia theo thời gian; tính trên toàn catalog"],
+      ["Chung: tuning trên tập test; không báo độ dao động theo seed; benchmark bị nhiễm dữ liệu", "Tập test khoá lại; nhiều seed; kiểm tra nhiễm"]
+    ],
+    core: ["linear-algebra", "calculus", "probability", "python-core", "numpy", "pandas", "metrics", "validation", "bias-variance", "nn-basics", "cnn", "rnn", "transformer", "nlp-embeddings", "recsys", "knn", "pca"],
+    useful: ["finetuning", "rag", "serving-api", "docker", "tracking", "boosting", "dbscan", "tuning"]
+  },
+  {
+    id: "research", name: "Research Scientist / Engineer", family: "research",
+    question: "Có phương pháp mới tốt hơn không?", deliver: "Bài báo, phương pháp, hạ tầng thí nghiệm", measure: "Công bố, khả năng tái lập, tác động", neighbor: "Applied Scientist",
+    math: 3, swe: 2, degree: "Research Scientist: gần như cần tiến sĩ. Research Engineer: portfolio có thể đủ", vn: "Blog hướng nghiệp cho rằng tỷ lệ trúng tuyển Research Scientist ở lab hàng đầu dưới 0,5%, Research Engineer cao hơn 2–5 lần (chỉ mang tính gợi ý). Evals engineering là lối vào gần nghiên cứu đang tăng.",
+    summary: "Research Scientist đề xuất phương pháp và viết bài báo; Research Engineer xây hạ tầng huấn luyện và eval, tái lập kết quả. Với người không có bằng tiến sĩ, Research Engineer hoặc evals engineer là cửa khả thi.",
+    daily: "Đọc và tái lập bài báo, thiết kế thí nghiệm, huấn luyện ở quy mô lớn, viết hạ tầng eval, viết bài.",
+    levels: [
+      ["Nền", "Toán (đại số tuyến tính, giải tích, xác suất, tối ưu) vững; PyTorch; đọc bài báo theo ba lượt", "Tái lập bảng kết quả chính của một bài báo"],
+      ["Lõi", "Transformer, huấn luyện phân tán, phương pháp eval, ablation, báo độ dao động theo seed", "Đóng góp open-source vào một thư viện nghiên cứu"],
+      ["Nâng cao", "Chủ đề chuyên sâu (alignment, evals, hiệu năng CUDA, robotics)", "Bài workshop hoặc blog kỹ thuật có thí nghiệm tái lập được"]
+    ],
+    order: "Toàn bộ lộ trình, đặc biệt giai đoạn 1, 9, 10; đọc bài báo song song. Khi đọc luôn hỏi: baseline có được tinh chỉnh công bằng, có tuning trên test, có báo độ dao động, benchmark có bị nhiễm không.",
+    resources: [["Dive into Deep Learning", "https://d2l.ai/"], ["Chip Huyen — AI Engineering (chương eval)", "https://github.com/chiphuyen/aie-book"], ["Hugging Face — LLM course", "https://huggingface.co/learn/llm-course/"]],
+    stable: ["Toán nền", "PyTorch", "Phương pháp thí nghiệm và eval"],
+    churn: ["Kiến trúc mô hình mới", "Benchmark theo mùa"],
+    cases: [
+      ["AI evals engineering: khoảng 39,6% tin tuyển của công ty AI-first ghi kỹ năng eval; vị trí Research Engineer, Model Evaluations của Anthropic đăng mức 500.000–850.000 USD/năm (nguồn thứ cấp, cần đối chiếu).", "https://jobsbyculture.com/blog/ai-evals-engineer-career-guide-2026"],
+      ["Qualcomm mua MovianAI, bộ phận GenAI cũ của VinAI, ngày 1/4/2025: edge AI có nhu cầu cụ thể liên quan tới Việt Nam.", "https://techcrunch.com/2025/04/01/qualcomm-acquires-generative-ai-division-of-vietnamese-startup-vinai"],
+      ["Robotics foundation model (GR00T N1, Gemini Robotics, π0) là nghiên cứu thật nhưng tổng kết ngành 2026 cho rằng robot hình người còn vụng về và đắt đỏ: nên theo dõi hơn là chọn làm cửa vào.", "https://arxiv.org/abs/2503.14734"]
+    ],
+    critique: [
+      ["Baseline không được tinh chỉnh công bằng", "Tinh chỉnh baseline với cùng ngân sách"],
+      ["Tinh chỉnh siêu tham số trên tập test", "Tập test chỉ dùng một lần"],
+      ["Chỉ báo kết quả một seed", "Báo trung bình và độ lệch qua nhiều seed"],
+      ["Benchmark bị nhiễm dữ liệu huấn luyện (GSM1k cho thấy một số mô hình tụt tới 8–13 điểm so với GSM8K)", "Dùng benchmark mới hoặc kiểm tra nhiễm"]
+    ],
+    core: ["linear-algebra", "calculus", "probability", "statistics", "numpy", "python-core", "git-env", "metrics", "validation", "bias-variance", "tuning", "nn-basics", "cnn", "rnn", "transformer", "finetuning"],
+    useful: ["agents-eval", "nlp-embeddings", "recsys", "tracking", "explainability"]
+  }
+];
+
+window.ROADMAP_FOUNDATION = [
+  ["SQL và mô hình dữ liệu", "JOIN, GROUP BY, window, CTE, NULL; biết mỗi bảng \"một dòng là gì\" (grain); star schema", "Join fan-out làm phồng tổng, sai mẫu số, LEFT JOIN vô tình thành INNER JOIN"],
+  ["Thống kê suy luận", "Phân phối, khoảng tin cậy, kiểm định, cỡ mẫu và power, precision/recall", "\"Prompt B thắng prompt A trên 50 ví dụ\" có thật không; A/B thiếu power; kết luận nhân quả từ tương quan"],
+  ["Kỷ luật đánh giá mô hình", "Chia theo thời gian/nhóm, fit tiền xử lý sau khi chia, baseline, metric gắn mục tiêu kinh doanh", "Leakage, điểm offline đẹp nhưng thực tế hỏng, accuracy trên dữ liệu mất cân bằng"],
+  ["Kỹ thuật phần mềm", "Git, pytest, môi trường và khoá phiên bản, cấu hình không hard-code, Docker, HTTP/JSON, quản lý secret", "Code chỉ chạy trên máy tác giả, không tái lập được, lộ API key, gọi hàm không tồn tại"],
+  ["Hệ thống, chi phí, bảo mật", "Ước tính chi phí truy vấn và suy luận, quyền tối thiểu, nạp mô hình an toàn, log và giám sát", "Cluster Spark cho 2 GB, agent có quyền xoá DB production, pickle.load file lạ"]
+];
+
+window.ROADMAP_TRANSITIONS = [
+  ["da", "ae", "dbt, mô hình hoá dữ liệu, test, Git/CI", "Thấp"],
+  ["da", "pds", "Thống kê suy luận, thí nghiệm, nhân quả", "Trung bình"],
+  ["da", "aie", "Kỹ thuật phần mềm, ML, triển khai", "~9–12 tháng (vendor/blog)"],
+  ["swe", "aie", "LLM API, RAG, eval", "~3–6 tháng (vendor/blog)"],
+  ["swe", "de", "SQL và mô hình hoá dữ liệu", "Trung bình"],
+  ["de", "mle", "Nền ML, feature store, serving", "Trung bình"],
+  ["mlds", "mle", "Kỹ thuật phần mềm, system design, triển khai", "Trung bình"],
+  ["mle", "mlops", "Kubernetes, nền tảng dùng chung, SRE", "Trung bình"],
+  ["mle", "research", "Chiều sâu nghiên cứu, thường qua thạc sĩ/tiến sĩ hoặc công bố", "Cao"]
+];
+
+window.ROADMAP_INTERVIEWS = [
+  ["Data Analyst", "Bài SQL; phân tích tình huống kinh doanh hoặc phê bình dashboard; bài về nhà từ dataset ra slide insight"],
+  ["Analytics Engineer", "Mô hình hoá dữ liệu (star schema, SCD); biến nguồn lộn xộn thành mart; dự án dbt"],
+  ["Product DS", "Xác suất, thống kê, A/B test; product sense và tình huống metric"],
+  ["Data Engineer", "SQL và Python; mô hình hoá dữ liệu; thiết kế pipeline hoặc nền tảng dữ liệu"],
+  ["ML Engineer", "Coding; lý thuyết ML; ML system design (gợi ý, xếp hạng, gian lận)"],
+  ["MLOps", "Docker/K8s, CI/CD; thiết kế serving và giám sát drift"],
+  ["AI Engineer", "Thiết kế hệ LLM, eval, đánh đổi chi phí và độ trễ"],
+  ["Research", "Sàng lọc qua công bố; đào sâu một bài báo; trình bày nghiên cứu"]
+];
+
+window.ROADMAP_MARKET = {
+  global: [
+    ["Top 3", "WEF 2025: chuyên gia big data, kỹ sư fintech, chuyên gia AI/ML là ba nghề tăng nhanh nhất đến 2030.", "https://www.weforum.org/stories/2025/01/future-of-jobs-report-2025-the-fastest-growing-and-declining-jobs/"],
+    ["#1", "LinkedIn: AI Engineer là chức danh tăng nhanh nhất ở Mỹ năm 2025 và 2026.", "https://www.dice.com/career-advice/ai-related-jobs-top-linkedins-fastest-growing-roles-list-for-2026"],
+    ["2,5%", "Stanford AI Index 2026: kỹ năng AI có trong 2,5% tin tuyển ở Mỹ năm 2025, tăng 55%.", "https://lightcast.io/resources/blog/stanford-ai-2026"],
+    ["−16 đến −19%", "Stanford: việc làm nhóm 22–25 tuổi trong nghề dễ bị AI thay thế thấp hơn nhóm ít bị tác động (bản 8/2026, qua snippet).", "https://digitaleconomy.stanford.edu/news/canariesaug26/"]
+  ],
+  vn: [
+    ["1.110–2.060 USD", "Lương tháng kỹ sư AI (TopDev 2024–25, qua snippet); AI Engineer khó tuyển nhất.", "https://e.vnexpress.net/news/business/data-speaks/ai-engineers-monthly-pay-exceeds-2-000-but-few-qualify-4796918.html"],
+    ["41,3 triệu", "Trung vị lương tháng Data Engineer; 56,9 triệu ở 3–4 năm (ITviec, qua snippet).", "https://itviec.com/report/vietnam-it-salary-and-recruitment-market"],
+    ["+38%", "Tin tuyển Data Engineer so với năm trước (ITviec blog, qua snippet).", "https://itviec.com/blog/luong-data-engineer/"],
+    ["1/3/2026", "Luật Trí tuệ nhân tạo 134/2025/QH15 có hiệu lực; mục tiêu 50.000 người ứng dụng AI và 10.000 chuyên gia vào 2030.", "https://mst.gov.vn/quoc-hoi-thong-qua-luat-tri-tue-nhan-tao-hoan-thien-hanh-lang-phap-ly-cho-ky-nguyen-so-197251210165544671.htm"]
+  ],
+  ladder: [
+    ["Fresher/junior DA hoặc AI", "~11–25 triệu đồng (~420–960 USD)", "Các nguồn lệch nhau ở cấp này"],
+    ["Mid DS/DE/AI (2–4 năm)", "~30–57 triệu đồng (~1.150–2.200 USD)", "DE 3–4 năm: 56,9 triệu (ITviec)"],
+    ["Senior/lead", "~50–90 triệu đồng trở lên", "Big tech, FDI, làm từ xa cho công ty nước ngoài ở đầu trên"],
+    ["Analytics Engineer, MLOps, Research Scientist", "Chưa có số liệu Việt Nam đã kiểm chứng", "Không nên tự ước lượng"]
+  ],
+  note: "Doanh nghiệp Việt năm 2026 mô tả \"thiếu người giỏi, dư người code cơ bản\": tin entry-level đòi 2–5 năm kinh nghiệm và phỏng vấn kiểm tra khả năng làm việc cùng AI (VnExpress, 6/2026).",
+  noteSrc: "https://vnexpress.net/thi-truong-it-viet-thieu-nguoi-gioi-du-nguoi-code-co-ban-5059102.html"
+};
+
+window.ROADMAP_BRANCH_MAP = {
+  title: "Bản đồ nhánh nghề: một nền chung, bốn họ, mười nhánh",
+  src: `flowchart LR
+  F["Nền chung: SQL và grain, thống kê, kỷ luật đánh giá, kỹ thuật phần mềm, chi phí và bảo mật"]:::hl
+  F --> A["Họ phân tích"]
+  F --> I["Họ hạ tầng"]
+  F --> P["Họ sản phẩm AI"]
+  F --> R["Nghiên cứu"]
+  A --> DA["Data Analyst"]
+  A --> AE["Analytics Engineer"]
+  A --> PDS["Data Scientist product"]
+  A --> MLDS["Data Scientist ML"]
+  I --> DE["Data Engineer"]
+  I --> MLE["ML Engineer"]
+  I --> OPS["MLOps / Platform"]
+  P --> AIE["AI Engineer"]
+  P --> SPEC["CV / NLP / RecSys"]
+  R --> RS["Research Scientist / Engineer"]`
+};
+
+window.ROADMAP_TRANSITION_MAP = {
+  title: "Các hướng chuyển nhánh phổ biến (đi từ kỹ năng liền kề)",
+  src: `flowchart LR
+  SWE["Software Engineer"]
+  DA["Data Analyst"] -->|"thấp"| AE["Analytics Engineer"]
+  DA -->|"trung bình"| PDS["Product DS"]
+  DA -->|"~9–12 tháng"| AIE["AI Engineer"]
+  SWE -->|"~3–6 tháng"| AIE
+  SWE --> DE["Data Engineer"]
+  DE --> MLE["ML Engineer"]
+  MLDS["Data Scientist ML"] --> MLE
+  MLE --> OPS["MLOps / Platform"]
+  MLE -->|"cao, thường cần học vị"| RS["Research / Applied Scientist"]:::hl`
+};
+
 </script>
 <script>
 (function () {
@@ -4280,6 +4894,12 @@ window.ROADMAP_AI_EVIDENCE = [
     B->>AI: Gửi lỗi và output, hỏi nguyên nhân, không nhận bản sửa mù
   end`
   };
+  const BRANCHES = window.ROADMAP_BRANCHES || [];
+  const BRANCH_BY_ID = Object.fromEntries(BRANCHES.map(b => [b.id, b]));
+  const FAMILIES = window.ROADMAP_FAMILIES || {};
+  const BRANCH_KEY = "dsml-roadmap-branch-v1";
+  let branchSel = (() => { try { const v = localStorage.getItem(BRANCH_KEY) || ""; return BRANCH_BY_ID[v] ? v : ""; } catch (e) { return ""; } })();
+  const branchRole = (b, id) => !b ? "" : b.core.includes(id) ? "core" : b.useful.includes(id) ? "useful" : "";
   const OVERVIEW = window.ROADMAP_OVERVIEW;
   const GUIDE_TREE = window.ROADMAP_GUIDE_TREE;
 
@@ -4373,6 +4993,8 @@ window.ROADMAP_AI_EVIDENCE = [
     if (key === "guide") return GUIDE_TREE;
     if (key === "plan") return PLAN;
     if (key === "aiflow") return AI_FLOW;
+    if (key === "branchmap") return window.ROADMAP_BRANCH_MAP;
+    if (key === "transmap") return window.ROADMAP_TRANSITION_MAP;
     const [id, i] = key.split(":");
     return MOD_BY_ID[id] && MOD_BY_ID[id].diagrams[+i];
   }
@@ -4664,6 +5286,109 @@ window.ROADMAP_AI_EVIDENCE = [
     if (el) el.textContent = done.length ? `Bạn đã làm ${done.length}/${QUIZ.length} tình huống, đúng ${ok}.` : `${QUIZ.length} tình huống. Chọn đánh giá của bạn trước khi xem đáp án.`;
   }
 
+  const dots3 = n => `<i class="dots3">${[1, 2, 3].map(k => `<b class="${k <= n ? "on" : ""}"></b>`).join("")}</i>`;
+  function branchChip(b) {
+    return `<button class="chip br-chip" type="button" data-branch="${b.id}" data-track="${FAMILIES[b.family].track}" aria-pressed="${b.id === branchSel}"><i></i>${esc(b.name)}</button>`;
+  }
+  function modChip(id, role) {
+    const m = MOD_BY_ID[id];
+    if (!m) return "";
+    return `<a class="mchip ${role}" href="#m-${id}" data-open="${id}" data-status="${statusOf(id)}"><i></i>${esc(m.title)}</a>`;
+  }
+  function branchProgress(b) {
+    const done = b.core.filter(id => statusOf(id) === "done").length;
+    return { done, total: b.core.length };
+  }
+  function branchDetailHTML(b) {
+    const fam = FAMILIES[b.family];
+    const pr = branchProgress(b);
+    const table = (head, rows) => `<div class="table-wrap"><table><thead><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    return `<article class="br-card" data-track="${fam.track}">
+  <header class="br-top">
+    <div><span class="br-fam">${esc(fam.name)}</span><h3>${esc(b.name)}</h3><p>${esc(b.summary)}</p></div>
+    <div class="br-actions">
+      <button class="btn primary small" type="button" data-branch-filter="${b.id}">Lọc lộ trình theo nhánh này</button>
+      <button class="btn small" type="button" data-pdf-branch="${b.id}">${ICON.pdf} PDF nhánh này</button>
+    </div>
+  </header>
+  <dl class="br-facts">
+    <div><dt>Câu hỏi cốt lõi</dt><dd>${esc(b.question)}</dd></div>
+    <div><dt>Giao ra</dt><dd>${esc(b.deliver)}</dd></div>
+    <div><dt>Được đo bằng</dt><dd>${esc(b.measure)}</dd></div>
+    <div><dt>Nhánh gần nhất</dt><dd>${esc(b.neighbor)}</dd></div>
+    <div><dt>Mức toán</dt><dd>${dots3(b.math)}</dd></div>
+    <div><dt>Kỹ thuật phần mềm</dt><dd>${dots3(b.swe)}</dd></div>
+    <div><dt>Bằng cấp</dt><dd>${esc(b.degree)}</dd></div>
+  </dl>
+  <div class="br-progress"><span>Chủ đề cốt lõi đã xong: <b>${pr.done}/${pr.total}</b></span><div class="progress"><i style="width:${(100 * pr.done / pr.total).toFixed(1)}%"></i></div></div>
+  <h4>Công việc hằng ngày</h4><p>${esc(b.daily)}</p>
+  <h4>Cây kỹ năng và dự án mốc</h4>
+  ${table(["Cấp", "Nội dung", "Dự án mốc"], b.levels)}
+  <h4>Thứ tự học</h4><p>${esc(b.order)}</p>
+  <h4>Chủ đề trong lộ trình này cần học</h4>
+  <p class="br-legend"><span class="mchip core"><i></i>Cốt lõi</span><span class="mchip useful"><i></i>Nên biết</span> Màu chấm theo trạng thái học của bạn.</p>
+  <div class="mchips">${b.core.map(id => modChip(id, "core")).join("")}${b.useful.map(id => modChip(id, "useful")).join("")}</div>
+  <div class="br-tools">
+    <div><h4>Công cụ ổn định, học sâu</h4><div class="tools">${b.stable.map(t => `<span>${esc(t)}</span>`).join("")}</div></div>
+    <div><h4>Thay đổi nhanh, học khi cần</h4><div class="tools churn">${b.churn.map(t => `<span>${esc(t)}</span>`).join("")}</div></div>
+  </div>
+  <h4>Case có số liệu</h4>
+  <ul class="br-cases">${b.cases.map(([t, u]) => `<li>${esc(t)} <a href="${esc(u)}" target="_blank" rel="noopener">Nguồn ↗</a></li>`).join("")}</ul>
+  <h4>Phản biện khi AI viết code cho nhánh này</h4>
+  ${table(["AI hay làm sai", "Cách tự kiểm hoặc căn cứ"], b.critique)}
+  <h4>Thị trường</h4><p>${esc(b.vn)}</p>
+  <h4>Tài liệu học</h4>
+  <ul class="res">${b.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>
+</article>`;
+  }
+  function renderBranchDetail() {
+    const b = BRANCH_BY_ID[branchSel] || BRANCHES[0];
+    if (!b) return;
+    const box = $("#branch-detail");
+    if (box) box.innerHTML = branchDetailHTML(b);
+    document.querySelectorAll(".br-chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.branch === b.id)));
+    document.querySelectorAll("#branch-table tr[data-branch-row]").forEach(r => r.classList.toggle("is-sel", r.dataset.branchRow === b.id));
+  }
+  function renderBranches() {
+    if (!BRANCHES.length) return;
+    const M = window.ROADMAP_MARKET;
+    $("#branch-map").innerHTML = figureHTML("branchmap", window.ROADMAP_BRANCH_MAP);
+    $("#branch-families").innerHTML = Object.entries(FAMILIES).map(([k, f]) => `<button class="fam-card" type="button" data-family="${k}" data-track="${f.track}"><b>${esc(f.name)}</b><span>${esc(f.hint)}</span><small>${BRANCHES.filter(b => b.family === k).map(b => esc(b.name)).join(" · ")}</small></button>`).join("");
+    $("#branch-table").innerHTML = BRANCHES.map(b => `<tr data-branch-row="${b.id}" data-track="${FAMILIES[b.family].track}"><td><button class="linkish" type="button" data-branch="${b.id}"><i></i>${esc(b.name)}</button></td><td>${esc(b.question)}</td><td>${esc(b.deliver)}</td><td>${esc(b.measure)}</td><td>${dots3(b.math)}</td><td>${dots3(b.swe)}</td></tr>`).join("");
+    $("#branch-chips").innerHTML = BRANCHES.map(branchChip).join("");
+    $("#foundation-body").innerHTML = (window.ROADMAP_FOUNDATION || []).map(r => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("");
+    $("#market-global").innerHTML = M.global.map(([n, t, u]) => `<div class="ev"><b>${esc(n)}</b><p>${esc(t)}</p><a href="${esc(u)}" target="_blank" rel="noopener">Nguồn ↗</a></div>`).join("");
+    $("#market-vn").innerHTML = M.vn.map(([n, t, u]) => `<div class="ev"><b>${esc(n)}</b><p>${esc(t)}</p><a href="${esc(u)}" target="_blank" rel="noopener">Nguồn ↗</a></div>`).join("");
+    $("#market-ladder").innerHTML = M.ladder.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("");
+    $("#market-note").innerHTML = `${esc(M.note)} <a href="${esc(M.noteSrc)}" target="_blank" rel="noopener">Nguồn ↗</a>`;
+    $("#interview-body").innerHTML = (window.ROADMAP_INTERVIEWS || []).map(r => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td></tr>`).join("");
+    $("#trans-map").innerHTML = figureHTML("transmap", window.ROADMAP_TRANSITION_MAP);
+    const nm = id => id === "swe" ? "Software Engineer" : BRANCH_BY_ID[id].name;
+    $("#trans-body").innerHTML = (window.ROADMAP_TRANSITIONS || []).map(([a, b, need, t]) => `<tr><td>${esc(nm(a))} → <b>${esc(nm(b))}</b></td><td>${esc(need)}</td><td>${esc(t)}</td></tr>`).join("");
+    $("#branch-filter").innerHTML = `<option value="">Mọi nhánh nghề</option>` + BRANCHES.map(b => `<option value="${b.id}">${esc(b.name)}</option>`).join("");
+    renderBranchDetail();
+  }
+  function setBranch(id, filterRoadmap) {
+    branchSel = BRANCH_BY_ID[id] ? id : "";
+    try { localStorage.setItem(BRANCH_KEY, branchSel); } catch (e) { /* bỏ qua */ }
+    const sel = $("#branch-filter");
+    if (sel) sel.value = filterRoadmap ? branchSel : sel.value;
+    renderBranchDetail();
+    refreshBranchBadges();
+  }
+  function refreshBranchBadges() {
+    const fb = BRANCH_BY_ID[($("#branch-filter") || {}).value];
+    ALL_MODS.forEach(m => {
+      const el = document.querySelector(`[data-brb="${m.id}"]`);
+      if (!el) return;
+      const r = branchRole(fb, m.id);
+      el.textContent = r === "core" ? `Cốt lõi cho ${fb.name}` : r === "useful" ? `Nên biết cho ${fb.name}` : "";
+      el.dataset.role = r;
+    });
+    if (typeof applyFilterRef2 === "function") applyFilterRef2();
+  }
+  let applyFilterRef2 = null;
+
   function appHTML(a) {
     return `<article class="app${a.kind === "fail" ? " app-fail" : ""}">
   <div class="app-top"><span class="app-org">${esc(a.org)}</span><span class="app-ind">${esc(a.ind)}</span>${a.kind === "fail" ? `<span class="app-flag">Thất bại · bài học</span>` : ""}</div>
@@ -4673,6 +5398,68 @@ window.ROADMAP_AI_EVIDENCE = [
   ${a.lesson ? `<p class="app-lesson"><b>Bài học:</b> ${esc(a.lesson)}</p>` : ""}
   <a class="app-src" href="${esc(a.src[1])}" target="_blank" rel="noopener">Nguồn: ${esc(a.src[0])}</a>
 </article>`;
+  }
+
+  function modTabs(m, items) {
+    const list = items.filter(([, , html]) => html && html.trim());
+    return `<div class="subtabs mod-tabs" role="tablist">${list.map(([k, l], i) => `<button class="subtab" type="button" role="tab" data-sub="${m.id}-${k}" aria-selected="${i === 0}">${l}</button>`).join("")}</div>` +
+      list.map(([k, , html], i) => `<div class="subpanel" data-subpanel="${m.id}-${k}"${i ? " hidden" : ""}>${html}</div>`).join("");
+  }
+  function showSub(btnOrPanel) {
+    const root = btnOrPanel.closest("[data-subroot]");
+    if (!root) return;
+    const key = btnOrPanel.dataset.sub || btnOrPanel.dataset.subpanel;
+    root.querySelectorAll(":scope [data-subpanel]").forEach(p => { if (p.closest("[data-subroot]") === root) p.hidden = p.dataset.subpanel !== key; });
+    root.querySelectorAll("[data-sub]").forEach(b => { if (b.closest("[data-subroot]") === root) b.setAttribute("aria-selected", String(b.dataset.sub === key)); });
+  }
+
+  /* ---------- tab chính và giai đoạn ---------- */
+  const TAB_KEY = "dsml-roadmap-tab-v1", STAGEVIEW_KEY = "dsml-roadmap-stage-v1";
+  let stageView = (() => { try { return localStorage.getItem(STAGEVIEW_KEY) || ""; } catch (e) { return ""; } })();
+  function showTab(name, toTop) {
+    const has = document.querySelector(`[data-panel="${name}"]`);
+    if (!has) name = "home";
+    document.querySelectorAll("[data-panel]").forEach(p => { p.hidden = p.dataset.panel !== name; });
+    document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
+    const active = document.querySelector(`[data-tab="${name}"]`);
+    if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) { /* bỏ qua */ } }
+    try { localStorage.setItem(TAB_KEY, name); } catch (e) { /* bỏ qua */ }
+    if (toTop) window.scrollTo(0, 0);
+  }
+  function setStageView(id, silent) {
+    stageView = id === "all" || STAGES.some(s => s.id === id) ? id : STAGES[0].id;
+    try { localStorage.setItem(STAGEVIEW_KEY, stageView); } catch (e) { /* bỏ qua */ }
+    document.querySelectorAll("[data-stage-view]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.stageView === stageView)));
+    if (!silent && typeof applyFilterRef2 === "function") applyFilterRef2();
+  }
+  function renderStageTabs() {
+    const box = document.getElementById("stage-tabs");
+    if (!box) return;
+    box.innerHTML = `<button class="stab" type="button" role="tab" data-stage-view="all" aria-selected="${stageView === "all"}">Tất cả</button>` +
+      STAGES.map(s => { const k = countStatus(s.modules); return `<button class="stab" type="button" role="tab" data-stage-view="${s.id}" data-track="${s.track}" aria-selected="${stageView === s.id}" title="${esc(s.title)}"><i></i><b>${s.no}</b><span>${esc(s.title.split(/[:&,(]/)[0].trim())}</span><small>${k.done}/${s.modules.length}</small></button>`; }).join("");
+  }
+  function renderStageNav() {
+    const nav = document.getElementById("stage-nav");
+    if (!nav) return;
+    const i = STAGES.findIndex(s => s.id === stageView);
+    if (stageView === "all" || i < 0 || document.getElementById("q").value.trim()) { nav.innerHTML = ""; return; }
+    const prev = STAGES[i - 1], next = STAGES[i + 1];
+    nav.innerHTML = `${prev ? `<button class="btn" type="button" data-stage-view="${prev.id}">← ${prev.no}. ${esc(prev.title)}</button>` : "<span></span>"}${next ? `<button class="btn primary" type="button" data-stage-view="${next.id}">${next.no}. ${esc(next.title)} →</button>` : ""}`;
+  }
+  function reveal(id) {
+    if (!id || id === "top") { showTab("home", true); return; }
+    const el = document.getElementById(id);
+    if (!el) return;
+    const panel = el.closest("[data-panel]");
+    if (panel) showTab(panel.dataset.panel, false);
+    const sp = el.closest("[data-subpanel]");
+    if (sp) showSub(sp);
+    const st = el.classList.contains("stage") ? el : el.closest(".stage");
+    if (st && stageView !== "all" && stageView !== st.id) setStageView(st.id);
+    if (el.hidden && (el.classList.contains("mod") || el.classList.contains("stage"))) setStageView(st ? st.id : "all");
+    if (el.classList.contains("mod")) setOpen(el, true);
+    try { history.replaceState(null, "", "#" + id); } catch (e) { /* bỏ qua */ }
+    requestAnimationFrame(() => el.scrollIntoView({ block: "start" }));
   }
 
   const lvlDots = n => `<span class="lvl"><i>${[1, 2, 3].map(k => `<b class="${k <= n ? "on" : ""}"></b>`).join("")}</i>${LEVELS[n]}</span>`;
@@ -4697,12 +5484,12 @@ window.ROADMAP_AI_EVIDENCE = [
       return `<h4>Code mẫu</h4><div class="code"><div class="code-bar"><span>${esc(m.code.lang)}</span><button class="btn ghost small" data-copy="${m.id}" type="button">${ICON.copy} Sao chép</button></div><pre><code>${lines.join("\n")}</code></pre></div>`;
     })() : "";
     return `
-<article class="mod" id="m-${m.id}" data-track="${s.track}" data-level="${m.level}" data-status="${statusOf(m.id)}">
+<article class="mod" data-subroot id="m-${m.id}" data-track="${s.track}" data-level="${m.level}" data-status="${statusOf(m.id)}">
   <div class="mod-head">
     <button class="mod-toggle" type="button" aria-expanded="false" aria-controls="b-${m.id}">
       <span class="mod-title"><h3>${esc(m.title)}</h3></span>
       <div class="mod-sum">${esc(m.summary)}</div>
-      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}${m.apps.length ? `<span>${m.apps.length} case doanh nghiệp</span>` : ""}<span class="st-since" data-since="${m.id}"></span></div>
+      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}${m.apps.length ? `<span>${m.apps.length} case doanh nghiệp</span>` : ""}<span class="st-since" data-since="${m.id}"></span><span class="br-badge" data-brb="${m.id}"></span></div>
     </button>
     <div class="mod-tools">
       <label class="st-pick" title="Đổi trạng thái học"><span class="dot" aria-hidden="true"></span><select id="st-${m.id}" data-status-of="${m.id}" aria-label="Trạng thái: ${esc(m.title)}">${STATUSES.map(o => `<option value="${o.id}"${statusOf(m.id) === o.id ? " selected" : ""}>${o.label}</option>`).join("")}</select></label>
@@ -4711,21 +5498,18 @@ window.ROADMAP_AI_EVIDENCE = [
     </div>
   </div>
   <div class="mod-body" id="b-${m.id}" hidden>
-    <h4>Khái niệm</h4><p>${esc(m.concept)}</p>
-    ${m.diagrams.length ? `<h4>Sơ đồ</h4><div class="dgms">${m.diagrams.map((d, i) => figureHTML(m.id + ":" + i, d)).join("")}</div>` : ""}
-    <h4>Khi nào dùng & vì sao</h4>
-    <div class="cols">
+    ${modTabs(m, [
+      ["k", "Khái niệm", `<p>${esc(m.concept)}</p>${m.diagrams.length ? `<h4>Sơ đồ</h4><div class="dgms">${m.diagrams.map((d, i) => figureHTML(m.id + ":" + i, d)).join("")}</div>` : ""}`],
+      ["w", "Khi nào dùng", `<div class="cols">
       <div class="col why"><h4>Lý do sử dụng</h4>${list(m.why)}</div>
       <div class="col when"><h4>Khi nào dùng</h4>${list(m.when)}</div>
       <div class="col not"><h4>Khi nào không nên</h4>${list(m.whenNot)}</div>
-    </div>
-    ${m.example ? `<h4>Ví dụ ứng dụng thực tế</h4><div class="case"><span class="tag">${esc(m.example.domain)}</span><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>` : ""}
-    ${m.apps.length ? `<h4>Doanh nghiệp đã áp dụng</h4><div class="apps">${m.apps.map(appHTML).join("")}</div>` : ""}
-    ${code}
-    ${m.pitfalls && m.pitfalls.length ? `<h4>Lỗi thường gặp</h4><ul class="list">${m.pitfalls.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
-    ${aiHTML(m)}
-    ${m.tools && m.tools.length ? `<h4>Công cụ</h4><div class="tools">${m.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
-    ${m.resources && m.resources.length ? `<h4>Tài liệu học</h4><ul class="res">${m.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>` : ""}
+    </div>`],
+      ["r", "Thực tế" + (m.apps.length ? ` (${m.apps.length + (m.example ? 1 : 0)})` : ""), (m.example || m.apps.length) ? `${m.example ? `<h4>Ví dụ ứng dụng thực tế</h4><div class="case"><span class="tag">${esc(m.example.domain)}</span><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>` : ""}${m.apps.length ? `<h4>Doanh nghiệp đã áp dụng</h4><div class="apps">${m.apps.map(appHTML).join("")}</div>` : ""}` : ""],
+      ["c", "Code và lỗi", `${code}${m.pitfalls && m.pitfalls.length ? `<h4>Lỗi thường gặp</h4><ul class="list">${m.pitfalls.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}`],
+      ["a", "Làm việc với AI", aiHTML(m)],
+      ["t", "Công cụ và tài liệu", `${m.tools && m.tools.length ? `<h4>Công cụ</h4><div class="tools">${m.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}${m.resources && m.resources.length ? `<h4>Tài liệu học</h4><ul class="res">${m.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>` : ""}`]
+    ])}
   </div>
 </article>`;
   }
@@ -4748,7 +5532,8 @@ window.ROADMAP_AI_EVIDENCE = [
     if (GUIDE_TREE) $("#guide-fig").innerHTML = figureHTML("guide", GUIDE_TREE);
     $("#guide-body").innerHTML = GUIDE.map(([need, algo, id]) =>
       `<tr><td>${esc(need)}</td><td>${MOD_BY_ID[id] ? `<a href="#m-${id}" data-open="${id}">${esc(algo)}</a>` : esc(algo)}</td><td>${MOD_BY_ID[id] ? esc(MOD_BY_ID[id].stage.title) : ""}</td></tr>`).join("");
-    renderAppsIndex("all");
+    renderAppsIndex(sectorOf(ALL_APPS[0] ? ALL_APPS.map(a => a.ind).sort((x, y) => ALL_APPS.filter(a => sectorOf(a.ind) === sectorOf(y)).length - ALL_APPS.filter(a => sectorOf(a.ind) === sectorOf(x)).length)[0] : ""));
+    renderBranches();
     $("#ai-evidence").innerHTML = EVIDENCE.map(e => `<div class="ev"><b>${esc(e.n)}</b><p>${esc(e.t)}</p><a href="${esc(e.src[1])}" target="_blank" rel="noopener">${esc(e.src[0])}</a></div>`).join("");
     $("#ai-flow").innerHTML = figureHTML("aiflow", AI_FLOW);
     $("#ai-quiz").innerHTML = QUIZ.map((q, i) => quizHTML(q, i, true)).join("");
@@ -4824,6 +5609,8 @@ window.ROADMAP_AI_EVIDENCE = [
     }
     if (typeof applyFilterRef === "function") applyFilterRef();
     refreshPlan();
+    if (document.getElementById("branch-detail") && BRANCHES.length) renderBranchDetail();
+    if (document.getElementById("stage-tabs") && document.getElementById("stage-tabs").children.length) renderStageTabs();
   }
   let applyFilterRef = null;
 
@@ -4840,6 +5627,17 @@ window.ROADMAP_AI_EVIDENCE = [
   function bindMain() {
     document.addEventListener("click", e => {
       const t = e.target;
+      const tab = t.closest("[data-tab]");
+      if (tab) { showTab(tab.dataset.tab, true); return; }
+      const sub = t.closest("[data-sub]");
+      if (sub) { showSub(sub); return; }
+      const sv = t.closest("[data-stage-view]");
+      if (sv) { setStageView(sv.dataset.stageView); if (sv.closest("#stage-nav")) document.getElementById("stage-tabs").scrollIntoView({ block: "start" }); return; }
+      const a = t.closest('a[href^="#"]');
+      if (a && !e.defaultPrevented) {
+        const id = decodeURIComponent(a.getAttribute("href").slice(1));
+        if (id === "top" || document.getElementById(id)) { e.preventDefault(); reveal(id); return; }
+      }
       const tog = t.closest(".mod-toggle");
       if (tog) { const card = tog.closest(".mod"); setOpen(card, card.querySelector(".mod-body").hidden); return; }
       const chev = t.closest(".chev");
@@ -4856,6 +5654,20 @@ window.ROADMAP_AI_EVIDENCE = [
           toast("Đã chọn đoạn code, nhấn Ctrl+C để sao chép");
         };
         try { navigator.clipboard.writeText(src).then(() => toast("Đã sao chép code"), fallback); } catch (err) { fallback(); }
+        return;
+      }
+      const brf = t.closest("[data-branch-filter]");
+      if (brf) { setBranch(brf.dataset.branchFilter, true); setStageView("all", true); showTab("roadmap", true); applyFilterRef2(); toast(`Đang hiện các chủ đề cho nhánh ${BRANCH_BY_ID[brf.dataset.branchFilter].name}`); return; }
+      const brp = t.closest("[data-pdf-branch]");
+      if (brp) { openExport({ scope: "branch", branchId: brp.dataset.pdfBranch }); return; }
+      const brc = t.closest("[data-branch]");
+      if (brc) { setBranch(brc.dataset.branch, false); if (brc.closest("#branch-table")) reveal("branch-detail"); return; }
+      const fam = t.closest("[data-family]");
+      if (fam) {
+        const first = BRANCHES.find(b => b.family === fam.dataset.family);
+        document.querySelectorAll(".fam-card").forEach(c => c.setAttribute("aria-pressed", String(c === fam)));
+        document.querySelectorAll("#branch-table tr[data-branch-row]").forEach(r => r.classList.toggle("is-dim", BRANCH_BY_ID[r.dataset.branchRow].family !== fam.dataset.family));
+        if (first) setBranch(first.id, false);
         return;
       }
       const qa = t.closest("[data-quiz-ans]");
@@ -4899,7 +5711,7 @@ window.ROADMAP_AI_EVIDENCE = [
       document.querySelectorAll(".mod").forEach(c => { if (!c.hidden) setOpen(c, allOpen); });
       $("#toggle-all").textContent = allOpen ? "Thu gọn tất cả" : "Mở rộng tất cả";
     });
-    $("#mobile-toc").addEventListener("change", e => { if (e.target.value) location.hash = e.target.value; });
+    $("#mobile-toc").addEventListener("change", e => { if (e.target.value) reveal(e.target.value); });
 
     // Bộ lọc
     let level = "all";
@@ -4915,38 +5727,56 @@ window.ROADMAP_AI_EVIDENCE = [
       document.querySelectorAll("[data-status-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
       applyFilter();
     }));
-    q.addEventListener("input", applyFilter);
+    q.addEventListener("input", () => { if (q.value.trim()) showTab("roadmap", false); applyFilter(); });
     applyFilterRef = () => { if (stFilter !== "all") applyFilter(); };
+    applyFilterRef2 = applyFilter;
+    $("#branch-filter").addEventListener("change", e => {
+      if (e.target.value) { branchSel = e.target.value; try { localStorage.setItem(BRANCH_KEY, branchSel); } catch (err) { /* bỏ qua */ } renderBranchDetail(); }
+      refreshBranchBadges();
+    });
     function norm(s) { return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d"); }
     const hay = Object.fromEntries(ALL_MODS.map(m => [m.id, norm([m.title, m.summary, m.concept, (m.tools || []).join(" "), m.example && m.example.domain, m.example && m.example.title, m.apps.map(a => [a.org, a.ind, a.title].join(" ")).join(" ")].join(" "))]));
     function applyFilter() {
       const terms = norm(q.value.trim()).split(/\s+/).filter(Boolean);
+      const fb0 = BRANCH_BY_ID[$("#branch-filter").value];
       let shown = 0;
       STAGES.forEach(s => {
         let k = 0;
         s.modules.forEach(m => {
-          const ok = (level === "all" || String(m.level) === level) && (stFilter === "all" || statusOf(m.id) === stFilter) && terms.every(t => hay[m.id].includes(t));
+          const fb = BRANCH_BY_ID[$("#branch-filter").value];
+          const ok = (level === "all" || String(m.level) === level) && (stFilter === "all" || statusOf(m.id) === stFilter) && (!fb || branchRole(fb, m.id)) && terms.every(t => hay[m.id].includes(t));
           document.getElementById("m-" + m.id).hidden = !ok;
           if (ok) k++;
         });
-        document.getElementById(s.id).hidden = k === 0;
-        shown += k;
+        const inView = stageView === "all" || terms.length > 0 || fb0 || s.id === stageView;
+        document.getElementById(s.id).hidden = k === 0 || !inView;
+        if (inView) shown += k;
       });
       $("#empty").hidden = shown > 0;
+      renderStageNav();
     }
 
     // Bản in từ trình duyệt: mở rộng mọi thẻ trước khi in, khôi phục sau đó
     let before = null;
+    let viewBefore = null;
     window.addEventListener("beforeprint", () => {
+      viewBefore = stageView; setStageView("all");
       before = [...document.querySelectorAll(".mod")].map(c => [c, !c.querySelector(".mod-body").hidden]);
       before.forEach(([c]) => setOpen(c, true));
     });
-    window.addEventListener("afterprint", () => { if (before) before.forEach(([c, o]) => setOpen(c, o)); before = null; });
+    window.addEventListener("afterprint", () => { if (before) before.forEach(([c, o]) => setOpen(c, o)); before = null; if (viewBefore) setStageView(viewBefore); });
 
-    if (location.hash.startsWith("#m-")) {
-      const card = document.getElementById(location.hash.slice(1));
-      if (card) { setOpen(card, true); card.scrollIntoView(); }
+    // Trạng thái ban đầu: giai đoạn đang học, tab đã mở lần trước hoặc theo đường dẫn
+    if (!stageView) {
+      const next = ALL_MODS.find(m => statusOf(m.id) === "doing") || ALL_MODS.find(m => statusOf(m.id) !== "done");
+      stageView = next ? next.stage.id : STAGES[0].id;
     }
+    renderStageTabs();
+    setStageView(stageView);
+    window.addEventListener("hashchange", () => { const h = decodeURIComponent(location.hash.slice(1)); if (h) reveal(h); });
+    const hash = decodeURIComponent(location.hash.slice(1));
+    if (hash && document.getElementById(hash)) reveal(hash);
+    else { let last = "home"; try { last = localStorage.getItem(TAB_KEY) || "home"; } catch (e) { /* bỏ qua */ } showTab(last, false); }
   }
 
   /* =====================================================================
@@ -5107,6 +5937,41 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
 </div>` });
     }
     if (opt.toc && !single) units.push({ kind: "toc", newPage: true, html: null /* dựng sau khi có số trang */ });
+    if (opt.branches && !single) {
+      const tb = (head, rows) => `<table class="ptrack"><thead><tr class="bk">${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr class="bk">${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      const brUnit = b => `<div class="stage-band bk" data-track="${FAMILIES[b.family].track}"><div class="no">Nhánh nghề · ${esc(FAMILIES[b.family].name)}</div><h2>${esc(b.name)}</h2><p class="sub">${esc(b.summary)}</p>
+<div class="facts"><span>Mức toán: <b>${b.math}/3</b></span><span>Kỹ thuật phần mềm: <b>${b.swe}/3</b></span><span>Bằng cấp: <b>${esc(b.degree)}</b></span></div>
+<p class="goal"><b>Câu hỏi cốt lõi:</b> ${esc(b.question)} <b>Giao ra:</b> ${esc(b.deliver)}. <b>Đo bằng:</b> ${esc(b.measure)}.</p></div>
+<div class="mod" style="border-top:0"><h4 class="bk">Công việc hằng ngày</h4><p class="bk">${esc(b.daily)}</p>
+<h4 class="bk">Cây kỹ năng và dự án mốc</h4>${tb(["Cấp", "Nội dung", "Dự án mốc"], b.levels)}
+<h4 class="bk">Thứ tự học</h4><p class="bk">${esc(b.order)}</p>
+<h4 class="bk">Chủ đề cốt lõi trong lộ trình</h4><p class="bk">${b.core.filter(id => MOD_BY_ID[id]).map(id => esc(MOD_BY_ID[id].title) + " (" + ST_LABEL[statusOf(id)] + ")").join(" · ")}</p>
+<h4 class="bk">Nên biết</h4><p class="bk">${b.useful.filter(id => MOD_BY_ID[id]).map(id => esc(MOD_BY_ID[id].title)).join(" · ")}</p>
+<h4 class="bk">Công cụ</h4><p class="bk"><b>Ổn định:</b> ${b.stable.map(esc).join(" · ")}<br><b>Thay đổi nhanh:</b> ${b.churn.map(esc).join(" · ")}</p>
+<h4 class="bk">Case có số liệu</h4><ul>${b.cases.map(([t, u]) => `<li class="bk">${esc(t)} <a href="${esc(u)}">Nguồn</a></li>`).join("")}</ul>
+<h4 class="bk">Phản biện khi AI viết code cho nhánh này</h4>${tb(["AI hay làm sai", "Cách tự kiểm hoặc căn cứ"], b.critique)}
+<h4 class="bk">Thị trường</h4><p class="bk">${esc(b.vn)}</p>
+<h4 class="bk">Tài liệu học</h4><ul class="res">${b.resources.map(([l, u]) => `<li class="bk"><a href="${esc(u)}">${esc(l)}</a><br><span class="u">${esc(u)}</span></li>`).join("")}</ul></div>`;
+      if (sel.scope === "branch") {
+        units.push({ kind: "branch", newPage: true, html: (opt.diagrams ? pdfFigure(opt, "branchmap", window.ROADMAP_BRANCH_MAP) : "") + brUnit(sel.branch) });
+      } else {
+        const M = window.ROADMAP_MARKET;
+        units.push({ kind: "branches", newPage: true, html: `<h2 class="sec-title bk">Chọn nhánh nghề AI và dữ liệu</h2>
+<p class="sec-sub bk">Các nhánh khác nhau ở thứ họ giao ra, không ở công cụ. Học chắc nền chung rồi mới rẽ nhánh. Tổng hợp từ báo cáo nghiên cứu 9/2026 trong repo.</p>
+${opt.diagrams ? pdfFigure(opt, "branchmap", window.ROADMAP_BRANCH_MAP) : ""}
+${tb(["Nhánh", "Câu hỏi cốt lõi", "Giao ra", "Đo bằng"], BRANCHES.map(b => [b.name, b.question, b.deliver, b.measure]))}
+<h4 class="bk" style="font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#667281;margin:14px 0 6px">Năm khối nền dùng cho mọi nhánh</h4>
+${tb(["Khối nền", "Nội dung tối thiểu", "Bắt được lỗi AI nào"], window.ROADMAP_FOUNDATION)}
+<h4 class="bk" style="font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#667281;margin:14px 0 6px">Thị trường</h4>
+${[...M.global, ...M.vn].map(([n, t, u]) => `<div class="pev bk"><b>${esc(n)}</b> ${esc(t)} <span class="pa-src"><a href="${esc(u)}">nguồn</a></span></div>`).join("")}
+${tb(["Cấp", "Lương tháng (gộp, Việt Nam)", "Ghi chú"], M.ladder)}
+<p class="bk" style="font-size:12.5px">${esc(M.note)}</p>
+${tb(["Nhánh", "Vòng phỏng vấn đặc trưng"], window.ROADMAP_INTERVIEWS)}
+${opt.diagrams ? pdfFigure(opt, "transmap", window.ROADMAP_TRANSITION_MAP) : ""}
+${tb(["Chuyển nhánh", "Cần bổ sung", "Độ khó / thời gian"], window.ROADMAP_TRANSITIONS.map(([a, b, n, t]) => [(a === "swe" ? "Software Engineer" : BRANCH_BY_ID[a].name) + " → " + BRANCH_BY_ID[b].name, n, t]))}` });
+        BRANCHES.forEach(b => units.push({ kind: "branch", newPage: true, html: brUnit(b) }));
+      }
+    }
     if (opt.ai && !single) {
       units.push({ kind: "ai", newPage: true, html: `<h2 class="sec-title bk">Học để làm chủ AI</h2>
 <p class="sec-sub bk">Mục tiêu của bộ tài liệu: hiểu đủ nền tảng để giao việc cho AI rõ ràng, tự kiểm chứng kết quả, ra quyết định và phản biện được đề xuất của AI.</p>
@@ -5201,6 +6066,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       if (opt.diagrams) {
         const keys = [];
         if (opt.plan && sel.scope !== "mod") keys.push("plan");
+        if (opt.branches && sel.scope !== "mod") { keys.push("branchmap"); if (sel.scope !== "branch") keys.push("transmap"); }
         if (opt.ai && sel.scope !== "mod") keys.push("aiflow");
         if (opt.guide && sel.scope !== "mod") { if (OVERVIEW) keys.push("overview"); if (GUIDE_TREE) keys.push("guide"); }
         ALL_MODS.filter(m => sel.mods.has(m.id)).forEach(m => m.diagrams.forEach((d, i) => keys.push(m.id + ":" + i)));
@@ -5374,6 +6240,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
     const picks = preset.stages ? new Set(preset.stages) : null;
     document.querySelectorAll("[data-pick]").forEach(cb => { cb.checked = picks ? picks.has(cb.dataset.pick) : true; });
     back.dataset.mod = preset.modId || "";
+    if (preset.branchId) $("#exp-branch").value = preset.branchId;
     const modOpt = $("#scope-mod-opt");
     modOpt.hidden = !preset.modId;
     if (preset.modId) $("#scope-mod-name").textContent = MOD_BY_ID[preset.modId].title;
@@ -5385,6 +6252,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
   function syncScope() {
     const v = document.querySelector('input[name="scope"]:checked').value;
     $("#stage-picks").hidden = v !== "pick";
+    $("#exp-branch").disabled = v !== "branch";
     const sel = currentSelection();
     $("#exp-summary").textContent = sel.mods.size ? `${sel.mods.size} chủ đề, khoảng ${totalHours(ALL_MODS.filter(m => sel.mods.has(m.id)))} giờ học` : "Chưa chọn chủ đề nào";
     $("#exp-go").disabled = !sel.mods.size || busy;
@@ -5400,6 +6268,11 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       const st = STAGES.filter(s => ids.has(s.id));
       return { scope: "pick", label: st.length === 1 ? `Giai đoạn ${st[0].no}: ${st[0].title}` : `${st.length} giai đoạn đã chọn`, stages: st, mods: new Set(st.flatMap(s => s.modules.map(m => m.id))) };
     }
+    if (v === "branch") {
+      const b = BRANCH_BY_ID[$("#exp-branch").value] || BRANCHES[0];
+      const ids = new Set([...b.core, ...b.useful].filter(id => MOD_BY_ID[id]));
+      return { scope: "branch", branch: b, label: "Nhánh nghề: " + b.name, stages: STAGES.filter(s => s.modules.some(m => ids.has(m.id))), mods: ids };
+    }
     if (v === "todo") {
       const ms = ALL_MODS.filter(m => statusOf(m.id) !== "done");
       return { scope: "todo", label: "Các chủ đề chưa xong", stages: STAGES, mods: new Set(ms.map(m => m.id)) };
@@ -5407,7 +6280,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
     return { scope: "all", label: "Toàn bộ lộ trình", stages: STAGES, mods: new Set(ALL_MODS.map(m => m.id)) };
   }
   function fileName(sel) {
-    const base = sel.scope === "mod" ? [...sel.mods][0] : sel.scope === "pick" && sel.stages.length === 1 ? "giai-doan-" + sel.stages[0].no : sel.scope === "todo" ? "chua-xong" : "toan-bo";
+    const base = sel.scope === "mod" ? [...sel.mods][0] : sel.scope === "pick" && sel.stages.length === 1 ? "giai-doan-" + sel.stages[0].no : sel.scope === "todo" ? "chua-xong" : sel.scope === "branch" ? "nhanh-" + sel.branch.id : "toan-bo";
     return `ds-ml-roadmap-${base}.pdf`;
   }
 
@@ -5417,7 +6290,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       cover: $("#o-cover").checked, toc: $("#o-toc").checked, guide: $("#o-guide").checked,
       code: $("#o-code").checked, res: $("#o-res").checked,
       quality: document.querySelector('input[name="quality"]:checked').value,
-      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked, apps: $("#o-apps").checked, ai: $("#o-ai").checked
+      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked, apps: $("#o-apps").checked, ai: $("#o-ai").checked, branches: $("#o-branches").checked
     };
     const status = $("#exp-status"), bar = $("#exp-bar"), go = $("#exp-go");
     busy = true; cancelFlag = false; go.disabled = true;
@@ -5465,6 +6338,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
   }
 
   function renderExportDialog() {
+    $("#exp-branch").innerHTML = BRANCHES.map(b => `<option value="${b.id}">${esc(b.name)}</option>`).join("");
     $("#stage-picks").innerHTML = STAGES.map(s => `<label data-track="${s.track}"><input type="checkbox" id="pick-${s.id}" data-pick="${s.id}" checked><i></i>${s.no}. ${esc(s.title)}</label>`).join("");
     if (IN_FRAME) $("#print-btn").hidden = true;
     $("#export").addEventListener("change", syncScope);

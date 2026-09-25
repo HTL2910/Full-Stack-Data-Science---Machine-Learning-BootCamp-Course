@@ -18,6 +18,7 @@ Repo gồm hai phần:
 
 | Bạn muốn | Mở |
 |---|---|
+| Chọn nhánh nghề (Data Analyst, Data Engineer, ML Engineer, AI Engineer…) | Mục **Chọn nhánh nghề** trong website, hoặc báo cáo [`reports/Lộ trình các nhánh ngành AI.md`](reports/Lộ%20trình%20các%20nhánh%20ngành%20AI.md) |
 | Học cách làm việc với AI và luyện phản biện | Mục **Học để làm chủ AI** trong website, hoặc mục 1 của [`HUONG-DAN-HOC.md`](roadmap/HUONG-DAN-HOC.md) |
 | Xem lộ trình học đầy đủ | [`roadmap/index.html`](roadmap/index.html): tải về rồi mở bằng trình duyệt, không cần server |
 | Biết nên học gì trước, mỗi tuần học bao nhiêu | [`roadmap/HUONG-DAN-HOC.md`](roadmap/HUONG-DAN-HOC.md) |
@@ -82,6 +83,20 @@ flowchart TD
 
 ### Tính năng của website
 
+- **Chia tab để khỏi phải cuộn dài:**
+  - 8 tab chính: Tổng quan · Làm chủ AI · Nhánh nghề · Học từ đầu · Lộ trình · Chọn thuật toán · Ứng dụng thực tế · Nguồn;
+  - tab con trong các mục dài;
+  - mỗi chủ đề có 6 tab: Khái niệm · Khi nào dùng · Thực tế · Code và lỗi · Làm việc với AI · Công cụ và tài liệu;
+  - tab Lộ trình hiện từng giai đoạn một, có thanh chọn giai đoạn và nút sang giai đoạn trước hoặc tiếp theo;
+  - trang nhớ tab và giai đoạn bạn mở lần trước, và link dạng `#m-rag` mở thẳng đúng chủ đề.
+
+- **Chọn nhánh nghề**:
+  - bản đồ 10 nhánh chia thành 4 họ (phân tích, hạ tầng, sản phẩm AI, nghiên cứu);
+  - chọn theo sở thích, bảng so sánh nhanh;
+  - trang chi tiết từng nhánh: câu hỏi cốt lõi, mức toán và kỹ thuật phần mềm cần có, cây kỹ năng, dự án mốc, thứ tự học, công cụ ổn định và công cụ thay đổi nhanh, case có số liệu, bảng phản biện khi AI viết code cho nhánh đó, thị trường Việt Nam;
+  - năm khối nền chung cho mọi nhánh, thị trường 2025–2026 (toàn cầu và Việt Nam), vòng phỏng vấn, sơ đồ chuyển nhánh;
+  - **lọc lộ trình theo nhánh**: chỉ hiện các chủ đề cốt lõi và nên biết của nhánh đó, kèm tiến độ;
+  - **xuất PDF riêng cho từng nhánh**.
 - **Học để làm chủ AI**:
   - 6 số liệu nghiên cứu về hiệu quả và rủi ro khi dùng AI viết code;
   - 3 mức hiểu cần đạt ở mỗi chủ đề;
@@ -119,6 +134,7 @@ roadmap/
     ├── data-5-diagrams.js      # 42 sơ đồ Mermaid
     ├── data-6-applications.js  # 109 case doanh nghiệp có nguồn
     ├── data-7-ai.js            # làm việc với AI cho 59 chủ đề, 24 tình huống phản biện, số liệu nghiên cứu
+    ├── data-8-branches.js      # 10 nhánh nghề, khối nền chung, thị trường, phỏng vấn, chuyển nhánh
     ├── template.html, styles.css, app.js
 ```
 
@@ -169,6 +185,11 @@ Các điểm này được phân tích chi tiết trong giai đoạn 13 của l�
 - Notebook lưu `reg_rf` (mô hình mặc định) chứ không lưu mô hình đã tinh chỉnh `rf_random.best_estimator_`.
 - `max_features='auto'` và `sns.distplot` đã bị loại bỏ trong các phiên bản thư viện mới.
 - Chỉ chia train/test ngẫu nhiên, chưa kiểm tra theo thời gian.
+
+## Báo cáo nghiên cứu
+
+- [`reports/Lộ trình các nhánh ngành AI.md`](reports/Lộ%20trình%20các%20nhánh%20ngành%20AI.md): báo cáo khoảng 13.900 từ, có nguồn cho từng số liệu. Nội dung gồm 10 nhánh nghề AI và dữ liệu, nền chung, những điều cần phản biện khi AI viết code, thị trường toàn cầu và Việt Nam 2025–2026, cách chọn và chuyển nhánh.
+- Ghi chú nghiên cứu gốc cho từng nhánh nằm trong `research_notes/Lộ trình các nhánh ngành AI/`.
 
 ## Nguồn tham khảo chính
 
