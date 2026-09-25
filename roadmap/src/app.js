@@ -58,6 +58,12 @@
     B->>AI: Gửi lỗi và output, hỏi nguyên nhân, không nhận bản sửa mù
   end`
   };
+  const BRANCHES = window.ROADMAP_BRANCHES || [];
+  const BRANCH_BY_ID = Object.fromEntries(BRANCHES.map(b => [b.id, b]));
+  const FAMILIES = window.ROADMAP_FAMILIES || {};
+  const BRANCH_KEY = "dsml-roadmap-branch-v1";
+  let branchSel = (() => { try { const v = localStorage.getItem(BRANCH_KEY) || ""; return BRANCH_BY_ID[v] ? v : ""; } catch (e) { return ""; } })();
+  const branchRole = (b, id) => !b ? "" : b.core.includes(id) ? "core" : b.useful.includes(id) ? "useful" : "";
   const OVERVIEW = window.ROADMAP_OVERVIEW;
   const GUIDE_TREE = window.ROADMAP_GUIDE_TREE;
 
@@ -151,6 +157,8 @@
     if (key === "guide") return GUIDE_TREE;
     if (key === "plan") return PLAN;
     if (key === "aiflow") return AI_FLOW;
+    if (key === "branchmap") return window.ROADMAP_BRANCH_MAP;
+    if (key === "transmap") return window.ROADMAP_TRANSITION_MAP;
     const [id, i] = key.split(":");
     return MOD_BY_ID[id] && MOD_BY_ID[id].diagrams[+i];
   }
@@ -442,6 +450,109 @@
     if (el) el.textContent = done.length ? `Bạn đã làm ${done.length}/${QUIZ.length} tình huống, đúng ${ok}.` : `${QUIZ.length} tình huống. Chọn đánh giá của bạn trước khi xem đáp án.`;
   }
 
+  const dots3 = n => `<i class="dots3">${[1, 2, 3].map(k => `<b class="${k <= n ? "on" : ""}"></b>`).join("")}</i>`;
+  function branchChip(b) {
+    return `<button class="chip br-chip" type="button" data-branch="${b.id}" data-track="${FAMILIES[b.family].track}" aria-pressed="${b.id === branchSel}"><i></i>${esc(b.name)}</button>`;
+  }
+  function modChip(id, role) {
+    const m = MOD_BY_ID[id];
+    if (!m) return "";
+    return `<a class="mchip ${role}" href="#m-${id}" data-open="${id}" data-status="${statusOf(id)}"><i></i>${esc(m.title)}</a>`;
+  }
+  function branchProgress(b) {
+    const done = b.core.filter(id => statusOf(id) === "done").length;
+    return { done, total: b.core.length };
+  }
+  function branchDetailHTML(b) {
+    const fam = FAMILIES[b.family];
+    const pr = branchProgress(b);
+    const table = (head, rows) => `<div class="table-wrap"><table><thead><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    return `<article class="br-card" data-track="${fam.track}">
+  <header class="br-top">
+    <div><span class="br-fam">${esc(fam.name)}</span><h3>${esc(b.name)}</h3><p>${esc(b.summary)}</p></div>
+    <div class="br-actions">
+      <button class="btn primary small" type="button" data-branch-filter="${b.id}">Lọc lộ trình theo nhánh này</button>
+      <button class="btn small" type="button" data-pdf-branch="${b.id}">${ICON.pdf} PDF nhánh này</button>
+    </div>
+  </header>
+  <dl class="br-facts">
+    <div><dt>Câu hỏi cốt lõi</dt><dd>${esc(b.question)}</dd></div>
+    <div><dt>Giao ra</dt><dd>${esc(b.deliver)}</dd></div>
+    <div><dt>Được đo bằng</dt><dd>${esc(b.measure)}</dd></div>
+    <div><dt>Nhánh gần nhất</dt><dd>${esc(b.neighbor)}</dd></div>
+    <div><dt>Mức toán</dt><dd>${dots3(b.math)}</dd></div>
+    <div><dt>Kỹ thuật phần mềm</dt><dd>${dots3(b.swe)}</dd></div>
+    <div><dt>Bằng cấp</dt><dd>${esc(b.degree)}</dd></div>
+  </dl>
+  <div class="br-progress"><span>Chủ đề cốt lõi đã xong: <b>${pr.done}/${pr.total}</b></span><div class="progress"><i style="width:${(100 * pr.done / pr.total).toFixed(1)}%"></i></div></div>
+  <h4>Công việc hằng ngày</h4><p>${esc(b.daily)}</p>
+  <h4>Cây kỹ năng và dự án mốc</h4>
+  ${table(["Cấp", "Nội dung", "Dự án mốc"], b.levels)}
+  <h4>Thứ tự học</h4><p>${esc(b.order)}</p>
+  <h4>Chủ đề trong lộ trình này cần học</h4>
+  <p class="br-legend"><span class="mchip core"><i></i>Cốt lõi</span><span class="mchip useful"><i></i>Nên biết</span> Màu chấm theo trạng thái học của bạn.</p>
+  <div class="mchips">${b.core.map(id => modChip(id, "core")).join("")}${b.useful.map(id => modChip(id, "useful")).join("")}</div>
+  <div class="br-tools">
+    <div><h4>Công cụ ổn định, học sâu</h4><div class="tools">${b.stable.map(t => `<span>${esc(t)}</span>`).join("")}</div></div>
+    <div><h4>Thay đổi nhanh, học khi cần</h4><div class="tools churn">${b.churn.map(t => `<span>${esc(t)}</span>`).join("")}</div></div>
+  </div>
+  <h4>Case có số liệu</h4>
+  <ul class="br-cases">${b.cases.map(([t, u]) => `<li>${esc(t)} <a href="${esc(u)}" target="_blank" rel="noopener">Nguồn ↗</a></li>`).join("")}</ul>
+  <h4>Phản biện khi AI viết code cho nhánh này</h4>
+  ${table(["AI hay làm sai", "Cách tự kiểm hoặc căn cứ"], b.critique)}
+  <h4>Thị trường</h4><p>${esc(b.vn)}</p>
+  <h4>Tài liệu học</h4>
+  <ul class="res">${b.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>
+</article>`;
+  }
+  function renderBranchDetail() {
+    const b = BRANCH_BY_ID[branchSel] || BRANCHES[0];
+    if (!b) return;
+    const box = $("#branch-detail");
+    if (box) box.innerHTML = branchDetailHTML(b);
+    document.querySelectorAll(".br-chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.branch === b.id)));
+    document.querySelectorAll("#branch-table tr[data-branch-row]").forEach(r => r.classList.toggle("is-sel", r.dataset.branchRow === b.id));
+  }
+  function renderBranches() {
+    if (!BRANCHES.length) return;
+    const M = window.ROADMAP_MARKET;
+    $("#branch-map").innerHTML = figureHTML("branchmap", window.ROADMAP_BRANCH_MAP);
+    $("#branch-families").innerHTML = Object.entries(FAMILIES).map(([k, f]) => `<button class="fam-card" type="button" data-family="${k}" data-track="${f.track}"><b>${esc(f.name)}</b><span>${esc(f.hint)}</span><small>${BRANCHES.filter(b => b.family === k).map(b => esc(b.name)).join(" · ")}</small></button>`).join("");
+    $("#branch-table").innerHTML = BRANCHES.map(b => `<tr data-branch-row="${b.id}" data-track="${FAMILIES[b.family].track}"><td><button class="linkish" type="button" data-branch="${b.id}"><i></i>${esc(b.name)}</button></td><td>${esc(b.question)}</td><td>${esc(b.deliver)}</td><td>${esc(b.measure)}</td><td>${dots3(b.math)}</td><td>${dots3(b.swe)}</td></tr>`).join("");
+    $("#branch-chips").innerHTML = BRANCHES.map(branchChip).join("");
+    $("#foundation-body").innerHTML = (window.ROADMAP_FOUNDATION || []).map(r => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("");
+    $("#market-global").innerHTML = M.global.map(([n, t, u]) => `<div class="ev"><b>${esc(n)}</b><p>${esc(t)}</p><a href="${esc(u)}" target="_blank" rel="noopener">Nguồn ↗</a></div>`).join("");
+    $("#market-vn").innerHTML = M.vn.map(([n, t, u]) => `<div class="ev"><b>${esc(n)}</b><p>${esc(t)}</p><a href="${esc(u)}" target="_blank" rel="noopener">Nguồn ↗</a></div>`).join("");
+    $("#market-ladder").innerHTML = M.ladder.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("");
+    $("#market-note").innerHTML = `${esc(M.note)} <a href="${esc(M.noteSrc)}" target="_blank" rel="noopener">Nguồn ↗</a>`;
+    $("#interview-body").innerHTML = (window.ROADMAP_INTERVIEWS || []).map(r => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td></tr>`).join("");
+    $("#trans-map").innerHTML = figureHTML("transmap", window.ROADMAP_TRANSITION_MAP);
+    const nm = id => id === "swe" ? "Software Engineer" : BRANCH_BY_ID[id].name;
+    $("#trans-body").innerHTML = (window.ROADMAP_TRANSITIONS || []).map(([a, b, need, t]) => `<tr><td>${esc(nm(a))} → <b>${esc(nm(b))}</b></td><td>${esc(need)}</td><td>${esc(t)}</td></tr>`).join("");
+    $("#branch-filter").innerHTML = `<option value="">Mọi nhánh nghề</option>` + BRANCHES.map(b => `<option value="${b.id}">${esc(b.name)}</option>`).join("");
+    renderBranchDetail();
+  }
+  function setBranch(id, filterRoadmap) {
+    branchSel = BRANCH_BY_ID[id] ? id : "";
+    try { localStorage.setItem(BRANCH_KEY, branchSel); } catch (e) { /* bỏ qua */ }
+    const sel = $("#branch-filter");
+    if (sel) sel.value = filterRoadmap ? branchSel : sel.value;
+    renderBranchDetail();
+    refreshBranchBadges();
+  }
+  function refreshBranchBadges() {
+    const fb = BRANCH_BY_ID[($("#branch-filter") || {}).value];
+    ALL_MODS.forEach(m => {
+      const el = document.querySelector(`[data-brb="${m.id}"]`);
+      if (!el) return;
+      const r = branchRole(fb, m.id);
+      el.textContent = r === "core" ? `Cốt lõi cho ${fb.name}` : r === "useful" ? `Nên biết cho ${fb.name}` : "";
+      el.dataset.role = r;
+    });
+    if (typeof applyFilterRef2 === "function") applyFilterRef2();
+  }
+  let applyFilterRef2 = null;
+
   function appHTML(a) {
     return `<article class="app${a.kind === "fail" ? " app-fail" : ""}">
   <div class="app-top"><span class="app-org">${esc(a.org)}</span><span class="app-ind">${esc(a.ind)}</span>${a.kind === "fail" ? `<span class="app-flag">Thất bại · bài học</span>` : ""}</div>
@@ -480,7 +591,7 @@
     <button class="mod-toggle" type="button" aria-expanded="false" aria-controls="b-${m.id}">
       <span class="mod-title"><h3>${esc(m.title)}</h3></span>
       <div class="mod-sum">${esc(m.summary)}</div>
-      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}${m.apps.length ? `<span>${m.apps.length} case doanh nghiệp</span>` : ""}<span class="st-since" data-since="${m.id}"></span></div>
+      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}${m.apps.length ? `<span>${m.apps.length} case doanh nghiệp</span>` : ""}<span class="st-since" data-since="${m.id}"></span><span class="br-badge" data-brb="${m.id}"></span></div>
     </button>
     <div class="mod-tools">
       <label class="st-pick" title="Đổi trạng thái học"><span class="dot" aria-hidden="true"></span><select id="st-${m.id}" data-status-of="${m.id}" aria-label="Trạng thái: ${esc(m.title)}">${STATUSES.map(o => `<option value="${o.id}"${statusOf(m.id) === o.id ? " selected" : ""}>${o.label}</option>`).join("")}</select></label>
@@ -527,6 +638,7 @@
     $("#guide-body").innerHTML = GUIDE.map(([need, algo, id]) =>
       `<tr><td>${esc(need)}</td><td>${MOD_BY_ID[id] ? `<a href="#m-${id}" data-open="${id}">${esc(algo)}</a>` : esc(algo)}</td><td>${MOD_BY_ID[id] ? esc(MOD_BY_ID[id].stage.title) : ""}</td></tr>`).join("");
     renderAppsIndex("all");
+    renderBranches();
     $("#ai-evidence").innerHTML = EVIDENCE.map(e => `<div class="ev"><b>${esc(e.n)}</b><p>${esc(e.t)}</p><a href="${esc(e.src[1])}" target="_blank" rel="noopener">${esc(e.src[0])}</a></div>`).join("");
     $("#ai-flow").innerHTML = figureHTML("aiflow", AI_FLOW);
     $("#ai-quiz").innerHTML = QUIZ.map((q, i) => quizHTML(q, i, true)).join("");
@@ -602,6 +714,7 @@
     }
     if (typeof applyFilterRef === "function") applyFilterRef();
     refreshPlan();
+    if (document.getElementById("branch-detail") && BRANCHES.length) renderBranchDetail();
   }
   let applyFilterRef = null;
 
@@ -634,6 +747,20 @@
           toast("Đã chọn đoạn code, nhấn Ctrl+C để sao chép");
         };
         try { navigator.clipboard.writeText(src).then(() => toast("Đã sao chép code"), fallback); } catch (err) { fallback(); }
+        return;
+      }
+      const brf = t.closest("[data-branch-filter]");
+      if (brf) { setBranch(brf.dataset.branchFilter, true); document.getElementById("stages").scrollIntoView(); toast(`Đang hiện các chủ đề cho nhánh ${BRANCH_BY_ID[brf.dataset.branchFilter].name}`); return; }
+      const brp = t.closest("[data-pdf-branch]");
+      if (brp) { openExport({ scope: "branch", branchId: brp.dataset.pdfBranch }); return; }
+      const brc = t.closest("[data-branch]");
+      if (brc) { setBranch(brc.dataset.branch, false); const d = document.getElementById("branch-detail"); if (d && brc.closest("#branch-table")) d.scrollIntoView({ block: "start" }); return; }
+      const fam = t.closest("[data-family]");
+      if (fam) {
+        const first = BRANCHES.find(b => b.family === fam.dataset.family);
+        document.querySelectorAll(".fam-card").forEach(c => c.setAttribute("aria-pressed", String(c === fam)));
+        document.querySelectorAll("#branch-table tr[data-branch-row]").forEach(r => r.classList.toggle("is-dim", BRANCH_BY_ID[r.dataset.branchRow].family !== fam.dataset.family));
+        if (first) setBranch(first.id, false);
         return;
       }
       const qa = t.closest("[data-quiz-ans]");
@@ -695,6 +822,11 @@
     }));
     q.addEventListener("input", applyFilter);
     applyFilterRef = () => { if (stFilter !== "all") applyFilter(); };
+    applyFilterRef2 = applyFilter;
+    $("#branch-filter").addEventListener("change", e => {
+      if (e.target.value) { branchSel = e.target.value; try { localStorage.setItem(BRANCH_KEY, branchSel); } catch (err) { /* bỏ qua */ } renderBranchDetail(); }
+      refreshBranchBadges();
+    });
     function norm(s) { return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d"); }
     const hay = Object.fromEntries(ALL_MODS.map(m => [m.id, norm([m.title, m.summary, m.concept, (m.tools || []).join(" "), m.example && m.example.domain, m.example && m.example.title, m.apps.map(a => [a.org, a.ind, a.title].join(" ")).join(" ")].join(" "))]));
     function applyFilter() {
@@ -703,7 +835,8 @@
       STAGES.forEach(s => {
         let k = 0;
         s.modules.forEach(m => {
-          const ok = (level === "all" || String(m.level) === level) && (stFilter === "all" || statusOf(m.id) === stFilter) && terms.every(t => hay[m.id].includes(t));
+          const fb = BRANCH_BY_ID[$("#branch-filter").value];
+          const ok = (level === "all" || String(m.level) === level) && (stFilter === "all" || statusOf(m.id) === stFilter) && (!fb || branchRole(fb, m.id)) && terms.every(t => hay[m.id].includes(t));
           document.getElementById("m-" + m.id).hidden = !ok;
           if (ok) k++;
         });
@@ -885,6 +1018,41 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
 </div>` });
     }
     if (opt.toc && !single) units.push({ kind: "toc", newPage: true, html: null /* dựng sau khi có số trang */ });
+    if (opt.branches && !single) {
+      const tb = (head, rows) => `<table class="ptrack"><thead><tr class="bk">${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr class="bk">${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      const brUnit = b => `<div class="stage-band bk" data-track="${FAMILIES[b.family].track}"><div class="no">Nhánh nghề · ${esc(FAMILIES[b.family].name)}</div><h2>${esc(b.name)}</h2><p class="sub">${esc(b.summary)}</p>
+<div class="facts"><span>Mức toán: <b>${b.math}/3</b></span><span>Kỹ thuật phần mềm: <b>${b.swe}/3</b></span><span>Bằng cấp: <b>${esc(b.degree)}</b></span></div>
+<p class="goal"><b>Câu hỏi cốt lõi:</b> ${esc(b.question)} <b>Giao ra:</b> ${esc(b.deliver)}. <b>Đo bằng:</b> ${esc(b.measure)}.</p></div>
+<div class="mod" style="border-top:0"><h4 class="bk">Công việc hằng ngày</h4><p class="bk">${esc(b.daily)}</p>
+<h4 class="bk">Cây kỹ năng và dự án mốc</h4>${tb(["Cấp", "Nội dung", "Dự án mốc"], b.levels)}
+<h4 class="bk">Thứ tự học</h4><p class="bk">${esc(b.order)}</p>
+<h4 class="bk">Chủ đề cốt lõi trong lộ trình</h4><p class="bk">${b.core.filter(id => MOD_BY_ID[id]).map(id => esc(MOD_BY_ID[id].title) + " (" + ST_LABEL[statusOf(id)] + ")").join(" · ")}</p>
+<h4 class="bk">Nên biết</h4><p class="bk">${b.useful.filter(id => MOD_BY_ID[id]).map(id => esc(MOD_BY_ID[id].title)).join(" · ")}</p>
+<h4 class="bk">Công cụ</h4><p class="bk"><b>Ổn định:</b> ${b.stable.map(esc).join(" · ")}<br><b>Thay đổi nhanh:</b> ${b.churn.map(esc).join(" · ")}</p>
+<h4 class="bk">Case có số liệu</h4><ul>${b.cases.map(([t, u]) => `<li class="bk">${esc(t)} <a href="${esc(u)}">Nguồn</a></li>`).join("")}</ul>
+<h4 class="bk">Phản biện khi AI viết code cho nhánh này</h4>${tb(["AI hay làm sai", "Cách tự kiểm hoặc căn cứ"], b.critique)}
+<h4 class="bk">Thị trường</h4><p class="bk">${esc(b.vn)}</p>
+<h4 class="bk">Tài liệu học</h4><ul class="res">${b.resources.map(([l, u]) => `<li class="bk"><a href="${esc(u)}">${esc(l)}</a><br><span class="u">${esc(u)}</span></li>`).join("")}</ul></div>`;
+      if (sel.scope === "branch") {
+        units.push({ kind: "branch", newPage: true, html: (opt.diagrams ? pdfFigure(opt, "branchmap", window.ROADMAP_BRANCH_MAP) : "") + brUnit(sel.branch) });
+      } else {
+        const M = window.ROADMAP_MARKET;
+        units.push({ kind: "branches", newPage: true, html: `<h2 class="sec-title bk">Chọn nhánh nghề AI và dữ liệu</h2>
+<p class="sec-sub bk">Các nhánh khác nhau ở thứ họ giao ra, không ở công cụ. Học chắc nền chung rồi mới rẽ nhánh. Tổng hợp từ báo cáo nghiên cứu 9/2026 trong repo.</p>
+${opt.diagrams ? pdfFigure(opt, "branchmap", window.ROADMAP_BRANCH_MAP) : ""}
+${tb(["Nhánh", "Câu hỏi cốt lõi", "Giao ra", "Đo bằng"], BRANCHES.map(b => [b.name, b.question, b.deliver, b.measure]))}
+<h4 class="bk" style="font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#667281;margin:14px 0 6px">Năm khối nền dùng cho mọi nhánh</h4>
+${tb(["Khối nền", "Nội dung tối thiểu", "Bắt được lỗi AI nào"], window.ROADMAP_FOUNDATION)}
+<h4 class="bk" style="font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#667281;margin:14px 0 6px">Thị trường</h4>
+${[...M.global, ...M.vn].map(([n, t, u]) => `<div class="pev bk"><b>${esc(n)}</b> ${esc(t)} <span class="pa-src"><a href="${esc(u)}">nguồn</a></span></div>`).join("")}
+${tb(["Cấp", "Lương tháng (gộp, Việt Nam)", "Ghi chú"], M.ladder)}
+<p class="bk" style="font-size:12.5px">${esc(M.note)}</p>
+${tb(["Nhánh", "Vòng phỏng vấn đặc trưng"], window.ROADMAP_INTERVIEWS)}
+${opt.diagrams ? pdfFigure(opt, "transmap", window.ROADMAP_TRANSITION_MAP) : ""}
+${tb(["Chuyển nhánh", "Cần bổ sung", "Độ khó / thời gian"], window.ROADMAP_TRANSITIONS.map(([a, b, n, t]) => [(a === "swe" ? "Software Engineer" : BRANCH_BY_ID[a].name) + " → " + BRANCH_BY_ID[b].name, n, t]))}` });
+        BRANCHES.forEach(b => units.push({ kind: "branch", newPage: true, html: brUnit(b) }));
+      }
+    }
     if (opt.ai && !single) {
       units.push({ kind: "ai", newPage: true, html: `<h2 class="sec-title bk">Học để làm chủ AI</h2>
 <p class="sec-sub bk">Mục tiêu của bộ tài liệu: hiểu đủ nền tảng để giao việc cho AI rõ ràng, tự kiểm chứng kết quả, ra quyết định và phản biện được đề xuất của AI.</p>
@@ -979,6 +1147,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       if (opt.diagrams) {
         const keys = [];
         if (opt.plan && sel.scope !== "mod") keys.push("plan");
+        if (opt.branches && sel.scope !== "mod") { keys.push("branchmap"); if (sel.scope !== "branch") keys.push("transmap"); }
         if (opt.ai && sel.scope !== "mod") keys.push("aiflow");
         if (opt.guide && sel.scope !== "mod") { if (OVERVIEW) keys.push("overview"); if (GUIDE_TREE) keys.push("guide"); }
         ALL_MODS.filter(m => sel.mods.has(m.id)).forEach(m => m.diagrams.forEach((d, i) => keys.push(m.id + ":" + i)));
@@ -1152,6 +1321,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
     const picks = preset.stages ? new Set(preset.stages) : null;
     document.querySelectorAll("[data-pick]").forEach(cb => { cb.checked = picks ? picks.has(cb.dataset.pick) : true; });
     back.dataset.mod = preset.modId || "";
+    if (preset.branchId) $("#exp-branch").value = preset.branchId;
     const modOpt = $("#scope-mod-opt");
     modOpt.hidden = !preset.modId;
     if (preset.modId) $("#scope-mod-name").textContent = MOD_BY_ID[preset.modId].title;
@@ -1163,6 +1333,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
   function syncScope() {
     const v = document.querySelector('input[name="scope"]:checked').value;
     $("#stage-picks").hidden = v !== "pick";
+    $("#exp-branch").disabled = v !== "branch";
     const sel = currentSelection();
     $("#exp-summary").textContent = sel.mods.size ? `${sel.mods.size} chủ đề, khoảng ${totalHours(ALL_MODS.filter(m => sel.mods.has(m.id)))} giờ học` : "Chưa chọn chủ đề nào";
     $("#exp-go").disabled = !sel.mods.size || busy;
@@ -1178,6 +1349,11 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       const st = STAGES.filter(s => ids.has(s.id));
       return { scope: "pick", label: st.length === 1 ? `Giai đoạn ${st[0].no}: ${st[0].title}` : `${st.length} giai đoạn đã chọn`, stages: st, mods: new Set(st.flatMap(s => s.modules.map(m => m.id))) };
     }
+    if (v === "branch") {
+      const b = BRANCH_BY_ID[$("#exp-branch").value] || BRANCHES[0];
+      const ids = new Set([...b.core, ...b.useful].filter(id => MOD_BY_ID[id]));
+      return { scope: "branch", branch: b, label: "Nhánh nghề: " + b.name, stages: STAGES.filter(s => s.modules.some(m => ids.has(m.id))), mods: ids };
+    }
     if (v === "todo") {
       const ms = ALL_MODS.filter(m => statusOf(m.id) !== "done");
       return { scope: "todo", label: "Các chủ đề chưa xong", stages: STAGES, mods: new Set(ms.map(m => m.id)) };
@@ -1185,7 +1361,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
     return { scope: "all", label: "Toàn bộ lộ trình", stages: STAGES, mods: new Set(ALL_MODS.map(m => m.id)) };
   }
   function fileName(sel) {
-    const base = sel.scope === "mod" ? [...sel.mods][0] : sel.scope === "pick" && sel.stages.length === 1 ? "giai-doan-" + sel.stages[0].no : sel.scope === "todo" ? "chua-xong" : "toan-bo";
+    const base = sel.scope === "mod" ? [...sel.mods][0] : sel.scope === "pick" && sel.stages.length === 1 ? "giai-doan-" + sel.stages[0].no : sel.scope === "todo" ? "chua-xong" : sel.scope === "branch" ? "nhanh-" + sel.branch.id : "toan-bo";
     return `ds-ml-roadmap-${base}.pdf`;
   }
 
@@ -1195,7 +1371,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       cover: $("#o-cover").checked, toc: $("#o-toc").checked, guide: $("#o-guide").checked,
       code: $("#o-code").checked, res: $("#o-res").checked,
       quality: document.querySelector('input[name="quality"]:checked').value,
-      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked, apps: $("#o-apps").checked, ai: $("#o-ai").checked
+      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked, apps: $("#o-apps").checked, ai: $("#o-ai").checked, branches: $("#o-branches").checked
     };
     const status = $("#exp-status"), bar = $("#exp-bar"), go = $("#exp-go");
     busy = true; cancelFlag = false; go.disabled = true;
@@ -1243,6 +1419,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
   }
 
   function renderExportDialog() {
+    $("#exp-branch").innerHTML = BRANCHES.map(b => `<option value="${b.id}">${esc(b.name)}</option>`).join("");
     $("#stage-picks").innerHTML = STAGES.map(s => `<label data-track="${s.track}"><input type="checkbox" id="pick-${s.id}" data-pick="${s.id}" checked><i></i>${s.no}. ${esc(s.title)}</label>`).join("");
     if (IN_FRAME) $("#print-btn").hidden = true;
     $("#export").addEventListener("change", syncScope);

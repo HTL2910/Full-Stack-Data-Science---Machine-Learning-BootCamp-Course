@@ -39,6 +39,7 @@
     <div class="hero-actions">
       <a class="btn primary" id="next-btn" href="#s0">Bắt đầu</a>
       <a class="btn" href="#ai">Học để làm chủ AI</a>
+      <a class="btn" href="#branches">Chọn nhánh nghề</a>
       <a class="btn" href="#learn">Hướng dẫn học từ đầu</a>
       <a class="btn" href="#overview">Sơ đồ tổng quan</a>
       <a class="btn" href="#guide">Chọn thuật toán nhanh</a>
@@ -111,6 +112,52 @@
         <h3 class="sub-h">Luyện phản biện AI</h3>
         <p class="plan-summary" id="quiz-score"></p>
         <div class="quiz-grid" id="ai-quiz"></div>
+      </section>
+
+      <section class="panel" id="branches">
+        <h2>Chọn nhánh nghề AI và dữ liệu</h2>
+        <p>Các nghề AI và dữ liệu khác nhau ở thứ họ giao ra, không ở công cụ. Nhưng lỗi AI mắc khi viết code cho các nghề này lại cùng một họ: sai grain và join, rò rỉ dữ liệu, chọn sai metric, lệch lúc huấn luyện và lúc chạy thật, thiếu test, lỏng bảo mật, chi phí vượt kiểm soát. Vì vậy hãy học chắc nền chung trước, rồi mới rẽ nhánh.</p>
+        <div id="branch-map"></div>
+
+        <h3 class="sub-h">Bạn thích làm gì hơn?</h3>
+        <div class="fam-grid" id="branch-families"></div>
+
+        <h3 class="sub-h">So sánh nhanh 10 nhánh</h3>
+        <div class="table-wrap">
+          <table class="branch-table">
+            <thead><tr><th>Nhánh</th><th>Câu hỏi cốt lõi</th><th>Giao ra</th><th>Được đo bằng</th><th>Toán</th><th>Phần mềm</th></tr></thead>
+            <tbody id="branch-table"></tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-h">Chi tiết từng nhánh</h3>
+        <div class="br-chips" id="branch-chips" role="toolbar" aria-label="Chọn nhánh nghề"></div>
+        <div id="branch-detail"></div>
+
+        <h3 class="sub-h">Năm khối nền dùng cho mọi nhánh</h3>
+        <div class="table-wrap"><table><thead><tr><th>Khối nền</th><th>Nội dung tối thiểu</th><th>Giúp bạn bắt được lỗi AI nào</th></tr></thead><tbody id="foundation-body"></tbody></table></div>
+
+        <h3 class="sub-h">Thị trường 2025–2026</h3>
+        <p class="plan-summary">Toàn cầu</p>
+        <div class="evidence" id="market-global"></div>
+        <p class="plan-summary" style="margin-top:14px">Việt Nam</p>
+        <div class="evidence" id="market-vn"></div>
+        <div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Cấp</th><th>Lương tháng (gộp, Việt Nam)</th><th>Ghi chú</th></tr></thead><tbody id="market-ladder"></tbody></table></div>
+        <p class="sync-note" id="market-note"></p>
+
+        <div class="ai-two">
+          <div>
+            <h3 class="sub-h">Phỏng vấn kiểm tra gì</h3>
+            <div class="table-wrap"><table><thead><tr><th>Nhánh</th><th>Vòng đặc trưng</th></tr></thead><tbody id="interview-body"></tbody></table></div>
+            <p class="sync-note">Tổng hợp từ nguồn luyện phỏng vấn (vendor/blog). Portfolio có mục "những gì tôi đã bác bỏ trong đề xuất của AI và vì sao" vừa là bằng chứng kỹ năng, vừa khớp cách doanh nghiệp Việt đang tuyển.</p>
+          </div>
+          <div>
+            <h3 class="sub-h">Chuyển nhánh</h3>
+            <div id="trans-map"></div>
+            <div class="table-wrap"><table><thead><tr><th>Từ → sang</th><th>Cần bổ sung</th><th>Độ khó</th></tr></thead><tbody id="trans-body"></tbody></table></div>
+          </div>
+        </div>
+        <p class="sync-note">Nguồn: báo cáo nghiên cứu "Lộ trình các nhánh ngành AI" (9/2026) trong thư mục reports/ của repo. Nhãn (qua snippet), (vendor/blog), (số liệu cũ), (chưa kiểm chứng) được giữ nguyên. Cây kỹ năng, dự án mốc và thời lượng là đề xuất tổng hợp, không phải số liệu đo lường.</p>
       </section>
 
       <section class="panel" id="learn">
@@ -202,6 +249,8 @@
         <button class="chip" type="button" data-status-filter="doing" aria-pressed="false">Đang học</button>
         <button class="chip" type="button" data-status-filter="done" aria-pressed="false">Đã xong</button>
         <button class="chip" type="button" data-status-filter="review" aria-pressed="false">Cần ôn lại</button>
+        <span class="chip-sep" aria-hidden="true"></span>
+        <label class="br-filter" for="branch-filter">Nhánh <select id="branch-filter"></select></label>
         <span class="sep"></span>
         <button class="btn small" type="button" id="toggle-all">Mở rộng tất cả</button>
       </div>
@@ -240,6 +289,8 @@
         <label class="opt"><input type="radio" name="scope" id="sc-all" value="all" checked><span>Toàn bộ lộ trình<small>Mọi giai đoạn và chủ đề</small></span></label>
         <label class="opt"><input type="radio" name="scope" id="sc-pick" value="pick"><span>Chọn giai đoạn<small>Chỉ những giai đoạn bạn đánh dấu</small></span></label>
         <div class="stage-picks" id="stage-picks" hidden></div>
+        <label class="opt"><input type="radio" name="scope" id="sc-branch" value="branch"><span>Theo nhánh nghề<small>Trang nhánh nghề và các chủ đề cốt lõi, nên biết của nhánh đó</small></span></label>
+        <div class="stage-picks"><select id="exp-branch" aria-label="Chọn nhánh nghề để xuất"></select></div>
         <label class="opt"><input type="radio" name="scope" id="sc-todo" value="todo"><span>Chủ đề chưa xong<small>Chưa học, đang học và cần ôn lại (bỏ qua chủ đề "Đã xong")</small></span></label>
       </fieldset>
       <fieldset>
@@ -248,6 +299,7 @@
         <label class="opt"><input type="checkbox" id="o-toc" checked><span>Mục lục có số trang</span></label>
         <label class="opt"><input type="checkbox" id="o-plan" checked><span>Kế hoạch học và bảng theo dõi trạng thái<small>Biểu đồ Gantt, trạng thái từng chủ đề và cột ghi chú để in</small></span></label>
         <label class="opt"><input type="checkbox" id="o-guide" checked><span>Bảng chọn thuật toán nhanh</span></label>
+        <label class="opt"><input type="checkbox" id="o-branches" checked><span>Chọn nhánh nghề<small>Bảng so sánh nhánh, thị trường, và trang chi tiết từng nhánh</small></span></label>
         <label class="opt"><input type="checkbox" id="o-ai" checked><span>Làm việc với AI<small>Prompt mẫu, dấu hiệu AI sai, câu hỏi phản biện, tình huống kèm đáp án</small></span></label>
         <label class="opt"><input type="checkbox" id="o-apps" checked><span>Case doanh nghiệp đã áp dụng<small>Trong từng chủ đề, kèm bảng tra theo ngành</small></span></label>
         <label class="opt"><input type="checkbox" id="o-dgm" checked><span>Sơ đồ (flowchart, sequence diagram)</span></label>
