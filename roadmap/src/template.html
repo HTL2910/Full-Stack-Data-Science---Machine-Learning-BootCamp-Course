@@ -22,13 +22,15 @@
       <span>Xuất PDF</span>
     </button>
   </div>
+<nav class="tabbar" aria-label="Các phần của trang"><div class="wrap tabs" role="tablist"><button class="tab" type="button" role="tab" data-tab="home" aria-selected="true">Tổng quan</button><button class="tab" type="button" role="tab" data-tab="ai" aria-selected="false">Làm chủ AI</button><button class="tab" type="button" role="tab" data-tab="branches" aria-selected="false">Nhánh nghề</button><button class="tab" type="button" role="tab" data-tab="learn" aria-selected="false">Học từ đầu</button><button class="tab" type="button" role="tab" data-tab="roadmap" aria-selected="false">Lộ trình</button><button class="tab" type="button" role="tab" data-tab="guide" aria-selected="false">Chọn thuật toán</button><button class="tab" type="button" role="tab" data-tab="apps" aria-selected="false">Ứng dụng thực tế</button><button class="tab" type="button" role="tab" data-tab="refs" aria-selected="false">Nguồn</button></div></nav>
 </header>
 
 <main id="top">
+  <div data-panel="home">
   <section class="hero wrap">
     <div class="eyebrow">Full Stack Data Science &amp; Machine Learning BootCamp</div>
     <h1>Lộ trình Data Science &amp; Machine Learning</h1>
-    <p class="lede">Hiểu đủ nền tảng để dùng AI viết code đúng hướng: giao việc rõ ràng, tự kiểm chứng, ra quyết định và phản biện được đề xuất của AI. Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đã áp dụng nó ra sao, kèm số liệu, nguồn và cả những thất bại. Phần lớn chủ đề có sơ đồ luồng hoặc sequence diagram để thấy các bước và các bên tương tác. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
+    <p class="lede">Hiểu đủ nền tảng để dùng AI viết code đúng hướng: giao việc rõ ràng, tự kiểm chứng, ra quyết định và phản biện được đề xuất của AI. Từ toán và Python đến mô hình, LLM và triển khai. Mỗi phần nằm trong một tab riêng: chọn tab ở thanh trên để đi thẳng tới phần bạn cần.</p>
     <div class="stats">
       <div class="stat"><b id="stat-stages">0</b><span>giai đoạn</span></div>
       <div class="stat"><b id="stat-mods">0</b><span>chủ đề</span></div>
@@ -38,31 +40,35 @@
     <div class="status-counts" id="status-counts" aria-label="Số chủ đề theo trạng thái"></div>
     <div class="hero-actions">
       <a class="btn primary" id="next-btn" href="#s0">Bắt đầu</a>
-      <a class="btn" href="#ai">Học để làm chủ AI</a>
-      <a class="btn" href="#branches">Chọn nhánh nghề</a>
-      <a class="btn" href="#learn">Hướng dẫn học từ đầu</a>
-      <a class="btn" href="#overview">Sơ đồ tổng quan</a>
-      <a class="btn" href="#guide">Chọn thuật toán nhanh</a>
-      <a class="btn" href="#apps">Ứng dụng theo ngành</a>
-      <a class="btn" href="#s13">Xem case study của repo</a>
+      <a class="btn" href="#stages">Mở lộ trình</a>
     </div>
     <nav class="metro" id="metro" aria-label="Các giai đoạn"></nav>
     <div class="legend" id="legend"></div>
   </section>
+  <section class="wrap start" aria-label="Bắt đầu từ đâu">
+    <h2 class="start-h">Bắt đầu từ đâu</h2>
+    <div class="start-grid">
+      <a class="start-card" href="#ai" data-track="dl"><b>Học để làm chủ AI</b><span>Vì sao phải hiểu nền tảng, quy trình làm việc với AI, checklist và 24 tình huống luyện phản biện.</span></a>
+      <a class="start-card" href="#branches" data-track="ops"><b>Chọn nhánh nghề</b><span>10 nhánh AI và dữ liệu: nhánh nào hợp với bạn, cần học gì, thị trường Việt Nam ra sao.</span></a>
+      <a class="start-card" href="#learn" data-track="found"><b>Hướng dẫn học từ đầu</b><span>Sáu bước học, bốn trạng thái, lịch Gantt theo số giờ mỗi tuần, dự án ở các mốc.</span></a>
+      <a class="start-card" href="#stages" data-track="ml"><b>Lộ trình 59 chủ đề</b><span>Học từng giai đoạn: khái niệm, khi nào dùng, case thực tế, code, làm việc với AI.</span></a>
+      <a class="start-card" href="#guide" data-track="data"><b>Chọn thuật toán nhanh</b><span>Cây quyết định và bảng tra từ nhu cầu tới thuật toán nên thử.</span></a>
+      <a class="start-card" href="#apps" data-track="dl"><b>Ứng dụng thực tế</b><span>109 case doanh nghiệp có nguồn, gồm cả 14 thất bại kèm bài học.</span></a>
+    </div>
+  </section>
+  <div class="wrap"><section class="panel" id="overview">
+        <h2>Sơ đồ tổng quan</h2>
+        <p>Mũi tên cho biết giai đoạn nào cần học trước. Các ô tô màu là những mốc quan trọng nhất.</p>
+        <div id="overview-fig"></div>
+      </section></div>
+  </div>
 
-  <div class="wrap layout">
-    <aside class="sidenav" aria-label="Mục lục">
-      <h2>Mục lục</h2>
-      <ol id="sidenav-list"></ol>
-    </aside>
-
-    <div>
-      <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
-
-      <section class="panel" id="ai">
+  <div data-panel="ai" hidden><div class="wrap"><section class="panel" id="ai" data-subroot>
         <h2>Học để làm chủ AI</h2>
         <p>Bộ tài liệu này không dạy bạn tự viết mọi dòng code. Nó giúp bạn hiểu đủ nền tảng để giao việc cho AI rõ ràng, đọc và kiểm chứng được code AI viết, tự ra quyết định, và phản biện khi AI đề xuất sai. Các nghiên cứu gần đây cho thấy AI chỉ giúp khi người dùng hiểu việc mình đang làm.</p>
-        <div class="evidence" id="ai-evidence"></div>
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="ai-why" aria-selected="true">Vì sao và ba mức hiểu</button><button class="subtab" type="button" role="tab" data-sub="ai-flow" aria-selected="false">Quy trình</button><button class="subtab" type="button" role="tab" data-sub="ai-check" aria-selected="false">Checklist và prompt</button><button class="subtab" type="button" role="tab" data-sub="ai-quiz" aria-selected="false">Luyện phản biện</button></div>
+<div class="subpanel" data-subpanel="ai-why">
+<div class="evidence" id="ai-evidence"></div>
 
         <h3 class="sub-h">Ba mức hiểu bạn cần ở mỗi chủ đề</h3>
         <ol class="steps">
@@ -71,10 +77,15 @@
           <li><b>Quyết định.</b> Chọn được phương án dựa trên đánh đổi, và nói được vì sao không chọn phương án khác. Mỗi chủ đề có mục "Làm việc với AI" để luyện ba mức này.</li>
         </ol>
 
-        <h3 class="sub-h">Quy trình làm việc với AI</h3>
-        <div id="ai-flow"></div>
+        
+</div>
+<div class="subpanel" data-subpanel="ai-flow" hidden>
+<div id="ai-flow"></div>
 
-        <div class="ai-two">
+        
+</div>
+<div class="subpanel" data-subpanel="ai-check" hidden>
+<div class="ai-two">
           <div>
             <h3 class="sub-h">10 câu hỏi kiểm tra mọi đề xuất của AI</h3>
             <ol class="checklist" id="ai-checklist">
@@ -109,15 +120,20 @@
           </div>
         </div>
 
-        <h3 class="sub-h">Luyện phản biện AI</h3>
-        <p class="plan-summary" id="quiz-score"></p>
+        
+</div>
+<div class="subpanel" data-subpanel="ai-quiz" hidden>
+<p class="plan-summary" id="quiz-score"></p>
         <div class="quiz-grid" id="ai-quiz"></div>
-      </section>
-
-      <section class="panel" id="branches">
+      
+</div>
+</section></div></div>
+  <div data-panel="branches" hidden><div class="wrap"><section class="panel" id="branches" data-subroot>
         <h2>Chọn nhánh nghề AI và dữ liệu</h2>
         <p>Các nghề AI và dữ liệu khác nhau ở thứ họ giao ra, không ở công cụ. Nhưng lỗi AI mắc khi viết code cho các nghề này lại cùng một họ: sai grain và join, rò rỉ dữ liệu, chọn sai metric, lệch lúc huấn luyện và lúc chạy thật, thiếu test, lỏng bảo mật, chi phí vượt kiểm soát. Vì vậy hãy học chắc nền chung trước, rồi mới rẽ nhánh.</p>
-        <div id="branch-map"></div>
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="br-map" aria-selected="true">Bản đồ và so sánh</button><button class="subtab" type="button" role="tab" data-sub="br-detail" aria-selected="false">Chi tiết từng nhánh</button><button class="subtab" type="button" role="tab" data-sub="br-found" aria-selected="false">Nền chung</button><button class="subtab" type="button" role="tab" data-sub="br-market" aria-selected="false">Thị trường</button><button class="subtab" type="button" role="tab" data-sub="br-inter" aria-selected="false">Phỏng vấn và chuyển nhánh</button></div>
+<div class="subpanel" data-subpanel="br-map">
+<div id="branch-map"></div>
 
         <h3 class="sub-h">Bạn thích làm gì hơn?</h3>
         <div class="fam-grid" id="branch-families"></div>
@@ -130,22 +146,31 @@
           </table>
         </div>
 
-        <h3 class="sub-h">Chi tiết từng nhánh</h3>
-        <div class="br-chips" id="branch-chips" role="toolbar" aria-label="Chọn nhánh nghề"></div>
+        
+</div>
+<div class="subpanel" data-subpanel="br-detail" hidden>
+<div class="br-chips" id="branch-chips" role="toolbar" aria-label="Chọn nhánh nghề"></div>
         <div id="branch-detail"></div>
 
-        <h3 class="sub-h">Năm khối nền dùng cho mọi nhánh</h3>
-        <div class="table-wrap"><table><thead><tr><th>Khối nền</th><th>Nội dung tối thiểu</th><th>Giúp bạn bắt được lỗi AI nào</th></tr></thead><tbody id="foundation-body"></tbody></table></div>
+        
+</div>
+<div class="subpanel" data-subpanel="br-found" hidden>
+<div class="table-wrap"><table><thead><tr><th>Khối nền</th><th>Nội dung tối thiểu</th><th>Giúp bạn bắt được lỗi AI nào</th></tr></thead><tbody id="foundation-body"></tbody></table></div>
 
-        <h3 class="sub-h">Thị trường 2025–2026</h3>
-        <p class="plan-summary">Toàn cầu</p>
+        
+</div>
+<div class="subpanel" data-subpanel="br-market" hidden>
+<p class="plan-summary">Toàn cầu</p>
         <div class="evidence" id="market-global"></div>
         <p class="plan-summary" style="margin-top:14px">Việt Nam</p>
         <div class="evidence" id="market-vn"></div>
         <div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Cấp</th><th>Lương tháng (gộp, Việt Nam)</th><th>Ghi chú</th></tr></thead><tbody id="market-ladder"></tbody></table></div>
         <p class="sync-note" id="market-note"></p>
 
-        <div class="ai-two">
+        
+</div>
+<div class="subpanel" data-subpanel="br-inter" hidden>
+<div class="ai-two">
           <div>
             <h3 class="sub-h">Phỏng vấn kiểm tra gì</h3>
             <div class="table-wrap"><table><thead><tr><th>Nhánh</th><th>Vòng đặc trưng</th></tr></thead><tbody id="interview-body"></tbody></table></div>
@@ -157,14 +182,18 @@
             <div class="table-wrap"><table><thead><tr><th>Từ → sang</th><th>Cần bổ sung</th><th>Độ khó</th></tr></thead><tbody id="trans-body"></tbody></table></div>
           </div>
         </div>
-        <p class="sync-note">Nguồn: báo cáo nghiên cứu "Lộ trình các nhánh ngành AI" (9/2026) trong thư mục reports/ của repo. Nhãn (qua snippet), (vendor/blog), (số liệu cũ), (chưa kiểm chứng) được giữ nguyên. Cây kỹ năng, dự án mốc và thời lượng là đề xuất tổng hợp, không phải số liệu đo lường.</p>
-      </section>
-
-      <section class="panel" id="learn">
+        
+</div>
+<p class="sync-note">Nguồn: báo cáo nghiên cứu "Lộ trình các nhánh ngành AI" (9/2026) trong thư mục reports/ của repo. Nhãn (qua snippet), (vendor/blog), (số liệu cũ), (chưa kiểm chứng) được giữ nguyên. Cây kỹ năng, dự án mốc và thời lượng là đề xuất tổng hợp, không phải số liệu đo lường.</p>
+      
+</section></div></div>
+  <div data-panel="learn" hidden><div class="wrap"><section class="panel" id="learn" data-subroot>
         <h2>Hướng dẫn học từ đầu</h2>
         <p>Nếu bạn bắt đầu từ con số 0, đi theo sáu bước dưới đây. Đánh trạng thái cho từng chủ đề để biết mình đang ở đâu, việc gì cần làm tiếp và phần nào cần ôn.</p>
 
-        <ol class="steps">
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="l-steps" aria-selected="true">Sáu bước</button><button class="subtab" type="button" role="tab" data-sub="l-status" aria-selected="false">Bốn trạng thái</button><button class="subtab" type="button" role="tab" data-sub="l-plan" aria-selected="false">Kế hoạch của bạn</button><button class="subtab" type="button" role="tab" data-sub="l-proj" aria-selected="false">Dự án ở các mốc</button></div>
+<div class="subpanel" data-subpanel="l-steps">
+<ol class="steps">
           <li><b>Kiểm tra đầu vào.</b> Bạn cần dùng được máy tính, cài được phần mềm, đọc được tài liệu tiếng Anh kỹ thuật cơ bản và nhớ toán phổ thông (hàm số, đạo hàm, xác suất cơ bản). Nếu đã biết một phần, mở chủ đề đó, làm lại code mẫu mà không nhìn: làm được thì đánh "Đã xong", chưa chắc thì đánh "Cần ôn lại".</li>
           <li><b>Đặt nhịp học.</b> Nhập số giờ bạn học được mỗi tuần và ngày bắt đầu ở ô bên dưới. Biểu đồ Gantt tự tính thời gian cho từng giai đoạn. Nhịp bền vững cho người đi làm là 8–12 giờ/tuần; học toàn thời gian là 25–35 giờ/tuần.</li>
           <li><b>Học theo thứ tự giai đoạn.</b> Giai đoạn 0 → 6 là phần lõi bắt buộc. Sau đó chọn nhánh theo mục tiêu: dữ liệu bảng và dự báo (7, 8), AI và LLM (9, 10), hoặc triển khai (11, 12). Xem sơ đồ tổng quan để biết giai đoạn nào phụ thuộc giai đoạn nào.</li>
@@ -173,11 +202,15 @@
           <li><b>Ôn định kỳ.</b> Cuối mỗi tuần, lọc "Cần ôn lại" và làm lại code của các chủ đề đó. Cuối mỗi tháng, xuất PDF "Chủ đề chưa xong" kèm bảng theo dõi để in ra và ghi chú.</li>
         </ol>
 
-        <h3 class="sub-h">Bốn trạng thái và khi nào đổi</h3>
-        <ul class="status-legend" id="status-legend"></ul>
+        
+</div>
+<div class="subpanel" data-subpanel="l-status" hidden>
+<ul class="status-legend" id="status-legend"></ul>
 
-        <h3 class="sub-h">Kế hoạch của bạn</h3>
-        <div class="plan-controls">
+        
+</div>
+<div class="subpanel" data-subpanel="l-plan" hidden>
+<div class="plan-controls">
           <label for="plan-hpw">Số giờ học mỗi tuần <input type="number" id="plan-hpw" min="2" max="60" step="1" value="10"></label>
           <label for="plan-start">Ngày bắt đầu <input type="date" id="plan-start"></label>
         </div>
@@ -191,8 +224,10 @@
         </div>
         <p class="sync-note" id="sync-note"></p>
 
-        <h3 class="sub-h">Dự án ở các mốc</h3>
-        <div class="table-wrap">
+        
+</div>
+<div class="subpanel" data-subpanel="l-proj" hidden>
+<div class="table-wrap">
           <table>
             <thead><tr><th>Sau giai đoạn</th><th>Dự án</th><th>Chứng minh được</th></tr></thead>
             <tbody>
@@ -205,39 +240,18 @@
             </tbody>
           </table>
         </div>
-      </section>
+      
+</div>
+</section></div></div>
 
-      <section class="panel" id="overview">
-        <h2>Sơ đồ tổng quan</h2>
-        <p>Mũi tên cho biết giai đoạn nào cần học trước. Các ô tô màu là những mốc quan trọng nhất.</p>
-        <div id="overview-fig"></div>
-      </section>
-
-      <section class="panel" id="guide">
-        <h2>Chọn thuật toán nhanh</h2>
-        <p>Bắt đầu từ nhu cầu của bạn, đi theo cây quyết định hoặc tra bảng, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
-        <div id="guide-fig"></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead>
-            <tbody id="guide-body"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="panel" id="apps">
-        <h2>Ứng dụng thực tế theo ngành</h2>
-        <p>Các case doanh nghiệp đã công bố, gồm cả những thất bại lớn và bài học rút ra. Bấm tên chủ đề để xem chi tiết, cách làm và nguồn.</p>
-        <div class="apps-stats" id="apps-stats"></div>
-        <div class="apps-filter" id="apps-filter" role="toolbar" aria-label="Lọc theo ngành"></div>
-        <div class="table-wrap">
-          <table class="apps-table">
-            <thead><tr><th>Tổ chức</th><th>Ứng dụng</th><th>Kết quả</th><th>Chủ đề</th></tr></thead>
-            <tbody id="apps-body"></tbody>
-          </table>
-        </div>
-      </section>
-
+  <div data-panel="roadmap" hidden>
+  <div class="wrap layout">
+    <aside class="sidenav" aria-label="Mục lục">
+      <h2>Mục lục</h2>
+      <ol id="sidenav-list"></ol>
+    </aside>
+    <div>
+      <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
       <div class="filters" role="toolbar" aria-label="Lọc chủ đề">
         <button class="chip" type="button" data-level-filter="all" aria-pressed="true">Tất cả</button>
         <button class="chip" type="button" data-level-filter="1" aria-pressed="false">Cơ bản</button>
@@ -255,20 +269,48 @@
         <button class="btn small" type="button" id="toggle-all">Mở rộng tất cả</button>
       </div>
 
+      
+      <div class="stage-tabs" id="stage-tabs" role="tablist" aria-label="Chọn giai đoạn"></div>
       <div id="stages"></div>
-      <p class="empty" id="empty" hidden>Không có chủ đề nào khớp. Thử từ khoá khác hoặc bỏ bộ lọc trình độ.</p>
+      <p class="empty" id="empty" hidden>Không có chủ đề nào khớp. Thử từ khoá khác hoặc bỏ bộ lọc.</p>
+      <div class="stage-nav" id="stage-nav"></div>
+    </div>
+  </div>
+  </div>
 
-      <section class="panel" id="refs">
+  <div data-panel="guide" hidden><div class="wrap"><section class="panel" id="guide">
+        <h2>Chọn thuật toán nhanh</h2>
+        <p>Bắt đầu từ nhu cầu của bạn, đi theo cây quyết định hoặc tra bảng, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
+        <div id="guide-fig"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead>
+            <tbody id="guide-body"></tbody>
+          </table>
+        </div>
+      </section></div></div>
+  <div data-panel="apps" hidden><div class="wrap"><section class="panel" id="apps">
+        <h2>Ứng dụng thực tế theo ngành</h2>
+        <p>Các case doanh nghiệp đã công bố, gồm cả những thất bại lớn và bài học rút ra. Bấm tên chủ đề để xem chi tiết, cách làm và nguồn.</p>
+        <div class="apps-stats" id="apps-stats"></div>
+        <div class="apps-filter" id="apps-filter" role="toolbar" aria-label="Lọc theo ngành"></div>
+        <div class="table-wrap">
+          <table class="apps-table">
+            <thead><tr><th>Tổ chức</th><th>Ứng dụng</th><th>Kết quả</th><th>Chủ đề</th></tr></thead>
+            <tbody id="apps-body"></tbody>
+          </table>
+        </div>
+      </section></div></div>
+  <div data-panel="refs" hidden><div class="wrap"><section class="panel" id="refs">
         <h2>Nguồn tham khảo</h2>
         <p>Các nguồn đã tra cứu (tháng 9/2026) để đối chiếu thứ tự kỹ năng, công cụ MLOps và các khuyến nghị RAG, fine-tuning, gradient boosting.</p>
         <ol class="sources" id="sources"></ol>
-      </section>
-    </div>
-  </div>
+      </section></div></div>
 
   <footer class="foot">
     <div class="wrap">Trạng thái học lưu theo tài khoản khi mở trong Claude, hoặc trong trình duyệt khi mở file trực tiếp. Nội dung có thể xuất ra PDF theo toàn bộ lộ trình, từng giai đoạn, từng chủ đề hoặc các chủ đề chưa xong.</div>
   </footer>
+
 </main>
 
 <div class="modal-back" id="export" hidden>

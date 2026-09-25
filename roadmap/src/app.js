@@ -564,6 +564,68 @@
 </article>`;
   }
 
+  function modTabs(m, items) {
+    const list = items.filter(([, , html]) => html && html.trim());
+    return `<div class="subtabs mod-tabs" role="tablist">${list.map(([k, l], i) => `<button class="subtab" type="button" role="tab" data-sub="${m.id}-${k}" aria-selected="${i === 0}">${l}</button>`).join("")}</div>` +
+      list.map(([k, , html], i) => `<div class="subpanel" data-subpanel="${m.id}-${k}"${i ? " hidden" : ""}>${html}</div>`).join("");
+  }
+  function showSub(btnOrPanel) {
+    const root = btnOrPanel.closest("[data-subroot]");
+    if (!root) return;
+    const key = btnOrPanel.dataset.sub || btnOrPanel.dataset.subpanel;
+    root.querySelectorAll(":scope [data-subpanel]").forEach(p => { if (p.closest("[data-subroot]") === root) p.hidden = p.dataset.subpanel !== key; });
+    root.querySelectorAll("[data-sub]").forEach(b => { if (b.closest("[data-subroot]") === root) b.setAttribute("aria-selected", String(b.dataset.sub === key)); });
+  }
+
+  /* ---------- tab chính và giai đoạn ---------- */
+  const TAB_KEY = "dsml-roadmap-tab-v1", STAGEVIEW_KEY = "dsml-roadmap-stage-v1";
+  let stageView = (() => { try { return localStorage.getItem(STAGEVIEW_KEY) || ""; } catch (e) { return ""; } })();
+  function showTab(name, toTop) {
+    const has = document.querySelector(`[data-panel="${name}"]`);
+    if (!has) name = "home";
+    document.querySelectorAll("[data-panel]").forEach(p => { p.hidden = p.dataset.panel !== name; });
+    document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
+    const active = document.querySelector(`[data-tab="${name}"]`);
+    if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) { /* bỏ qua */ } }
+    try { localStorage.setItem(TAB_KEY, name); } catch (e) { /* bỏ qua */ }
+    if (toTop) window.scrollTo(0, 0);
+  }
+  function setStageView(id, silent) {
+    stageView = id === "all" || STAGES.some(s => s.id === id) ? id : STAGES[0].id;
+    try { localStorage.setItem(STAGEVIEW_KEY, stageView); } catch (e) { /* bỏ qua */ }
+    document.querySelectorAll("[data-stage-view]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.stageView === stageView)));
+    if (!silent && typeof applyFilterRef2 === "function") applyFilterRef2();
+  }
+  function renderStageTabs() {
+    const box = document.getElementById("stage-tabs");
+    if (!box) return;
+    box.innerHTML = `<button class="stab" type="button" role="tab" data-stage-view="all" aria-selected="${stageView === "all"}">Tất cả</button>` +
+      STAGES.map(s => { const k = countStatus(s.modules); return `<button class="stab" type="button" role="tab" data-stage-view="${s.id}" data-track="${s.track}" aria-selected="${stageView === s.id}" title="${esc(s.title)}"><i></i><b>${s.no}</b><span>${esc(s.title.split(/[:&,(]/)[0].trim())}</span><small>${k.done}/${s.modules.length}</small></button>`; }).join("");
+  }
+  function renderStageNav() {
+    const nav = document.getElementById("stage-nav");
+    if (!nav) return;
+    const i = STAGES.findIndex(s => s.id === stageView);
+    if (stageView === "all" || i < 0 || document.getElementById("q").value.trim()) { nav.innerHTML = ""; return; }
+    const prev = STAGES[i - 1], next = STAGES[i + 1];
+    nav.innerHTML = `${prev ? `<button class="btn" type="button" data-stage-view="${prev.id}">← ${prev.no}. ${esc(prev.title)}</button>` : "<span></span>"}${next ? `<button class="btn primary" type="button" data-stage-view="${next.id}">${next.no}. ${esc(next.title)} →</button>` : ""}`;
+  }
+  function reveal(id) {
+    if (!id || id === "top") { showTab("home", true); return; }
+    const el = document.getElementById(id);
+    if (!el) return;
+    const panel = el.closest("[data-panel]");
+    if (panel) showTab(panel.dataset.panel, false);
+    const sp = el.closest("[data-subpanel]");
+    if (sp) showSub(sp);
+    const st = el.classList.contains("stage") ? el : el.closest(".stage");
+    if (st && stageView !== "all" && stageView !== st.id) setStageView(st.id);
+    if (el.hidden && (el.classList.contains("mod") || el.classList.contains("stage"))) setStageView(st ? st.id : "all");
+    if (el.classList.contains("mod")) setOpen(el, true);
+    try { history.replaceState(null, "", "#" + id); } catch (e) { /* bỏ qua */ }
+    requestAnimationFrame(() => el.scrollIntoView({ block: "start" }));
+  }
+
   const lvlDots = n => `<span class="lvl"><i>${[1, 2, 3].map(k => `<b class="${k <= n ? "on" : ""}"></b>`).join("")}</i>${LEVELS[n]}</span>`;
 
   /* ---------- trang chính ---------- */
@@ -586,7 +648,7 @@
       return `<h4>Code mẫu</h4><div class="code"><div class="code-bar"><span>${esc(m.code.lang)}</span><button class="btn ghost small" data-copy="${m.id}" type="button">${ICON.copy} Sao chép</button></div><pre><code>${lines.join("\n")}</code></pre></div>`;
     })() : "";
     return `
-<article class="mod" id="m-${m.id}" data-track="${s.track}" data-level="${m.level}" data-status="${statusOf(m.id)}">
+<article class="mod" data-subroot id="m-${m.id}" data-track="${s.track}" data-level="${m.level}" data-status="${statusOf(m.id)}">
   <div class="mod-head">
     <button class="mod-toggle" type="button" aria-expanded="false" aria-controls="b-${m.id}">
       <span class="mod-title"><h3>${esc(m.title)}</h3></span>
@@ -600,21 +662,18 @@
     </div>
   </div>
   <div class="mod-body" id="b-${m.id}" hidden>
-    <h4>Khái niệm</h4><p>${esc(m.concept)}</p>
-    ${m.diagrams.length ? `<h4>Sơ đồ</h4><div class="dgms">${m.diagrams.map((d, i) => figureHTML(m.id + ":" + i, d)).join("")}</div>` : ""}
-    <h4>Khi nào dùng & vì sao</h4>
-    <div class="cols">
+    ${modTabs(m, [
+      ["k", "Khái niệm", `<p>${esc(m.concept)}</p>${m.diagrams.length ? `<h4>Sơ đồ</h4><div class="dgms">${m.diagrams.map((d, i) => figureHTML(m.id + ":" + i, d)).join("")}</div>` : ""}`],
+      ["w", "Khi nào dùng", `<div class="cols">
       <div class="col why"><h4>Lý do sử dụng</h4>${list(m.why)}</div>
       <div class="col when"><h4>Khi nào dùng</h4>${list(m.when)}</div>
       <div class="col not"><h4>Khi nào không nên</h4>${list(m.whenNot)}</div>
-    </div>
-    ${m.example ? `<h4>Ví dụ ứng dụng thực tế</h4><div class="case"><span class="tag">${esc(m.example.domain)}</span><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>` : ""}
-    ${m.apps.length ? `<h4>Doanh nghiệp đã áp dụng</h4><div class="apps">${m.apps.map(appHTML).join("")}</div>` : ""}
-    ${code}
-    ${m.pitfalls && m.pitfalls.length ? `<h4>Lỗi thường gặp</h4><ul class="list">${m.pitfalls.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
-    ${aiHTML(m)}
-    ${m.tools && m.tools.length ? `<h4>Công cụ</h4><div class="tools">${m.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
-    ${m.resources && m.resources.length ? `<h4>Tài liệu học</h4><ul class="res">${m.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>` : ""}
+    </div>`],
+      ["r", "Thực tế" + (m.apps.length ? ` (${m.apps.length + (m.example ? 1 : 0)})` : ""), (m.example || m.apps.length) ? `${m.example ? `<h4>Ví dụ ứng dụng thực tế</h4><div class="case"><span class="tag">${esc(m.example.domain)}</span><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>` : ""}${m.apps.length ? `<h4>Doanh nghiệp đã áp dụng</h4><div class="apps">${m.apps.map(appHTML).join("")}</div>` : ""}` : ""],
+      ["c", "Code và lỗi", `${code}${m.pitfalls && m.pitfalls.length ? `<h4>Lỗi thường gặp</h4><ul class="list">${m.pitfalls.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}`],
+      ["a", "Làm việc với AI", aiHTML(m)],
+      ["t", "Công cụ và tài liệu", `${m.tools && m.tools.length ? `<h4>Công cụ</h4><div class="tools">${m.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}${m.resources && m.resources.length ? `<h4>Tài liệu học</h4><ul class="res">${m.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>` : ""}`]
+    ])}
   </div>
 </article>`;
   }
@@ -637,7 +696,7 @@
     if (GUIDE_TREE) $("#guide-fig").innerHTML = figureHTML("guide", GUIDE_TREE);
     $("#guide-body").innerHTML = GUIDE.map(([need, algo, id]) =>
       `<tr><td>${esc(need)}</td><td>${MOD_BY_ID[id] ? `<a href="#m-${id}" data-open="${id}">${esc(algo)}</a>` : esc(algo)}</td><td>${MOD_BY_ID[id] ? esc(MOD_BY_ID[id].stage.title) : ""}</td></tr>`).join("");
-    renderAppsIndex("all");
+    renderAppsIndex(sectorOf(ALL_APPS[0] ? ALL_APPS.map(a => a.ind).sort((x, y) => ALL_APPS.filter(a => sectorOf(a.ind) === sectorOf(y)).length - ALL_APPS.filter(a => sectorOf(a.ind) === sectorOf(x)).length)[0] : ""));
     renderBranches();
     $("#ai-evidence").innerHTML = EVIDENCE.map(e => `<div class="ev"><b>${esc(e.n)}</b><p>${esc(e.t)}</p><a href="${esc(e.src[1])}" target="_blank" rel="noopener">${esc(e.src[0])}</a></div>`).join("");
     $("#ai-flow").innerHTML = figureHTML("aiflow", AI_FLOW);
@@ -715,6 +774,7 @@
     if (typeof applyFilterRef === "function") applyFilterRef();
     refreshPlan();
     if (document.getElementById("branch-detail") && BRANCHES.length) renderBranchDetail();
+    if (document.getElementById("stage-tabs") && document.getElementById("stage-tabs").children.length) renderStageTabs();
   }
   let applyFilterRef = null;
 
@@ -731,6 +791,17 @@
   function bindMain() {
     document.addEventListener("click", e => {
       const t = e.target;
+      const tab = t.closest("[data-tab]");
+      if (tab) { showTab(tab.dataset.tab, true); return; }
+      const sub = t.closest("[data-sub]");
+      if (sub) { showSub(sub); return; }
+      const sv = t.closest("[data-stage-view]");
+      if (sv) { setStageView(sv.dataset.stageView); if (sv.closest("#stage-nav")) document.getElementById("stage-tabs").scrollIntoView({ block: "start" }); return; }
+      const a = t.closest('a[href^="#"]');
+      if (a && !e.defaultPrevented) {
+        const id = decodeURIComponent(a.getAttribute("href").slice(1));
+        if (id === "top" || document.getElementById(id)) { e.preventDefault(); reveal(id); return; }
+      }
       const tog = t.closest(".mod-toggle");
       if (tog) { const card = tog.closest(".mod"); setOpen(card, card.querySelector(".mod-body").hidden); return; }
       const chev = t.closest(".chev");
@@ -750,11 +821,11 @@
         return;
       }
       const brf = t.closest("[data-branch-filter]");
-      if (brf) { setBranch(brf.dataset.branchFilter, true); document.getElementById("stages").scrollIntoView(); toast(`Đang hiện các chủ đề cho nhánh ${BRANCH_BY_ID[brf.dataset.branchFilter].name}`); return; }
+      if (brf) { setBranch(brf.dataset.branchFilter, true); setStageView("all", true); showTab("roadmap", true); applyFilterRef2(); toast(`Đang hiện các chủ đề cho nhánh ${BRANCH_BY_ID[brf.dataset.branchFilter].name}`); return; }
       const brp = t.closest("[data-pdf-branch]");
       if (brp) { openExport({ scope: "branch", branchId: brp.dataset.pdfBranch }); return; }
       const brc = t.closest("[data-branch]");
-      if (brc) { setBranch(brc.dataset.branch, false); const d = document.getElementById("branch-detail"); if (d && brc.closest("#branch-table")) d.scrollIntoView({ block: "start" }); return; }
+      if (brc) { setBranch(brc.dataset.branch, false); if (brc.closest("#branch-table")) reveal("branch-detail"); return; }
       const fam = t.closest("[data-family]");
       if (fam) {
         const first = BRANCHES.find(b => b.family === fam.dataset.family);
@@ -804,7 +875,7 @@
       document.querySelectorAll(".mod").forEach(c => { if (!c.hidden) setOpen(c, allOpen); });
       $("#toggle-all").textContent = allOpen ? "Thu gọn tất cả" : "Mở rộng tất cả";
     });
-    $("#mobile-toc").addEventListener("change", e => { if (e.target.value) location.hash = e.target.value; });
+    $("#mobile-toc").addEventListener("change", e => { if (e.target.value) reveal(e.target.value); });
 
     // Bộ lọc
     let level = "all";
@@ -820,7 +891,7 @@
       document.querySelectorAll("[data-status-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
       applyFilter();
     }));
-    q.addEventListener("input", applyFilter);
+    q.addEventListener("input", () => { if (q.value.trim()) showTab("roadmap", false); applyFilter(); });
     applyFilterRef = () => { if (stFilter !== "all") applyFilter(); };
     applyFilterRef2 = applyFilter;
     $("#branch-filter").addEventListener("change", e => {
@@ -831,6 +902,7 @@
     const hay = Object.fromEntries(ALL_MODS.map(m => [m.id, norm([m.title, m.summary, m.concept, (m.tools || []).join(" "), m.example && m.example.domain, m.example && m.example.title, m.apps.map(a => [a.org, a.ind, a.title].join(" ")).join(" ")].join(" "))]));
     function applyFilter() {
       const terms = norm(q.value.trim()).split(/\s+/).filter(Boolean);
+      const fb0 = BRANCH_BY_ID[$("#branch-filter").value];
       let shown = 0;
       STAGES.forEach(s => {
         let k = 0;
@@ -840,24 +912,35 @@
           document.getElementById("m-" + m.id).hidden = !ok;
           if (ok) k++;
         });
-        document.getElementById(s.id).hidden = k === 0;
-        shown += k;
+        const inView = stageView === "all" || terms.length > 0 || fb0 || s.id === stageView;
+        document.getElementById(s.id).hidden = k === 0 || !inView;
+        if (inView) shown += k;
       });
       $("#empty").hidden = shown > 0;
+      renderStageNav();
     }
 
     // Bản in từ trình duyệt: mở rộng mọi thẻ trước khi in, khôi phục sau đó
     let before = null;
+    let viewBefore = null;
     window.addEventListener("beforeprint", () => {
+      viewBefore = stageView; setStageView("all");
       before = [...document.querySelectorAll(".mod")].map(c => [c, !c.querySelector(".mod-body").hidden]);
       before.forEach(([c]) => setOpen(c, true));
     });
-    window.addEventListener("afterprint", () => { if (before) before.forEach(([c, o]) => setOpen(c, o)); before = null; });
+    window.addEventListener("afterprint", () => { if (before) before.forEach(([c, o]) => setOpen(c, o)); before = null; if (viewBefore) setStageView(viewBefore); });
 
-    if (location.hash.startsWith("#m-")) {
-      const card = document.getElementById(location.hash.slice(1));
-      if (card) { setOpen(card, true); card.scrollIntoView(); }
+    // Trạng thái ban đầu: giai đoạn đang học, tab đã mở lần trước hoặc theo đường dẫn
+    if (!stageView) {
+      const next = ALL_MODS.find(m => statusOf(m.id) === "doing") || ALL_MODS.find(m => statusOf(m.id) !== "done");
+      stageView = next ? next.stage.id : STAGES[0].id;
     }
+    renderStageTabs();
+    setStageView(stageView);
+    window.addEventListener("hashchange", () => { const h = decodeURIComponent(location.hash.slice(1)); if (h) reveal(h); });
+    const hash = decodeURIComponent(location.hash.slice(1));
+    if (hash && document.getElementById(hash)) reveal(hash);
+    else { let last = "home"; try { last = localStorage.getItem(TAB_KEY) || "home"; } catch (e) { /* bỏ qua */ } showTab(last, false); }
   }
 
   /* =====================================================================

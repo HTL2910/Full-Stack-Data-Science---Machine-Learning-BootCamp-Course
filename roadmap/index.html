@@ -143,7 +143,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; l
 /* Layout */
 .layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 36px; padding-block: 12px 60px; }
 @media (max-width: 960px) { .layout { grid-template-columns: minmax(0, 1fr); } }
-.sidenav { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 70px); align-self: start; max-height: calc(100vh - 90px); overflow-y: auto; padding-right: 6px; font-size: 13.5px; }
+.sidenav { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 122px); align-self: start; max-height: calc(100vh - 140px); overflow-y: auto; padding-right: 6px; font-size: 13.5px; }
 @media (max-width: 960px) { .sidenav { display: none; } }
 .sidenav h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-family: var(--f-body); margin: 0 0 10px; }
 .sidenav ol { list-style: none; margin: 0; padding: 0; }
@@ -171,7 +171,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; l
 .empty { padding: 30px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 12px; }
 
 /* Stage */
-.stage { margin-bottom: 44px; scroll-margin-top: 80px; }
+.stage { margin-bottom: 44px; scroll-margin-top: 130px; }
 .stage-head { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; align-items: start; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
 .stage-no { grid-row: span 3; width: 46px; height: 46px; border-radius: 50%; border: 5px solid var(--tc); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 17px; font-variant-numeric: tabular-nums; background: var(--surface); }
 .stage-head h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 700; line-height: 1.2; }
@@ -185,7 +185,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; l
 
 /* Module card */
 .mods { display: grid; gap: 10px; }
-.mod { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; scroll-margin-top: 80px; position: relative; }
+.mod { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; scroll-margin-top: 130px; position: relative; }
 .mod::before { content: ""; position: absolute; left: -1px; top: 16px; width: 4px; height: 22px; border-radius: 0 3px 3px 0; background: var(--tc); }
 .mod.open { box-shadow: var(--shadow); }
 .mod-head { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px 14px 20px; }
@@ -235,7 +235,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; l
 .res a::after { content: " ↗"; font-size: 11px; }
 
 /* Guide table */
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 44px; scroll-margin-top: 80px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-block: 24px 32px; scroll-margin-top: 130px; }
 .panel h2 { font-size: 24px; margin-bottom: 4px; }
 .panel > p { color: var(--ink-2); margin: 0 0 14px; }
 .table-wrap { overflow-x: auto; }
@@ -470,6 +470,53 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
 .br-badge { font-weight: 600; font-size: 11.5px; border-radius: 999px; padding: 0 8px; border: 1px solid var(--accent); color: var(--accent); }
 .br-badge[data-role="useful"] { border-style: dashed; color: var(--muted); border-color: var(--muted); }
 
+
+/* Tab chính */
+.tabbar { border-top: 1px solid var(--line); }
+.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-block: 0; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: none; background: none; border: 0; border-bottom: 3px solid transparent; padding: 11px 14px 9px; font: inherit; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+[data-panel] { min-height: 60vh; }
+[data-panel="roadmap"] .layout { padding-block: 24px 60px; }
+
+/* Trang tổng quan */
+.start { padding-block: 4px 8px; }
+.start-h { font-size: 22px; margin-bottom: 12px; }
+.start-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .start-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .start-grid { grid-template-columns: minmax(0, 1fr); } }
+.start-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid var(--line); border-left: 4px solid var(--tc); border-radius: 12px; background: var(--surface); text-decoration: none; color: var(--ink); }
+.start-card:hover { box-shadow: var(--shadow); }
+.start-card b { font-family: var(--f-display); font-size: 17px; }
+.start-card span { font-size: 14px; color: var(--ink-2); }
+
+/* Tab con */
+.subtabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.subtab { border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 13.5px; cursor: pointer; }
+.subtab:hover { border-color: var(--muted); color: var(--ink); }
+.subtab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.mod-tabs { margin: 14px 0 12px; }
+.mod-tabs .subtab { font-size: 13px; padding: 5px 12px; }
+.subpanel > h4:first-child, .subpanel > .sub-h:first-child { margin-top: 0; }
+
+/* Chọn giai đoạn */
+.stage-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 18px; scrollbar-width: thin; }
+.stab { flex: none; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 10px; font: inherit; font-size: 13px; color: var(--ink-2); cursor: pointer; max-width: 220px; }
+.stab i { width: 8px; height: 8px; border-radius: 50%; background: var(--tc, var(--muted)); flex: none; }
+.stab b { font-family: var(--f-display); font-variant-numeric: tabular-nums; }
+.stab span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stab small { color: var(--muted); font-variant-numeric: tabular-nums; }
+.stab[aria-selected="true"] { border-color: var(--tc, var(--ink)); background: var(--surface-2); color: var(--ink); box-shadow: inset 0 -3px 0 var(--tc, var(--ink)); }
+.stage-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.stage-nav:empty { display: none; }
+
+@media print {
+  .tabbar, .subtabs, .stage-tabs, .stage-nav, .start { display: none !important; }
+  [data-panel][hidden], [data-subpanel][hidden], .stage[hidden] { display: block !important; }
+}
+
 </style>
 
 <header class="topbar">
@@ -487,13 +534,15 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
       <span>Xuất PDF</span>
     </button>
   </div>
+<nav class="tabbar" aria-label="Các phần của trang"><div class="wrap tabs" role="tablist"><button class="tab" type="button" role="tab" data-tab="home" aria-selected="true">Tổng quan</button><button class="tab" type="button" role="tab" data-tab="ai" aria-selected="false">Làm chủ AI</button><button class="tab" type="button" role="tab" data-tab="branches" aria-selected="false">Nhánh nghề</button><button class="tab" type="button" role="tab" data-tab="learn" aria-selected="false">Học từ đầu</button><button class="tab" type="button" role="tab" data-tab="roadmap" aria-selected="false">Lộ trình</button><button class="tab" type="button" role="tab" data-tab="guide" aria-selected="false">Chọn thuật toán</button><button class="tab" type="button" role="tab" data-tab="apps" aria-selected="false">Ứng dụng thực tế</button><button class="tab" type="button" role="tab" data-tab="refs" aria-selected="false">Nguồn</button></div></nav>
 </header>
 
 <main id="top">
+  <div data-panel="home">
   <section class="hero wrap">
     <div class="eyebrow">Full Stack Data Science &amp; Machine Learning BootCamp</div>
     <h1>Lộ trình Data Science &amp; Machine Learning</h1>
-    <p class="lede">Hiểu đủ nền tảng để dùng AI viết code đúng hướng: giao việc rõ ràng, tự kiểm chứng, ra quyết định và phản biện được đề xuất của AI. Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đã áp dụng nó ra sao, kèm số liệu, nguồn và cả những thất bại. Phần lớn chủ đề có sơ đồ luồng hoặc sequence diagram để thấy các bước và các bên tương tác. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
+    <p class="lede">Hiểu đủ nền tảng để dùng AI viết code đúng hướng: giao việc rõ ràng, tự kiểm chứng, ra quyết định và phản biện được đề xuất của AI. Từ toán và Python đến mô hình, LLM và triển khai. Mỗi phần nằm trong một tab riêng: chọn tab ở thanh trên để đi thẳng tới phần bạn cần.</p>
     <div class="stats">
       <div class="stat"><b id="stat-stages">0</b><span>giai đoạn</span></div>
       <div class="stat"><b id="stat-mods">0</b><span>chủ đề</span></div>
@@ -503,31 +552,35 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
     <div class="status-counts" id="status-counts" aria-label="Số chủ đề theo trạng thái"></div>
     <div class="hero-actions">
       <a class="btn primary" id="next-btn" href="#s0">Bắt đầu</a>
-      <a class="btn" href="#ai">Học để làm chủ AI</a>
-      <a class="btn" href="#branches">Chọn nhánh nghề</a>
-      <a class="btn" href="#learn">Hướng dẫn học từ đầu</a>
-      <a class="btn" href="#overview">Sơ đồ tổng quan</a>
-      <a class="btn" href="#guide">Chọn thuật toán nhanh</a>
-      <a class="btn" href="#apps">Ứng dụng theo ngành</a>
-      <a class="btn" href="#s13">Xem case study của repo</a>
+      <a class="btn" href="#stages">Mở lộ trình</a>
     </div>
     <nav class="metro" id="metro" aria-label="Các giai đoạn"></nav>
     <div class="legend" id="legend"></div>
   </section>
+  <section class="wrap start" aria-label="Bắt đầu từ đâu">
+    <h2 class="start-h">Bắt đầu từ đâu</h2>
+    <div class="start-grid">
+      <a class="start-card" href="#ai" data-track="dl"><b>Học để làm chủ AI</b><span>Vì sao phải hiểu nền tảng, quy trình làm việc với AI, checklist và 24 tình huống luyện phản biện.</span></a>
+      <a class="start-card" href="#branches" data-track="ops"><b>Chọn nhánh nghề</b><span>10 nhánh AI và dữ liệu: nhánh nào hợp với bạn, cần học gì, thị trường Việt Nam ra sao.</span></a>
+      <a class="start-card" href="#learn" data-track="found"><b>Hướng dẫn học từ đầu</b><span>Sáu bước học, bốn trạng thái, lịch Gantt theo số giờ mỗi tuần, dự án ở các mốc.</span></a>
+      <a class="start-card" href="#stages" data-track="ml"><b>Lộ trình 59 chủ đề</b><span>Học từng giai đoạn: khái niệm, khi nào dùng, case thực tế, code, làm việc với AI.</span></a>
+      <a class="start-card" href="#guide" data-track="data"><b>Chọn thuật toán nhanh</b><span>Cây quyết định và bảng tra từ nhu cầu tới thuật toán nên thử.</span></a>
+      <a class="start-card" href="#apps" data-track="dl"><b>Ứng dụng thực tế</b><span>109 case doanh nghiệp có nguồn, gồm cả 14 thất bại kèm bài học.</span></a>
+    </div>
+  </section>
+  <div class="wrap"><section class="panel" id="overview">
+        <h2>Sơ đồ tổng quan</h2>
+        <p>Mũi tên cho biết giai đoạn nào cần học trước. Các ô tô màu là những mốc quan trọng nhất.</p>
+        <div id="overview-fig"></div>
+      </section></div>
+  </div>
 
-  <div class="wrap layout">
-    <aside class="sidenav" aria-label="Mục lục">
-      <h2>Mục lục</h2>
-      <ol id="sidenav-list"></ol>
-    </aside>
-
-    <div>
-      <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
-
-      <section class="panel" id="ai">
+  <div data-panel="ai" hidden><div class="wrap"><section class="panel" id="ai" data-subroot>
         <h2>Học để làm chủ AI</h2>
         <p>Bộ tài liệu này không dạy bạn tự viết mọi dòng code. Nó giúp bạn hiểu đủ nền tảng để giao việc cho AI rõ ràng, đọc và kiểm chứng được code AI viết, tự ra quyết định, và phản biện khi AI đề xuất sai. Các nghiên cứu gần đây cho thấy AI chỉ giúp khi người dùng hiểu việc mình đang làm.</p>
-        <div class="evidence" id="ai-evidence"></div>
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="ai-why" aria-selected="true">Vì sao và ba mức hiểu</button><button class="subtab" type="button" role="tab" data-sub="ai-flow" aria-selected="false">Quy trình</button><button class="subtab" type="button" role="tab" data-sub="ai-check" aria-selected="false">Checklist và prompt</button><button class="subtab" type="button" role="tab" data-sub="ai-quiz" aria-selected="false">Luyện phản biện</button></div>
+<div class="subpanel" data-subpanel="ai-why">
+<div class="evidence" id="ai-evidence"></div>
 
         <h3 class="sub-h">Ba mức hiểu bạn cần ở mỗi chủ đề</h3>
         <ol class="steps">
@@ -536,10 +589,15 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
           <li><b>Quyết định.</b> Chọn được phương án dựa trên đánh đổi, và nói được vì sao không chọn phương án khác. Mỗi chủ đề có mục "Làm việc với AI" để luyện ba mức này.</li>
         </ol>
 
-        <h3 class="sub-h">Quy trình làm việc với AI</h3>
-        <div id="ai-flow"></div>
+        
+</div>
+<div class="subpanel" data-subpanel="ai-flow" hidden>
+<div id="ai-flow"></div>
 
-        <div class="ai-two">
+        
+</div>
+<div class="subpanel" data-subpanel="ai-check" hidden>
+<div class="ai-two">
           <div>
             <h3 class="sub-h">10 câu hỏi kiểm tra mọi đề xuất của AI</h3>
             <ol class="checklist" id="ai-checklist">
@@ -574,15 +632,20 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
           </div>
         </div>
 
-        <h3 class="sub-h">Luyện phản biện AI</h3>
-        <p class="plan-summary" id="quiz-score"></p>
+        
+</div>
+<div class="subpanel" data-subpanel="ai-quiz" hidden>
+<p class="plan-summary" id="quiz-score"></p>
         <div class="quiz-grid" id="ai-quiz"></div>
-      </section>
-
-      <section class="panel" id="branches">
+      
+</div>
+</section></div></div>
+  <div data-panel="branches" hidden><div class="wrap"><section class="panel" id="branches" data-subroot>
         <h2>Chọn nhánh nghề AI và dữ liệu</h2>
         <p>Các nghề AI và dữ liệu khác nhau ở thứ họ giao ra, không ở công cụ. Nhưng lỗi AI mắc khi viết code cho các nghề này lại cùng một họ: sai grain và join, rò rỉ dữ liệu, chọn sai metric, lệch lúc huấn luyện và lúc chạy thật, thiếu test, lỏng bảo mật, chi phí vượt kiểm soát. Vì vậy hãy học chắc nền chung trước, rồi mới rẽ nhánh.</p>
-        <div id="branch-map"></div>
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="br-map" aria-selected="true">Bản đồ và so sánh</button><button class="subtab" type="button" role="tab" data-sub="br-detail" aria-selected="false">Chi tiết từng nhánh</button><button class="subtab" type="button" role="tab" data-sub="br-found" aria-selected="false">Nền chung</button><button class="subtab" type="button" role="tab" data-sub="br-market" aria-selected="false">Thị trường</button><button class="subtab" type="button" role="tab" data-sub="br-inter" aria-selected="false">Phỏng vấn và chuyển nhánh</button></div>
+<div class="subpanel" data-subpanel="br-map">
+<div id="branch-map"></div>
 
         <h3 class="sub-h">Bạn thích làm gì hơn?</h3>
         <div class="fam-grid" id="branch-families"></div>
@@ -595,22 +658,31 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
           </table>
         </div>
 
-        <h3 class="sub-h">Chi tiết từng nhánh</h3>
-        <div class="br-chips" id="branch-chips" role="toolbar" aria-label="Chọn nhánh nghề"></div>
+        
+</div>
+<div class="subpanel" data-subpanel="br-detail" hidden>
+<div class="br-chips" id="branch-chips" role="toolbar" aria-label="Chọn nhánh nghề"></div>
         <div id="branch-detail"></div>
 
-        <h3 class="sub-h">Năm khối nền dùng cho mọi nhánh</h3>
-        <div class="table-wrap"><table><thead><tr><th>Khối nền</th><th>Nội dung tối thiểu</th><th>Giúp bạn bắt được lỗi AI nào</th></tr></thead><tbody id="foundation-body"></tbody></table></div>
+        
+</div>
+<div class="subpanel" data-subpanel="br-found" hidden>
+<div class="table-wrap"><table><thead><tr><th>Khối nền</th><th>Nội dung tối thiểu</th><th>Giúp bạn bắt được lỗi AI nào</th></tr></thead><tbody id="foundation-body"></tbody></table></div>
 
-        <h3 class="sub-h">Thị trường 2025–2026</h3>
-        <p class="plan-summary">Toàn cầu</p>
+        
+</div>
+<div class="subpanel" data-subpanel="br-market" hidden>
+<p class="plan-summary">Toàn cầu</p>
         <div class="evidence" id="market-global"></div>
         <p class="plan-summary" style="margin-top:14px">Việt Nam</p>
         <div class="evidence" id="market-vn"></div>
         <div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Cấp</th><th>Lương tháng (gộp, Việt Nam)</th><th>Ghi chú</th></tr></thead><tbody id="market-ladder"></tbody></table></div>
         <p class="sync-note" id="market-note"></p>
 
-        <div class="ai-two">
+        
+</div>
+<div class="subpanel" data-subpanel="br-inter" hidden>
+<div class="ai-two">
           <div>
             <h3 class="sub-h">Phỏng vấn kiểm tra gì</h3>
             <div class="table-wrap"><table><thead><tr><th>Nhánh</th><th>Vòng đặc trưng</th></tr></thead><tbody id="interview-body"></tbody></table></div>
@@ -622,14 +694,18 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
             <div class="table-wrap"><table><thead><tr><th>Từ → sang</th><th>Cần bổ sung</th><th>Độ khó</th></tr></thead><tbody id="trans-body"></tbody></table></div>
           </div>
         </div>
-        <p class="sync-note">Nguồn: báo cáo nghiên cứu "Lộ trình các nhánh ngành AI" (9/2026) trong thư mục reports/ của repo. Nhãn (qua snippet), (vendor/blog), (số liệu cũ), (chưa kiểm chứng) được giữ nguyên. Cây kỹ năng, dự án mốc và thời lượng là đề xuất tổng hợp, không phải số liệu đo lường.</p>
-      </section>
-
-      <section class="panel" id="learn">
+        
+</div>
+<p class="sync-note">Nguồn: báo cáo nghiên cứu "Lộ trình các nhánh ngành AI" (9/2026) trong thư mục reports/ của repo. Nhãn (qua snippet), (vendor/blog), (số liệu cũ), (chưa kiểm chứng) được giữ nguyên. Cây kỹ năng, dự án mốc và thời lượng là đề xuất tổng hợp, không phải số liệu đo lường.</p>
+      
+</section></div></div>
+  <div data-panel="learn" hidden><div class="wrap"><section class="panel" id="learn" data-subroot>
         <h2>Hướng dẫn học từ đầu</h2>
         <p>Nếu bạn bắt đầu từ con số 0, đi theo sáu bước dưới đây. Đánh trạng thái cho từng chủ đề để biết mình đang ở đâu, việc gì cần làm tiếp và phần nào cần ôn.</p>
 
-        <ol class="steps">
+        <div class="subtabs" role="tablist"><button class="subtab" type="button" role="tab" data-sub="l-steps" aria-selected="true">Sáu bước</button><button class="subtab" type="button" role="tab" data-sub="l-status" aria-selected="false">Bốn trạng thái</button><button class="subtab" type="button" role="tab" data-sub="l-plan" aria-selected="false">Kế hoạch của bạn</button><button class="subtab" type="button" role="tab" data-sub="l-proj" aria-selected="false">Dự án ở các mốc</button></div>
+<div class="subpanel" data-subpanel="l-steps">
+<ol class="steps">
           <li><b>Kiểm tra đầu vào.</b> Bạn cần dùng được máy tính, cài được phần mềm, đọc được tài liệu tiếng Anh kỹ thuật cơ bản và nhớ toán phổ thông (hàm số, đạo hàm, xác suất cơ bản). Nếu đã biết một phần, mở chủ đề đó, làm lại code mẫu mà không nhìn: làm được thì đánh "Đã xong", chưa chắc thì đánh "Cần ôn lại".</li>
           <li><b>Đặt nhịp học.</b> Nhập số giờ bạn học được mỗi tuần và ngày bắt đầu ở ô bên dưới. Biểu đồ Gantt tự tính thời gian cho từng giai đoạn. Nhịp bền vững cho người đi làm là 8–12 giờ/tuần; học toàn thời gian là 25–35 giờ/tuần.</li>
           <li><b>Học theo thứ tự giai đoạn.</b> Giai đoạn 0 → 6 là phần lõi bắt buộc. Sau đó chọn nhánh theo mục tiêu: dữ liệu bảng và dự báo (7, 8), AI và LLM (9, 10), hoặc triển khai (11, 12). Xem sơ đồ tổng quan để biết giai đoạn nào phụ thuộc giai đoạn nào.</li>
@@ -638,11 +714,15 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
           <li><b>Ôn định kỳ.</b> Cuối mỗi tuần, lọc "Cần ôn lại" và làm lại code của các chủ đề đó. Cuối mỗi tháng, xuất PDF "Chủ đề chưa xong" kèm bảng theo dõi để in ra và ghi chú.</li>
         </ol>
 
-        <h3 class="sub-h">Bốn trạng thái và khi nào đổi</h3>
-        <ul class="status-legend" id="status-legend"></ul>
+        
+</div>
+<div class="subpanel" data-subpanel="l-status" hidden>
+<ul class="status-legend" id="status-legend"></ul>
 
-        <h3 class="sub-h">Kế hoạch của bạn</h3>
-        <div class="plan-controls">
+        
+</div>
+<div class="subpanel" data-subpanel="l-plan" hidden>
+<div class="plan-controls">
           <label for="plan-hpw">Số giờ học mỗi tuần <input type="number" id="plan-hpw" min="2" max="60" step="1" value="10"></label>
           <label for="plan-start">Ngày bắt đầu <input type="date" id="plan-start"></label>
         </div>
@@ -656,8 +736,10 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
         </div>
         <p class="sync-note" id="sync-note"></p>
 
-        <h3 class="sub-h">Dự án ở các mốc</h3>
-        <div class="table-wrap">
+        
+</div>
+<div class="subpanel" data-subpanel="l-proj" hidden>
+<div class="table-wrap">
           <table>
             <thead><tr><th>Sau giai đoạn</th><th>Dự án</th><th>Chứng minh được</th></tr></thead>
             <tbody>
@@ -670,39 +752,18 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
             </tbody>
           </table>
         </div>
-      </section>
+      
+</div>
+</section></div></div>
 
-      <section class="panel" id="overview">
-        <h2>Sơ đồ tổng quan</h2>
-        <p>Mũi tên cho biết giai đoạn nào cần học trước. Các ô tô màu là những mốc quan trọng nhất.</p>
-        <div id="overview-fig"></div>
-      </section>
-
-      <section class="panel" id="guide">
-        <h2>Chọn thuật toán nhanh</h2>
-        <p>Bắt đầu từ nhu cầu của bạn, đi theo cây quyết định hoặc tra bảng, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
-        <div id="guide-fig"></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead>
-            <tbody id="guide-body"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="panel" id="apps">
-        <h2>Ứng dụng thực tế theo ngành</h2>
-        <p>Các case doanh nghiệp đã công bố, gồm cả những thất bại lớn và bài học rút ra. Bấm tên chủ đề để xem chi tiết, cách làm và nguồn.</p>
-        <div class="apps-stats" id="apps-stats"></div>
-        <div class="apps-filter" id="apps-filter" role="toolbar" aria-label="Lọc theo ngành"></div>
-        <div class="table-wrap">
-          <table class="apps-table">
-            <thead><tr><th>Tổ chức</th><th>Ứng dụng</th><th>Kết quả</th><th>Chủ đề</th></tr></thead>
-            <tbody id="apps-body"></tbody>
-          </table>
-        </div>
-      </section>
-
+  <div data-panel="roadmap" hidden>
+  <div class="wrap layout">
+    <aside class="sidenav" aria-label="Mục lục">
+      <h2>Mục lục</h2>
+      <ol id="sidenav-list"></ol>
+    </aside>
+    <div>
+      <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
       <div class="filters" role="toolbar" aria-label="Lọc chủ đề">
         <button class="chip" type="button" data-level-filter="all" aria-pressed="true">Tất cả</button>
         <button class="chip" type="button" data-level-filter="1" aria-pressed="false">Cơ bản</button>
@@ -720,20 +781,48 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
         <button class="btn small" type="button" id="toggle-all">Mở rộng tất cả</button>
       </div>
 
+      
+      <div class="stage-tabs" id="stage-tabs" role="tablist" aria-label="Chọn giai đoạn"></div>
       <div id="stages"></div>
-      <p class="empty" id="empty" hidden>Không có chủ đề nào khớp. Thử từ khoá khác hoặc bỏ bộ lọc trình độ.</p>
+      <p class="empty" id="empty" hidden>Không có chủ đề nào khớp. Thử từ khoá khác hoặc bỏ bộ lọc.</p>
+      <div class="stage-nav" id="stage-nav"></div>
+    </div>
+  </div>
+  </div>
 
-      <section class="panel" id="refs">
+  <div data-panel="guide" hidden><div class="wrap"><section class="panel" id="guide">
+        <h2>Chọn thuật toán nhanh</h2>
+        <p>Bắt đầu từ nhu cầu của bạn, đi theo cây quyết định hoặc tra bảng, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
+        <div id="guide-fig"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead>
+            <tbody id="guide-body"></tbody>
+          </table>
+        </div>
+      </section></div></div>
+  <div data-panel="apps" hidden><div class="wrap"><section class="panel" id="apps">
+        <h2>Ứng dụng thực tế theo ngành</h2>
+        <p>Các case doanh nghiệp đã công bố, gồm cả những thất bại lớn và bài học rút ra. Bấm tên chủ đề để xem chi tiết, cách làm và nguồn.</p>
+        <div class="apps-stats" id="apps-stats"></div>
+        <div class="apps-filter" id="apps-filter" role="toolbar" aria-label="Lọc theo ngành"></div>
+        <div class="table-wrap">
+          <table class="apps-table">
+            <thead><tr><th>Tổ chức</th><th>Ứng dụng</th><th>Kết quả</th><th>Chủ đề</th></tr></thead>
+            <tbody id="apps-body"></tbody>
+          </table>
+        </div>
+      </section></div></div>
+  <div data-panel="refs" hidden><div class="wrap"><section class="panel" id="refs">
         <h2>Nguồn tham khảo</h2>
         <p>Các nguồn đã tra cứu (tháng 9/2026) để đối chiếu thứ tự kỹ năng, công cụ MLOps và các khuyến nghị RAG, fine-tuning, gradient boosting.</p>
         <ol class="sources" id="sources"></ol>
-      </section>
-    </div>
-  </div>
+      </section></div></div>
 
   <footer class="foot">
     <div class="wrap">Trạng thái học lưu theo tài khoản khi mở trong Claude, hoặc trong trình duyệt khi mở file trực tiếp. Nội dung có thể xuất ra PDF theo toàn bộ lộ trình, từng giai đoạn, từng chủ đề hoặc các chủ đề chưa xong.</div>
   </footer>
+
 </main>
 
 <div class="modal-back" id="export" hidden>
@@ -5311,6 +5400,68 @@ window.ROADMAP_TRANSITION_MAP = {
 </article>`;
   }
 
+  function modTabs(m, items) {
+    const list = items.filter(([, , html]) => html && html.trim());
+    return `<div class="subtabs mod-tabs" role="tablist">${list.map(([k, l], i) => `<button class="subtab" type="button" role="tab" data-sub="${m.id}-${k}" aria-selected="${i === 0}">${l}</button>`).join("")}</div>` +
+      list.map(([k, , html], i) => `<div class="subpanel" data-subpanel="${m.id}-${k}"${i ? " hidden" : ""}>${html}</div>`).join("");
+  }
+  function showSub(btnOrPanel) {
+    const root = btnOrPanel.closest("[data-subroot]");
+    if (!root) return;
+    const key = btnOrPanel.dataset.sub || btnOrPanel.dataset.subpanel;
+    root.querySelectorAll(":scope [data-subpanel]").forEach(p => { if (p.closest("[data-subroot]") === root) p.hidden = p.dataset.subpanel !== key; });
+    root.querySelectorAll("[data-sub]").forEach(b => { if (b.closest("[data-subroot]") === root) b.setAttribute("aria-selected", String(b.dataset.sub === key)); });
+  }
+
+  /* ---------- tab chính và giai đoạn ---------- */
+  const TAB_KEY = "dsml-roadmap-tab-v1", STAGEVIEW_KEY = "dsml-roadmap-stage-v1";
+  let stageView = (() => { try { return localStorage.getItem(STAGEVIEW_KEY) || ""; } catch (e) { return ""; } })();
+  function showTab(name, toTop) {
+    const has = document.querySelector(`[data-panel="${name}"]`);
+    if (!has) name = "home";
+    document.querySelectorAll("[data-panel]").forEach(p => { p.hidden = p.dataset.panel !== name; });
+    document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
+    const active = document.querySelector(`[data-tab="${name}"]`);
+    if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) { /* bỏ qua */ } }
+    try { localStorage.setItem(TAB_KEY, name); } catch (e) { /* bỏ qua */ }
+    if (toTop) window.scrollTo(0, 0);
+  }
+  function setStageView(id, silent) {
+    stageView = id === "all" || STAGES.some(s => s.id === id) ? id : STAGES[0].id;
+    try { localStorage.setItem(STAGEVIEW_KEY, stageView); } catch (e) { /* bỏ qua */ }
+    document.querySelectorAll("[data-stage-view]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.stageView === stageView)));
+    if (!silent && typeof applyFilterRef2 === "function") applyFilterRef2();
+  }
+  function renderStageTabs() {
+    const box = document.getElementById("stage-tabs");
+    if (!box) return;
+    box.innerHTML = `<button class="stab" type="button" role="tab" data-stage-view="all" aria-selected="${stageView === "all"}">Tất cả</button>` +
+      STAGES.map(s => { const k = countStatus(s.modules); return `<button class="stab" type="button" role="tab" data-stage-view="${s.id}" data-track="${s.track}" aria-selected="${stageView === s.id}" title="${esc(s.title)}"><i></i><b>${s.no}</b><span>${esc(s.title.split(/[:&,(]/)[0].trim())}</span><small>${k.done}/${s.modules.length}</small></button>`; }).join("");
+  }
+  function renderStageNav() {
+    const nav = document.getElementById("stage-nav");
+    if (!nav) return;
+    const i = STAGES.findIndex(s => s.id === stageView);
+    if (stageView === "all" || i < 0 || document.getElementById("q").value.trim()) { nav.innerHTML = ""; return; }
+    const prev = STAGES[i - 1], next = STAGES[i + 1];
+    nav.innerHTML = `${prev ? `<button class="btn" type="button" data-stage-view="${prev.id}">← ${prev.no}. ${esc(prev.title)}</button>` : "<span></span>"}${next ? `<button class="btn primary" type="button" data-stage-view="${next.id}">${next.no}. ${esc(next.title)} →</button>` : ""}`;
+  }
+  function reveal(id) {
+    if (!id || id === "top") { showTab("home", true); return; }
+    const el = document.getElementById(id);
+    if (!el) return;
+    const panel = el.closest("[data-panel]");
+    if (panel) showTab(panel.dataset.panel, false);
+    const sp = el.closest("[data-subpanel]");
+    if (sp) showSub(sp);
+    const st = el.classList.contains("stage") ? el : el.closest(".stage");
+    if (st && stageView !== "all" && stageView !== st.id) setStageView(st.id);
+    if (el.hidden && (el.classList.contains("mod") || el.classList.contains("stage"))) setStageView(st ? st.id : "all");
+    if (el.classList.contains("mod")) setOpen(el, true);
+    try { history.replaceState(null, "", "#" + id); } catch (e) { /* bỏ qua */ }
+    requestAnimationFrame(() => el.scrollIntoView({ block: "start" }));
+  }
+
   const lvlDots = n => `<span class="lvl"><i>${[1, 2, 3].map(k => `<b class="${k <= n ? "on" : ""}"></b>`).join("")}</i>${LEVELS[n]}</span>`;
 
   /* ---------- trang chính ---------- */
@@ -5333,7 +5484,7 @@ window.ROADMAP_TRANSITION_MAP = {
       return `<h4>Code mẫu</h4><div class="code"><div class="code-bar"><span>${esc(m.code.lang)}</span><button class="btn ghost small" data-copy="${m.id}" type="button">${ICON.copy} Sao chép</button></div><pre><code>${lines.join("\n")}</code></pre></div>`;
     })() : "";
     return `
-<article class="mod" id="m-${m.id}" data-track="${s.track}" data-level="${m.level}" data-status="${statusOf(m.id)}">
+<article class="mod" data-subroot id="m-${m.id}" data-track="${s.track}" data-level="${m.level}" data-status="${statusOf(m.id)}">
   <div class="mod-head">
     <button class="mod-toggle" type="button" aria-expanded="false" aria-controls="b-${m.id}">
       <span class="mod-title"><h3>${esc(m.title)}</h3></span>
@@ -5347,21 +5498,18 @@ window.ROADMAP_TRANSITION_MAP = {
     </div>
   </div>
   <div class="mod-body" id="b-${m.id}" hidden>
-    <h4>Khái niệm</h4><p>${esc(m.concept)}</p>
-    ${m.diagrams.length ? `<h4>Sơ đồ</h4><div class="dgms">${m.diagrams.map((d, i) => figureHTML(m.id + ":" + i, d)).join("")}</div>` : ""}
-    <h4>Khi nào dùng & vì sao</h4>
-    <div class="cols">
+    ${modTabs(m, [
+      ["k", "Khái niệm", `<p>${esc(m.concept)}</p>${m.diagrams.length ? `<h4>Sơ đồ</h4><div class="dgms">${m.diagrams.map((d, i) => figureHTML(m.id + ":" + i, d)).join("")}</div>` : ""}`],
+      ["w", "Khi nào dùng", `<div class="cols">
       <div class="col why"><h4>Lý do sử dụng</h4>${list(m.why)}</div>
       <div class="col when"><h4>Khi nào dùng</h4>${list(m.when)}</div>
       <div class="col not"><h4>Khi nào không nên</h4>${list(m.whenNot)}</div>
-    </div>
-    ${m.example ? `<h4>Ví dụ ứng dụng thực tế</h4><div class="case"><span class="tag">${esc(m.example.domain)}</span><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>` : ""}
-    ${m.apps.length ? `<h4>Doanh nghiệp đã áp dụng</h4><div class="apps">${m.apps.map(appHTML).join("")}</div>` : ""}
-    ${code}
-    ${m.pitfalls && m.pitfalls.length ? `<h4>Lỗi thường gặp</h4><ul class="list">${m.pitfalls.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
-    ${aiHTML(m)}
-    ${m.tools && m.tools.length ? `<h4>Công cụ</h4><div class="tools">${m.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
-    ${m.resources && m.resources.length ? `<h4>Tài liệu học</h4><ul class="res">${m.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>` : ""}
+    </div>`],
+      ["r", "Thực tế" + (m.apps.length ? ` (${m.apps.length + (m.example ? 1 : 0)})` : ""), (m.example || m.apps.length) ? `${m.example ? `<h4>Ví dụ ứng dụng thực tế</h4><div class="case"><span class="tag">${esc(m.example.domain)}</span><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>` : ""}${m.apps.length ? `<h4>Doanh nghiệp đã áp dụng</h4><div class="apps">${m.apps.map(appHTML).join("")}</div>` : ""}` : ""],
+      ["c", "Code và lỗi", `${code}${m.pitfalls && m.pitfalls.length ? `<h4>Lỗi thường gặp</h4><ul class="list">${m.pitfalls.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}`],
+      ["a", "Làm việc với AI", aiHTML(m)],
+      ["t", "Công cụ và tài liệu", `${m.tools && m.tools.length ? `<h4>Công cụ</h4><div class="tools">${m.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}${m.resources && m.resources.length ? `<h4>Tài liệu học</h4><ul class="res">${m.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>` : ""}`]
+    ])}
   </div>
 </article>`;
   }
@@ -5384,7 +5532,7 @@ window.ROADMAP_TRANSITION_MAP = {
     if (GUIDE_TREE) $("#guide-fig").innerHTML = figureHTML("guide", GUIDE_TREE);
     $("#guide-body").innerHTML = GUIDE.map(([need, algo, id]) =>
       `<tr><td>${esc(need)}</td><td>${MOD_BY_ID[id] ? `<a href="#m-${id}" data-open="${id}">${esc(algo)}</a>` : esc(algo)}</td><td>${MOD_BY_ID[id] ? esc(MOD_BY_ID[id].stage.title) : ""}</td></tr>`).join("");
-    renderAppsIndex("all");
+    renderAppsIndex(sectorOf(ALL_APPS[0] ? ALL_APPS.map(a => a.ind).sort((x, y) => ALL_APPS.filter(a => sectorOf(a.ind) === sectorOf(y)).length - ALL_APPS.filter(a => sectorOf(a.ind) === sectorOf(x)).length)[0] : ""));
     renderBranches();
     $("#ai-evidence").innerHTML = EVIDENCE.map(e => `<div class="ev"><b>${esc(e.n)}</b><p>${esc(e.t)}</p><a href="${esc(e.src[1])}" target="_blank" rel="noopener">${esc(e.src[0])}</a></div>`).join("");
     $("#ai-flow").innerHTML = figureHTML("aiflow", AI_FLOW);
@@ -5462,6 +5610,7 @@ window.ROADMAP_TRANSITION_MAP = {
     if (typeof applyFilterRef === "function") applyFilterRef();
     refreshPlan();
     if (document.getElementById("branch-detail") && BRANCHES.length) renderBranchDetail();
+    if (document.getElementById("stage-tabs") && document.getElementById("stage-tabs").children.length) renderStageTabs();
   }
   let applyFilterRef = null;
 
@@ -5478,6 +5627,17 @@ window.ROADMAP_TRANSITION_MAP = {
   function bindMain() {
     document.addEventListener("click", e => {
       const t = e.target;
+      const tab = t.closest("[data-tab]");
+      if (tab) { showTab(tab.dataset.tab, true); return; }
+      const sub = t.closest("[data-sub]");
+      if (sub) { showSub(sub); return; }
+      const sv = t.closest("[data-stage-view]");
+      if (sv) { setStageView(sv.dataset.stageView); if (sv.closest("#stage-nav")) document.getElementById("stage-tabs").scrollIntoView({ block: "start" }); return; }
+      const a = t.closest('a[href^="#"]');
+      if (a && !e.defaultPrevented) {
+        const id = decodeURIComponent(a.getAttribute("href").slice(1));
+        if (id === "top" || document.getElementById(id)) { e.preventDefault(); reveal(id); return; }
+      }
       const tog = t.closest(".mod-toggle");
       if (tog) { const card = tog.closest(".mod"); setOpen(card, card.querySelector(".mod-body").hidden); return; }
       const chev = t.closest(".chev");
@@ -5497,11 +5657,11 @@ window.ROADMAP_TRANSITION_MAP = {
         return;
       }
       const brf = t.closest("[data-branch-filter]");
-      if (brf) { setBranch(brf.dataset.branchFilter, true); document.getElementById("stages").scrollIntoView(); toast(`Đang hiện các chủ đề cho nhánh ${BRANCH_BY_ID[brf.dataset.branchFilter].name}`); return; }
+      if (brf) { setBranch(brf.dataset.branchFilter, true); setStageView("all", true); showTab("roadmap", true); applyFilterRef2(); toast(`Đang hiện các chủ đề cho nhánh ${BRANCH_BY_ID[brf.dataset.branchFilter].name}`); return; }
       const brp = t.closest("[data-pdf-branch]");
       if (brp) { openExport({ scope: "branch", branchId: brp.dataset.pdfBranch }); return; }
       const brc = t.closest("[data-branch]");
-      if (brc) { setBranch(brc.dataset.branch, false); const d = document.getElementById("branch-detail"); if (d && brc.closest("#branch-table")) d.scrollIntoView({ block: "start" }); return; }
+      if (brc) { setBranch(brc.dataset.branch, false); if (brc.closest("#branch-table")) reveal("branch-detail"); return; }
       const fam = t.closest("[data-family]");
       if (fam) {
         const first = BRANCHES.find(b => b.family === fam.dataset.family);
@@ -5551,7 +5711,7 @@ window.ROADMAP_TRANSITION_MAP = {
       document.querySelectorAll(".mod").forEach(c => { if (!c.hidden) setOpen(c, allOpen); });
       $("#toggle-all").textContent = allOpen ? "Thu gọn tất cả" : "Mở rộng tất cả";
     });
-    $("#mobile-toc").addEventListener("change", e => { if (e.target.value) location.hash = e.target.value; });
+    $("#mobile-toc").addEventListener("change", e => { if (e.target.value) reveal(e.target.value); });
 
     // Bộ lọc
     let level = "all";
@@ -5567,7 +5727,7 @@ window.ROADMAP_TRANSITION_MAP = {
       document.querySelectorAll("[data-status-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
       applyFilter();
     }));
-    q.addEventListener("input", applyFilter);
+    q.addEventListener("input", () => { if (q.value.trim()) showTab("roadmap", false); applyFilter(); });
     applyFilterRef = () => { if (stFilter !== "all") applyFilter(); };
     applyFilterRef2 = applyFilter;
     $("#branch-filter").addEventListener("change", e => {
@@ -5578,6 +5738,7 @@ window.ROADMAP_TRANSITION_MAP = {
     const hay = Object.fromEntries(ALL_MODS.map(m => [m.id, norm([m.title, m.summary, m.concept, (m.tools || []).join(" "), m.example && m.example.domain, m.example && m.example.title, m.apps.map(a => [a.org, a.ind, a.title].join(" ")).join(" ")].join(" "))]));
     function applyFilter() {
       const terms = norm(q.value.trim()).split(/\s+/).filter(Boolean);
+      const fb0 = BRANCH_BY_ID[$("#branch-filter").value];
       let shown = 0;
       STAGES.forEach(s => {
         let k = 0;
@@ -5587,24 +5748,35 @@ window.ROADMAP_TRANSITION_MAP = {
           document.getElementById("m-" + m.id).hidden = !ok;
           if (ok) k++;
         });
-        document.getElementById(s.id).hidden = k === 0;
-        shown += k;
+        const inView = stageView === "all" || terms.length > 0 || fb0 || s.id === stageView;
+        document.getElementById(s.id).hidden = k === 0 || !inView;
+        if (inView) shown += k;
       });
       $("#empty").hidden = shown > 0;
+      renderStageNav();
     }
 
     // Bản in từ trình duyệt: mở rộng mọi thẻ trước khi in, khôi phục sau đó
     let before = null;
+    let viewBefore = null;
     window.addEventListener("beforeprint", () => {
+      viewBefore = stageView; setStageView("all");
       before = [...document.querySelectorAll(".mod")].map(c => [c, !c.querySelector(".mod-body").hidden]);
       before.forEach(([c]) => setOpen(c, true));
     });
-    window.addEventListener("afterprint", () => { if (before) before.forEach(([c, o]) => setOpen(c, o)); before = null; });
+    window.addEventListener("afterprint", () => { if (before) before.forEach(([c, o]) => setOpen(c, o)); before = null; if (viewBefore) setStageView(viewBefore); });
 
-    if (location.hash.startsWith("#m-")) {
-      const card = document.getElementById(location.hash.slice(1));
-      if (card) { setOpen(card, true); card.scrollIntoView(); }
+    // Trạng thái ban đầu: giai đoạn đang học, tab đã mở lần trước hoặc theo đường dẫn
+    if (!stageView) {
+      const next = ALL_MODS.find(m => statusOf(m.id) === "doing") || ALL_MODS.find(m => statusOf(m.id) !== "done");
+      stageView = next ? next.stage.id : STAGES[0].id;
     }
+    renderStageTabs();
+    setStageView(stageView);
+    window.addEventListener("hashchange", () => { const h = decodeURIComponent(location.hash.slice(1)); if (h) reveal(h); });
+    const hash = decodeURIComponent(location.hash.slice(1));
+    if (hash && document.getElementById(hash)) reveal(hash);
+    else { let last = "home"; try { last = localStorage.getItem(TAB_KEY) || "home"; } catch (e) { /* bỏ qua */ } showTab(last, false); }
   }
 
   /* =====================================================================

@@ -83,6 +83,13 @@ flowchart TD
 
 ### Tính năng của website
 
+- **Chia tab để khỏi phải cuộn dài:**
+  - 8 tab chính: Tổng quan · Làm chủ AI · Nhánh nghề · Học từ đầu · Lộ trình · Chọn thuật toán · Ứng dụng thực tế · Nguồn;
+  - tab con trong các mục dài;
+  - mỗi chủ đề có 6 tab: Khái niệm · Khi nào dùng · Thực tế · Code và lỗi · Làm việc với AI · Công cụ và tài liệu;
+  - tab Lộ trình hiện từng giai đoạn một, có thanh chọn giai đoạn và nút sang giai đoạn trước hoặc tiếp theo;
+  - trang nhớ tab và giai đoạn bạn mở lần trước, và link dạng `#m-rag` mở thẳng đúng chủ đề.
+
 - **Chọn nhánh nghề**:
   - bản đồ 10 nhánh chia thành 4 họ (phân tích, hạ tầng, sản phẩm AI, nghiên cứu);
   - chọn theo sở thích, bảng so sánh nhanh;
