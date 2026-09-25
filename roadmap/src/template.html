@@ -28,7 +28,7 @@
   <section class="hero wrap">
     <div class="eyebrow">Full Stack Data Science &amp; Machine Learning BootCamp</div>
     <h1>Lộ trình Data Science &amp; Machine Learning</h1>
-    <p class="lede">Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đã áp dụng nó ra sao, kèm số liệu, nguồn và cả những thất bại. Phần lớn chủ đề có sơ đồ luồng hoặc sequence diagram để thấy các bước và các bên tương tác. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
+    <p class="lede">Hiểu đủ nền tảng để dùng AI viết code đúng hướng: giao việc rõ ràng, tự kiểm chứng, ra quyết định và phản biện được đề xuất của AI. Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đã áp dụng nó ra sao, kèm số liệu, nguồn và cả những thất bại. Phần lớn chủ đề có sơ đồ luồng hoặc sequence diagram để thấy các bước và các bên tương tác. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
     <div class="stats">
       <div class="stat"><b id="stat-stages">0</b><span>giai đoạn</span></div>
       <div class="stat"><b id="stat-mods">0</b><span>chủ đề</span></div>
@@ -38,6 +38,7 @@
     <div class="status-counts" id="status-counts" aria-label="Số chủ đề theo trạng thái"></div>
     <div class="hero-actions">
       <a class="btn primary" id="next-btn" href="#s0">Bắt đầu</a>
+      <a class="btn" href="#ai">Học để làm chủ AI</a>
       <a class="btn" href="#learn">Hướng dẫn học từ đầu</a>
       <a class="btn" href="#overview">Sơ đồ tổng quan</a>
       <a class="btn" href="#guide">Chọn thuật toán nhanh</a>
@@ -57,6 +58,61 @@
     <div>
       <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
 
+      <section class="panel" id="ai">
+        <h2>Học để làm chủ AI</h2>
+        <p>Bộ tài liệu này không dạy bạn tự viết mọi dòng code. Nó giúp bạn hiểu đủ nền tảng để giao việc cho AI rõ ràng, đọc và kiểm chứng được code AI viết, tự ra quyết định, và phản biện khi AI đề xuất sai. Các nghiên cứu gần đây cho thấy AI chỉ giúp khi người dùng hiểu việc mình đang làm.</p>
+        <div class="evidence" id="ai-evidence"></div>
+
+        <h3 class="sub-h">Ba mức hiểu bạn cần ở mỗi chủ đề</h3>
+        <ol class="steps">
+          <li><b>Đọc hiểu.</b> Giải thích được từng dòng code AI viết, biết mỗi bước làm gì với dữ liệu và shape của kết quả.</li>
+          <li><b>Nhận diện lỗi.</b> Biết những lỗi AI hay mắc ở chủ đề đó: rò rỉ dữ liệu, chia tập sai, metric sai, tham số đã bị loại bỏ, package không tồn tại.</li>
+          <li><b>Quyết định.</b> Chọn được phương án dựa trên đánh đổi, và nói được vì sao không chọn phương án khác. Mỗi chủ đề có mục "Làm việc với AI" để luyện ba mức này.</li>
+        </ol>
+
+        <h3 class="sub-h">Quy trình làm việc với AI</h3>
+        <div id="ai-flow"></div>
+
+        <div class="ai-two">
+          <div>
+            <h3 class="sub-h">10 câu hỏi kiểm tra mọi đề xuất của AI</h3>
+            <ol class="checklist" id="ai-checklist">
+              <li>Đặc trưng này có sẵn tại thời điểm dự đoán không?</li>
+              <li>Bước nào đang fit trên dữ liệu, có chạm vào tập test không?</li>
+              <li>Cách chia tập có khớp cách mô hình được dùng (theo thời gian, theo nhóm) không?</li>
+              <li>Metric có gắn với chi phí thật của sai số không, đã so với baseline chưa?</li>
+              <li>Hàm và tham số có tồn tại trong phiên bản thư viện tôi đang dùng không? Đối chiếu tài liệu chính thức.</li>
+              <li>Package được đề xuất có thật trên PyPI không, ai phát triển, bao nhiêu lượt tải?</li>
+              <li>Kết quả có tốt đến mức đáng ngờ không (accuracy 99%, R² 0,99)?</li>
+              <li>Có giả định ngầm nào về phân phối, đơn vị, tính độc lập của dữ liệu không?</li>
+              <li>Code có chạy được trên máy khác không (đường dẫn, secret, phiên bản)?</li>
+              <li>Tôi có tự giải thích được từng dòng không? Nếu không, hỏi AI giải thích trước khi dùng.</li>
+            </ol>
+          </div>
+          <div>
+            <h3 class="sub-h">Quyết định không giao cho AI</h3>
+            <ul class="checklist">
+              <li>Mục tiêu kinh doanh, target và metric chính.</li>
+              <li>Ngưỡng quyết định dựa trên chi phí thật của từng loại sai.</li>
+              <li>Dữ liệu nào được phép dùng: pháp lý, quyền riêng tư, công bằng.</li>
+              <li>Mức rủi ro chấp nhận khi triển khai, và khi nào dừng mô hình.</li>
+              <li>Hành động không thể hoàn tác (xoá dữ liệu, gửi tới khách hàng, chi tiền).</li>
+            </ul>
+            <h3 class="sub-h">Prompt mơ hồ và prompt cụ thể</h3>
+            <div class="prompt-cmp">
+              <p class="bad"><b>Mơ hồ:</b> Viết code dự đoán giá vé cho tôi.</p>
+              <p class="good"><b>Cụ thể:</b> Dữ liệu Data_Train.xlsx, target Price, dự đoán lúc người dùng tìm vé. Dùng scikit-learn 1.5, Pipeline + ColumnTransformer, chia theo thời gian (train tháng 3–5, test tháng 6), so với baseline trung vị theo tuyến, báo cáo MAE. Làm từng bước và giải thích lý do.</p>
+              <p class="bad"><b>Mơ hồ:</b> Làm sao cải thiện mô hình?</p>
+              <p class="good"><b>Cụ thể:</b> R² train 0,95, test 0,80, MAE 1.174. Liệt kê 3 giả thuyết theo thứ tự khả năng, mỗi giả thuyết kèm cách kiểm chứng tốn ít thời gian nhất. Chưa viết code.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub-h">Luyện phản biện AI</h3>
+        <p class="plan-summary" id="quiz-score"></p>
+        <div class="quiz-grid" id="ai-quiz"></div>
+      </section>
+
       <section class="panel" id="learn">
         <h2>Hướng dẫn học từ đầu</h2>
         <p>Nếu bạn bắt đầu từ con số 0, đi theo sáu bước dưới đây. Đánh trạng thái cho từng chủ đề để biết mình đang ở đâu, việc gì cần làm tiếp và phần nào cần ôn.</p>
@@ -65,7 +121,7 @@
           <li><b>Kiểm tra đầu vào.</b> Bạn cần dùng được máy tính, cài được phần mềm, đọc được tài liệu tiếng Anh kỹ thuật cơ bản và nhớ toán phổ thông (hàm số, đạo hàm, xác suất cơ bản). Nếu đã biết một phần, mở chủ đề đó, làm lại code mẫu mà không nhìn: làm được thì đánh "Đã xong", chưa chắc thì đánh "Cần ôn lại".</li>
           <li><b>Đặt nhịp học.</b> Nhập số giờ bạn học được mỗi tuần và ngày bắt đầu ở ô bên dưới. Biểu đồ Gantt tự tính thời gian cho từng giai đoạn. Nhịp bền vững cho người đi làm là 8–12 giờ/tuần; học toàn thời gian là 25–35 giờ/tuần.</li>
           <li><b>Học theo thứ tự giai đoạn.</b> Giai đoạn 0 → 6 là phần lõi bắt buộc. Sau đó chọn nhánh theo mục tiêu: dữ liệu bảng và dự báo (7, 8), AI và LLM (9, 10), hoặc triển khai (11, 12). Xem sơ đồ tổng quan để biết giai đoạn nào phụ thuộc giai đoạn nào.</li>
-          <li><b>Mỗi chủ đề đi qua năm việc.</b> (1) Đọc Khái niệm. (2) Xem sơ đồ và tự vẽ lại trên giấy. (3) Chạy code mẫu trong Jupyter hoặc Google Colab. (4) Làm lại với một bộ dữ liệu khác trên Kaggle. (5) Tự nói lại bằng lời của mình: dùng khi nào, không dùng khi nào, và vì sao. Khi bắt đầu việc (1), chuyển chủ đề sang "Đang học". Xong cả năm việc thì chuyển sang "Đã xong".</li>
+          <li><b>Mỗi chủ đề đi qua sáu việc.</b> (1) Đọc Khái niệm. (2) Xem sơ đồ và tự vẽ lại trên giấy. (3) Chạy code mẫu trong Jupyter hoặc Google Colab. (4) Dùng prompt mẫu để nhờ AI làm lại với một bộ dữ liệu khác, rồi tự kiểm chứng kết quả theo mục "Làm việc với AI". (5) Làm tình huống luyện phản biện của chủ đề. (6) Tự nói lại bằng lời của mình: dùng khi nào, không dùng khi nào, vì sao, và AI hay sai ở đâu. Khi bắt đầu việc (1), chuyển chủ đề sang "Đang học". Xong cả sáu việc thì chuyển sang "Đã xong".</li>
           <li><b>Làm dự án ở mỗi mốc.</b> Hoàn thành một giai đoạn mốc thì làm dự án nhỏ ở bảng bên dưới trước khi đi tiếp. Dự án là bằng chứng bạn hiểu, và là nội dung cho portfolio.</li>
           <li><b>Ôn định kỳ.</b> Cuối mỗi tuần, lọc "Cần ôn lại" và làm lại code của các chủ đề đó. Cuối mỗi tháng, xuất PDF "Chủ đề chưa xong" kèm bảng theo dõi để in ra và ghi chú.</li>
         </ol>
@@ -192,6 +248,7 @@
         <label class="opt"><input type="checkbox" id="o-toc" checked><span>Mục lục có số trang</span></label>
         <label class="opt"><input type="checkbox" id="o-plan" checked><span>Kế hoạch học và bảng theo dõi trạng thái<small>Biểu đồ Gantt, trạng thái từng chủ đề và cột ghi chú để in</small></span></label>
         <label class="opt"><input type="checkbox" id="o-guide" checked><span>Bảng chọn thuật toán nhanh</span></label>
+        <label class="opt"><input type="checkbox" id="o-ai" checked><span>Làm việc với AI<small>Prompt mẫu, dấu hiệu AI sai, câu hỏi phản biện, tình huống kèm đáp án</small></span></label>
         <label class="opt"><input type="checkbox" id="o-apps" checked><span>Case doanh nghiệp đã áp dụng<small>Trong từng chủ đề, kèm bảng tra theo ngành</small></span></label>
         <label class="opt"><input type="checkbox" id="o-dgm" checked><span>Sơ đồ (flowchart, sequence diagram)</span></label>
         <label class="opt"><input type="checkbox" id="o-code" checked><span>Code mẫu</span></label>

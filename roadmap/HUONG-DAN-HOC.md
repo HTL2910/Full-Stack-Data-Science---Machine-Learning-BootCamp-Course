@@ -7,7 +7,121 @@ trong bảng cuối file rồi commit.
 Tổng cộng **14 giai đoạn, 59 chủ đề, khoảng 585 giờ học**.
 Với 10 giờ/tuần là khoảng 59 tuần; 20 giờ/tuần là khoảng 30 tuần.
 
-## 1. Sáu bước học từ con số 0
+## 1. Mục tiêu: hiểu đủ để làm chủ AI
+
+Bộ tài liệu này giúp bạn hiểu đủ nền tảng để **giao việc cho AI rõ ràng, tự kiểm chứng code AI viết,
+ra quyết định và phản biện được đề xuất của AI**. Các nghiên cứu cho thấy AI chỉ giúp khi người dùng hiểu việc mình làm:
+
+- **−19%**: Lập trình viên giàu kinh nghiệm chậm hơn 19% khi dùng AI trên dự án quen thuộc, dù chính họ tin mình nhanh hơn khoảng 20%. ([METR, 2025 — thử nghiệm ngẫu nhiên, 16 lập trình viên, 246 task](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/))
+- **+55,8%**: Với một task mới, được mô tả rõ (viết HTTP server), nhóm dùng Copilot hoàn thành nhanh hơn 55,8%. ([GitHub Copilot controlled experiment (arXiv 2302.06590)](https://arxiv.org/abs/2302.06590))
+- **66%**: Lập trình viên nói nỗi khó chịu lớn nhất là code AI viết 'gần đúng nhưng chưa hẳn'. 46% không tin độ chính xác của AI, chỉ 3% tin cao. ([Stack Overflow Developer Survey 2025](https://survey.stackoverflow.co/2025/ai))
+- **19,7%**: Trong 576.000 mẫu code của 16 mô hình, 19,7% package được đề xuất không tồn tại; 43% tên bịa lặp lại khi hỏi lại, nên kẻ xấu có thể đăng ký trước. ([Spracklen et al. — We Have a Package for You! (USENIX Security 2025)](https://www.helpnetsecurity.com/2025/04/14/package-hallucination-slopsquatting-malicious-code/))
+- **45%**: Code do hơn 100 mô hình sinh ra cho 80 task thực tế có lỗ hổng bảo mật OWASP Top 10 trong 45% trường hợp. ([Veracode — 2025 GenAI Code Security Report](https://www.veracode.com/blog/genai-code-security-report/))
+- **65% vs <40%**: Người mới học thư viện mới: nhóm dùng AI để hỏi khái niệm đạt từ 65% trở lên trong bài kiểm tra hiểu biết, nhóm giao hết việc viết code cho AI dưới 40%. Khoảng cách lớn nhất nằm ở kỹ năng debug. ([Anthropic — How AI assistance impacts the formation of coding skills (2026)](https://www.anthropic.com/research/AI-assistance-coding-skills))
+
+**Ba mức hiểu cần đạt ở mỗi chủ đề**
+
+1. **Đọc hiểu:** giải thích được từng dòng code AI viết.
+2. **Nhận diện lỗi:** biết lỗi AI hay mắc ở chủ đề đó (rò rỉ dữ liệu, chia tập sai, metric sai, tham số đã bị loại bỏ, package không tồn tại).
+3. **Quyết định:** chọn phương án dựa trên đánh đổi và nói được vì sao không chọn phương án khác.
+
+**Quy trình làm việc với AI**
+
+```mermaid
+sequenceDiagram
+  participant B as Bạn
+  participant AI as Trợ lý AI
+  participant C as Code và dữ liệu
+  B->>B: Đóng khung mục tiêu, dữ liệu có lúc dự đoán, metric, ràng buộc
+  B->>AI: Hỏi 2–3 phương án kèm đánh đổi, chưa cần code
+  AI-->>B: Phương án và giả định
+  B->>AI: Phản biện - giả định nào sai thì phương án hỏng?
+  B->>B: Chọn phương án (quyết định của bạn)
+  B->>AI: Yêu cầu code cho một bước nhỏ, nêu rõ thư viện và phiên bản
+  AI-->>B: Code nháp
+  B->>C: Đọc từng dòng, chạy trên dữ liệu nhỏ, so với baseline
+  alt Kết quả hợp lý và bạn giải thích được
+    B->>C: Commit kèm test
+  else Có dấu hiệu sai
+    B->>AI: Gửi lỗi và output, hỏi nguyên nhân, không nhận bản sửa mù
+  end
+```
+
+**10 câu hỏi kiểm tra mọi đề xuất của AI**
+
+1. Đặc trưng này có sẵn tại thời điểm dự đoán không?
+2. Bước nào đang fit trên dữ liệu, có chạm vào tập test không?
+3. Cách chia tập có khớp cách mô hình được dùng (theo thời gian, theo nhóm) không?
+4. Metric có gắn với chi phí thật của sai số không, đã so với baseline chưa?
+5. Hàm và tham số có tồn tại trong phiên bản thư viện đang dùng không? Đối chiếu tài liệu chính thức.
+6. Package được đề xuất có thật trên PyPI không, ai phát triển, bao nhiêu lượt tải?
+7. Kết quả có tốt đến mức đáng ngờ không (accuracy 99%, R² 0,99)?
+8. Có giả định ngầm nào về phân phối, đơn vị, tính độc lập của dữ liệu không?
+9. Code có chạy được trên máy khác không (đường dẫn, secret, phiên bản)?
+10. Tôi có tự giải thích được từng dòng không? Nếu không, hỏi AI giải thích trước khi dùng.
+
+**Quyết định không giao cho AI:** mục tiêu, target và metric chính; ngưỡng quyết định theo chi phí thật; dữ liệu nào được phép dùng
+(pháp lý, quyền riêng tư, công bằng); mức rủi ro khi triển khai và khi nào dừng mô hình; hành động không thể hoàn tác.
+
+**Prompt mơ hồ và prompt cụ thể**
+
+| Mơ hồ | Cụ thể |
+|---|---|
+| Viết code dự đoán giá vé cho tôi. | Dữ liệu Data_Train.xlsx, target Price, dự đoán lúc người dùng tìm vé. Dùng scikit-learn 1.5, Pipeline + ColumnTransformer, chia theo thời gian (train tháng 3–5, test tháng 6), so với baseline trung vị theo tuyến, báo cáo MAE. Làm từng bước và giải thích lý do. |
+| Làm sao cải thiện mô hình? | R² train 0,95, test 0,80, MAE 1.174. Liệt kê 3 giả thuyết theo thứ tự khả năng, mỗi giả thuyết kèm cách kiểm chứng tốn ít thời gian nhất. Chưa viết code. |
+
+**Luyện phản biện:** tự đánh giá mỗi đề xuất là *Chấp nhận*, *Cần sửa* hay *Bác bỏ*, rồi mới mở đáp án.
+
+1. AI đề xuất: Để xử lý giá trị thiếu, tôi điền trung bình cho toàn bộ DataFrame rồi mới chia train/test. `df = df.fillna(df.mean()); X_train, X_test, y_train, y_test = train_test_split(X, y)`
+   <details><summary>Đáp án</summary>Cần sửa. Trung bình được tính cả trên tập test, nên thông tin của test lọt vào lúc huấn luyện (rò rỉ). Chia tập trước, dùng SimpleImputer trong Pipeline để chỉ fit trên train.</details>
+2. AI đề xuất: Mô hình phát hiện gian lận đạt accuracy 99,8%, rất tốt, có thể triển khai.
+   <details><summary>Đáp án</summary>Bác bỏ. Gian lận chỉ chiếm 0,2%: dự đoán 'không gian lận' cho mọi giao dịch cũng đạt 99,8%. Cần precision, recall, PR-AUC và so với baseline.</details>
+3. AI đề xuất: Dữ liệu doanh số theo ngày, tôi dùng train_test_split(shuffle=True) để chia 80/20.
+   <details><summary>Đáp án</summary>Bác bỏ. Chia ngẫu nhiên cho phép mô hình học từ tương lai để đoán quá khứ. Dữ liệu theo thời gian phải chia theo thời gian (TimeSeriesSplit hoặc cắt theo ngày).</details>
+4. AI đề xuất: Dùng RandomForestRegressor(max_features='auto') như trong notebook.
+   <details><summary>Đáp án</summary>Cần sửa. max_features='auto' đã bị loại bỏ từ scikit-learn 1.3 và sẽ báo lỗi. Với hồi quy, dùng 1.0 (hành vi cũ) hoặc 'sqrt', hoặc một tỉ lệ như 0.5.</details>
+5. AI đề xuất: Thời lượng bay = abs(giờ đến - giờ đi). `dur_hour = abs(Arrival_hour - Dep_hour)`
+   <details><summary>Đáp án</summary>Bác bỏ. Chuyến 22:20 đến 01:10 hôm sau bị tính thành 21 giờ. Phải trừ hai datetime đầy đủ và cộng một ngày khi giờ đến nhỏ hơn giờ đi.</details>
+6. AI đề xuất: Cài thư viện này để tự động làm sạch dữ liệu: pip install pandas-autoclean-pro
+   <details><summary>Đáp án</summary>Bác bỏ. Tên package có thể là do AI bịa ra. Nghiên cứu năm 2025 cho thấy khoảng 20% package mà các mô hình sinh code đề xuất không tồn tại, và kẻ xấu có thể đăng ký trước các tên đó. Luôn kiểm tra trên pypi.org trước khi cài.</details>
+7. AI đề xuất: Dùng early stopping trên tập test để chọn số cây tối ưu, rồi báo cáo MAE trên chính tập test đó.
+   <details><summary>Đáp án</summary>Bác bỏ. Tập test đã được dùng để chọn mô hình nên kết quả bị lạc quan. Cần tập validation riêng cho early stopping, tập test chỉ dùng một lần ở cuối.</details>
+8. AI đề xuất: RMSE của mô hình mới thấp hơn nên mô hình mới tốt hơn.
+   <details><summary>Đáp án</summary>Cần sửa. Chỉ đúng nếu RMSE là metric bạn đã chọn từ đầu và hai mô hình được đánh giá trên cùng tập. Trong notebook, mô hình tuning có RMSE thấp hơn nhưng MAE cao hơn: phải quay về metric gắn với chi phí sai số.</details>
+9. AI đề xuất: Trong API, tôi tạo lại các cột one-hot bằng if/elif cho từng hãng bay giống notebook.
+   <details><summary>Đáp án</summary>Cần sửa. Chạy được nhưng dễ lệch với lúc huấn luyện và lỗi khi có hãng bay mới. Lưu Pipeline có OneHotEncoder(handle_unknown='ignore') và gọi predict trên DataFrame thô.</details>
+10. AI đề xuất: Sau 2 ngày A/B test, p-value = 0,04 nên ta dừng và triển khai phiên bản B.
+   <details><summary>Đáp án</summary>Bác bỏ. Dừng sớm ngay khi p < 0,05 (peeking) làm tăng dương tính giả. Cỡ mẫu và thời gian chạy phải được định trước, thường tối thiểu đủ một chu kỳ tuần.</details>
+11. AI đề xuất: Hệ số của kênh TV là 3,2 nên cứ chi thêm 1 triệu cho TV sẽ tăng 3,2 triệu doanh số.
+   <details><summary>Đáp án</summary>Cần sửa. Hệ số hồi quy là tương quan có điều kiện, không phải nhân quả; có thể bị ảnh hưởng bởi đa cộng tuyến, mùa vụ, và không ngoại suy được khi chi tiêu vượt khoảng đã thấy. Cần thử nghiệm hoặc MMM có kiểm chứng.</details>
+12. AI đề xuất: Prompt: 'Hãy trả lời câu hỏi của nhân viên thật đầy đủ.' kèm các đoạn tài liệu.
+   <details><summary>Đáp án</summary>Cần sửa. Thiếu ràng buộc chỉ dùng tài liệu, trích dẫn nguồn và được phép nói 'không biết'. Case Air Canada cho thấy doanh nghiệp chịu trách nhiệm cho câu trả lời sai của bot.</details>
+13. AI đề xuất: Mô hình chưa biết chính sách mới của công ty, ta nên fine-tune lại mỗi khi chính sách đổi.
+   <details><summary>Đáp án</summary>Bác bỏ. Thiếu kiến thức thay đổi thường xuyên là việc của RAG. Fine-tune phù hợp để thay đổi hành vi, định dạng hoặc chưng cất, không phải để cập nhật tài liệu.</details>
+14. AI đề xuất: Dữ liệu bảng 5.000 dòng, 20 cột: dùng mạng nơ-ron 6 tầng sẽ cho kết quả tốt nhất.
+   <details><summary>Đáp án</summary>Bác bỏ. Với dữ liệu bảng cỡ nhỏ và vừa, gradient boosting thường tốt hơn và rẻ hơn. Bắt đầu bằng baseline và GBDT; chỉ thử mạng nơ-ron khi có lý do.</details>
+15. AI đề xuất: Đặc trưng rolling_mean_7 = trung bình 7 ngày gần nhất tính bằng rolling(7).mean(). `df['roll7'] = df.groupby('sku')['sales'].transform(lambda s: s.rolling(7).mean())`
+   <details><summary>Đáp án</summary>Cần sửa. Cửa sổ gồm cả ngày hiện tại, tức giá trị cần dự đoán (rò rỉ). Phải shift ít nhất bằng tầm dự báo trước khi rolling, ví dụ s.shift(7).rolling(7).mean() khi dự báo trước 7 ngày.</details>
+16. AI đề xuất: Trong hàm predict, mỗi request tôi đọc file mô hình bằng pickle.load rồi dự đoán.
+   <details><summary>Đáp án</summary>Cần sửa. Load mô hình mỗi request làm tăng độ trễ rất nhiều. Load một lần khi ứng dụng khởi động; dùng đường dẫn tương đối và kiểm tra phiên bản thư viện.</details>
+17. AI đề xuất: Mã hoá thành phố: Hà Nội=1, Đà Nẵng=2, TP.HCM=3 rồi đưa vào hồi quy tuyến tính.
+   <details><summary>Đáp án</summary>Bác bỏ. Tạo ra thứ tự và khoảng cách giả giữa các thành phố. Với mô hình tuyến tính dùng one-hot; với nhiều giá trị dùng target encoding có cross-fitting hoặc để CatBoost/LightGBM xử lý.</details>
+18. AI đề xuất: SELECT c.customer_id, SUM(o.amount) FROM customers c JOIN orders o ON ... JOIN tickets t ON t.customer_id = c.customer_id GROUP BY 1
+   <details><summary>Đáp án</summary>Cần sửa. Join thêm bảng tickets (một khách nhiều ticket) làm nhân bản dòng đơn hàng, SUM(amount) bị nhân lên. Tổng hợp từng bảng trong CTE riêng rồi mới join.</details>
+19. AI đề xuất: PSI của Duration vượt 0,25, hãy tự động huấn luyện lại mô hình ngay.
+   <details><summary>Đáp án</summary>Cần sửa. Cần điều tra trước: drift có thể do lỗi pipeline (đổi đơn vị, cột bị null) chứ không phải thay đổi thật. Huấn luyện lại trên dữ liệu lỗi sẽ làm mô hình tệ hơn.</details>
+20. AI đề xuất: Chọn ngưỡng 0,5 để duyệt vay vì đó là ngưỡng chuẩn.
+   <details><summary>Đáp án</summary>Bác bỏ. 0,5 chỉ là mặc định. Ngưỡng phải chọn theo chi phí nợ xấu so với lợi nhuận mỗi khoản vay và khẩu vị rủi ro, sau khi kiểm tra xác suất đã được hiệu chỉnh.</details>
+21. AI đề xuất: SHAP cho thấy 'số năm làm việc' có đóng góp lớn nhất, vậy tăng số năm làm việc sẽ làm khách được duyệt.
+   <details><summary>Đáp án</summary>Cần sửa. SHAP giải thích mô hình dựa vào gì, không nói về quan hệ nhân quả ngoài đời thực. Cũng cần kiểm tra các đặc trưng tương quan với nhau.</details>
+22. AI đề xuất: Cho agent quyền chạy mọi câu lệnh SQL để trả lời linh hoạt hơn.
+   <details><summary>Đáp án</summary>Bác bỏ. Agent có thể chạy UPDATE/DELETE sai. Chỉ cấp quyền đọc, giới hạn bảng, và yêu cầu người duyệt với hành động có ảnh hưởng.</details>
+23. AI đề xuất: Dùng GridSearchCV với 6 tham số, mỗi tham số 10 giá trị, 5-fold.
+   <details><summary>Đáp án</summary>Cần sửa. 10^6 tổ hợp × 5 fold là quá lớn. Dùng RandomizedSearch hoặc Optuna với số lần thử giới hạn, và làm tốt đặc trưng trước khi tuning.</details>
+24. AI đề xuất: Dùng t-SNE giảm xuống 2 chiều rồi đưa vào mô hình phân loại.
+   <details><summary>Đáp án</summary>Bác bỏ. t-SNE dùng để trực quan hoá, không có phép transform ổn định cho dữ liệu mới và làm méo khoảng cách. Dùng PCA hoặc giữ nguyên đặc trưng cho mô hình.</details>
+
+## 2. Sáu bước học từ con số 0
 
 1. **Kiểm tra đầu vào.** Cần dùng được máy tính, cài được phần mềm, đọc được tài liệu tiếng Anh kỹ thuật cơ bản
    và nhớ toán phổ thông. Nếu đã biết một phần, làm lại code mẫu của chủ đề đó mà không nhìn: làm được thì đánh
@@ -16,18 +130,19 @@ Với 10 giờ/tuần là khoảng 59 tuần; 20 giờ/tuần là khoảng 30 tu
    giờ mỗi tuần và ngày bắt đầu để biểu đồ Gantt tự tính lịch.
 3. **Học theo thứ tự giai đoạn.** Giai đoạn 0 → 6 là phần lõi bắt buộc. Sau đó chọn nhánh: dữ liệu bảng và dự báo
    (7, 8), AI và LLM (9, 10), hoặc triển khai (11, 12). Giai đoạn 13 áp dụng tất cả vào dự án của repo.
-4. **Mỗi chủ đề đi qua năm việc:** đọc khái niệm → xem sơ đồ và tự vẽ lại → chạy code mẫu (Jupyter/Colab) →
-   làm lại với bộ dữ liệu khác trên Kaggle → tự giải thích dùng khi nào, không dùng khi nào, vì sao.
-5. **Làm dự án ở mỗi mốc** (bảng ở mục 4) trước khi đi tiếp.
+4. **Mỗi chủ đề đi qua sáu việc:** đọc khái niệm → xem sơ đồ và tự vẽ lại → chạy code mẫu (Jupyter/Colab) →
+   dùng prompt mẫu nhờ AI làm lại với dữ liệu khác rồi tự kiểm chứng → làm tình huống luyện phản biện →
+   tự giải thích dùng khi nào, không dùng khi nào, vì sao, và AI hay sai ở đâu.
+5. **Làm dự án ở mỗi mốc** (bảng ở mục 5) trước khi đi tiếp.
 6. **Ôn định kỳ.** Cuối tuần lọc "Cần ôn lại" để làm lại; cuối tháng xuất PDF "Chủ đề chưa xong" để in và ghi chú.
 
-## 2. Bốn trạng thái và khi nào đổi
+## 3. Bốn trạng thái và khi nào đổi
 
 | Ký hiệu | Trạng thái | Khi nào dùng |
 |---|---|---|
 | ⬜ | Chưa học | Chưa mở chủ đề này. |
 | 🟦 | Đang học | Đang đọc, xem sơ đồ, chạy code hoặc làm bài tập. |
-| ✅ | Đã xong | Giải thích được khái niệm, đã chạy code và tự làm lại với dữ liệu khác. |
+| ✅ | Đã xong | Giải thích được khái niệm, tự chạy và sửa được code, chỉ ra được lỗi AI hay mắc ở chủ đề này. |
 | 🟧 | Cần ôn lại | Đã học nhưng làm lại sau 1–2 tuần thì chưa chắc. |
 
 Vòng đời thường gặp của một chủ đề:
@@ -40,7 +155,7 @@ flowchart LR
   D -->|"Làm lại code, tự giải thích được"| C
 ```
 
-## 3. Lộ trình và lịch mẫu
+## 4. Lộ trình và lịch mẫu
 
 Thứ tự và phụ thuộc giữa các giai đoạn:
 
@@ -94,7 +209,7 @@ gantt
   GĐ 13 Case study Flight Fare Prediction (repo này) :g13, 2027-10-31, 19d
 ```
 
-## 4. Dự án ở các mốc
+## 5. Dự án ở các mốc
 
 | Sau giai đoạn | Dự án | Chứng minh được |
 |---|---|---|
@@ -105,7 +220,7 @@ gantt
 | 10. NLP và GenAI | Chatbot RAG hỏi đáp tài liệu khoá học, có trích dẫn và 30 câu hỏi đánh giá | Embeddings, vector search, đánh giá LLM |
 | 11 → 13. MLOps | Flight Fare lên FastAPI + Docker, CI bằng GitHub Actions, báo cáo drift | Triển khai, MLflow, giám sát |
 
-## 5. Bảng theo dõi trạng thái
+## 6. Bảng theo dõi trạng thái
 
 Đổi ký hiệu ở cột **Trạng thái** (⬜ 🟦 ✅ 🟧) và ghi ngày khi bạn đổi.
 

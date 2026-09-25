@@ -4,6 +4,13 @@ Website roadmap tiếng Việt: 14 giai đoạn, 59 chủ đề, 42 sơ đồ Me
 Mỗi chủ đề gồm: khái niệm, lý do sử dụng, khi nào dùng / không nên dùng, ví dụ ứng dụng thực tế, code mẫu,
 lỗi thường gặp, công cụ và tài liệu học. Giai đoạn cuối là case study dự án `AI/Flight_Fare_Prediction` trong repo.
 
+## Làm chủ AI
+
+Mục tiêu của lộ trình là hiểu đủ để dùng AI viết code đúng hướng: giao việc rõ ràng, tự kiểm chứng, ra quyết định và phản biện
+đề xuất của AI. Website có mục **Học để làm chủ AI** (số liệu nghiên cứu, quy trình, 10 câu hỏi kiểm tra, 24 tình huống luyện
+phản biện). Mỗi chủ đề có phần **Làm việc với AI** gồm prompt mẫu, dấu hiệu AI sai, câu hỏi phản biện, cách tự kiểm chứng và các quyết định
+bạn phải tự đưa ra. Dữ liệu nằm ở `src/data-7-ai.js`.
+
 ## Ứng dụng thực tế
 
 109 case doanh nghiệp đã công bố (Netflix, Amazon, Airbnb, Uber, DoorDash, Stripe, Booking.com, Morgan Stanley,
