@@ -1,0 +1,142 @@
+<title>Lộ trình Data Science &amp; ML</title>
+<meta name="description" content="Lộ trình Full Stack Data Science & Machine Learning: kiến thức nền tảng, khi nào dùng, lý do sử dụng, ví dụ thực tế, code mẫu và xuất PDF.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese">
+<style>
+/*STYLE*/
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top" style="color:inherit;text-decoration:none">
+      <span class="brand-mark" aria-hidden="true"><i data-track="found"></i><i data-track="data"></i><i data-track="ml"></i><i data-track="dl"></i><i data-track="ops"></i></span>
+      <span class="brand-text">DS &amp; ML Roadmap</span>
+    </a>
+    <label class="search" for="q">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Tìm chủ đề, thuật toán, công cụ…" aria-label="Tìm trong lộ trình" autocomplete="off">
+    </label>
+    <button class="btn primary" type="button" data-export="all">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg>
+      <span>Xuất PDF</span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <div class="eyebrow">Full Stack Data Science &amp; Machine Learning BootCamp</div>
+    <h1>Lộ trình Data Science &amp; Machine Learning</h1>
+    <p class="lede">Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đang áp dụng nó ra sao. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
+    <div class="stats">
+      <div class="stat"><b id="stat-stages">0</b><span>giai đoạn</span></div>
+      <div class="stat"><b id="stat-mods">0</b><span>chủ đề</span></div>
+      <div class="stat"><b id="stat-hours">0</b><span>giờ học ước tính</span></div>
+      <div class="stat"><b id="stat-done">0</b><span>chủ đề bạn đã học</span><div class="progress"><i id="progress-bar"></i></div></div>
+    </div>
+    <div class="hero-actions">
+      <a class="btn" href="#s0">Bắt đầu từ giai đoạn 0</a>
+      <a class="btn" href="#guide">Chọn thuật toán nhanh</a>
+      <a class="btn" href="#s13">Xem case study của repo</a>
+    </div>
+    <nav class="metro" id="metro" aria-label="Các giai đoạn"></nav>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <div class="wrap layout">
+    <aside class="sidenav" aria-label="Mục lục">
+      <h2>Mục lục</h2>
+      <ol id="sidenav-list"></ol>
+    </aside>
+
+    <div>
+      <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
+
+      <section class="panel" id="guide">
+        <h2>Chọn thuật toán nhanh</h2>
+        <p>Bắt đầu từ nhu cầu của bạn, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead>
+            <tbody id="guide-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="filters" role="toolbar" aria-label="Lọc chủ đề">
+        <button class="chip" type="button" data-level-filter="all" aria-pressed="true">Tất cả</button>
+        <button class="chip" type="button" data-level-filter="1" aria-pressed="false">Cơ bản</button>
+        <button class="chip" type="button" data-level-filter="2" aria-pressed="false">Trung cấp</button>
+        <button class="chip" type="button" data-level-filter="3" aria-pressed="false">Nâng cao</button>
+        <span class="sep"></span>
+        <button class="btn small" type="button" id="toggle-all">Mở rộng tất cả</button>
+      </div>
+
+      <div id="stages"></div>
+      <p class="empty" id="empty" hidden>Không có chủ đề nào khớp. Thử từ khoá khác hoặc bỏ bộ lọc trình độ.</p>
+
+      <section class="panel" id="refs">
+        <h2>Nguồn tham khảo</h2>
+        <p>Các nguồn đã tra cứu (tháng 9/2026) để đối chiếu thứ tự kỹ năng, công cụ MLOps và các khuyến nghị RAG, fine-tuning, gradient boosting.</p>
+        <ol class="sources" id="sources"></ol>
+      </section>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap">Tiến độ "Đã học" chỉ lưu trong trình duyệt của bạn. Nội dung có thể xuất ra PDF theo toàn bộ lộ trình, từng giai đoạn hoặc từng chủ đề.</div>
+  </footer>
+</main>
+
+<div class="modal-back" id="export" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="exp-title">
+    <header>
+      <div>
+        <h2 id="exp-title">Xuất PDF</h2>
+        <p>Khổ A4, có bìa, mục lục bấm được, số trang và liên kết tài liệu.</p>
+      </div>
+      <button class="icon-btn" type="button" id="exp-x" aria-label="Đóng">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </header>
+    <div class="body">
+      <fieldset>
+        <legend>Phạm vi</legend>
+        <label class="opt" id="scope-mod-opt" hidden><input type="radio" name="scope" id="sc-mod" value="mod"><span>Chủ đề này<small id="scope-mod-name"></small></span></label>
+        <label class="opt"><input type="radio" name="scope" id="sc-all" value="all" checked><span>Toàn bộ lộ trình<small>Mọi giai đoạn và chủ đề</small></span></label>
+        <label class="opt"><input type="radio" name="scope" id="sc-pick" value="pick"><span>Chọn giai đoạn<small>Chỉ những giai đoạn bạn đánh dấu</small></span></label>
+        <div class="stage-picks" id="stage-picks" hidden></div>
+        <label class="opt"><input type="radio" name="scope" id="sc-todo" value="todo"><span>Chủ đề chưa học<small>Bỏ qua các chủ đề bạn đã đánh dấu "Đã học"</small></span></label>
+      </fieldset>
+      <fieldset>
+        <legend>Nội dung</legend>
+        <label class="opt"><input type="checkbox" id="o-cover" checked><span>Trang bìa</span></label>
+        <label class="opt"><input type="checkbox" id="o-toc" checked><span>Mục lục có số trang</span></label>
+        <label class="opt"><input type="checkbox" id="o-guide" checked><span>Bảng chọn thuật toán nhanh</span></label>
+        <label class="opt"><input type="checkbox" id="o-code" checked><span>Code mẫu</span></label>
+        <label class="opt"><input type="checkbox" id="o-res" checked><span>Tài liệu học và nguồn tham khảo</span></label>
+      </fieldset>
+      <fieldset>
+        <legend>Chất lượng</legend>
+        <label class="opt"><input type="radio" name="quality" id="q-std" value="std" checked><span>Chuẩn<small>File nhẹ, đọc tốt trên màn hình</small></span></label>
+        <label class="opt"><input type="radio" name="quality" id="q-high" value="high"><span>Cao<small>Chữ nét hơn khi in, file lớn hơn</small></span></label>
+      </fieldset>
+      <div class="status" id="exp-status" role="status" hidden></div>
+      <div class="bar" id="exp-bar" hidden><i></i></div>
+    </div>
+    <footer>
+      <span class="note" id="exp-summary"></span>
+      <button class="btn" type="button" id="print-btn" title="Dùng hộp thoại in của trình duyệt, chữ trong PDF chọn và tìm kiếm được">In / Lưu PDF bằng trình duyệt</button>
+      <button class="btn" type="button" id="exp-cancel">Đóng</button>
+      <button class="btn primary" type="button" id="exp-go">Tạo PDF</button>
+    </footer>
+  </div>
+</div>
+
+<script>
+/*DATA*/
+</script>
+<script>
+/*APP*/
+</script>
