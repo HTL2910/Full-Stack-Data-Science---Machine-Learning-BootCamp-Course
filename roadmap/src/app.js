@@ -28,7 +28,8 @@
   const MERMAID_URL = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js";
   const PDF_PALETTE = {
     dark: false, bg: "#FFFFFF", node: "#EDF0F4", ink: "#111821", muted: "#677383", line: "#9AA5B1",
-    accent: "#1F5FD1", accentSoft: "#DCE7FB", note: "#FFF4DB", noteLine: "#C27400", font: "Arial, Helvetica, sans-serif"
+    accent: "#1F5FD1", accentSoft: "#DCE7FB", note: "#FFF4DB", noteLine: "#C27400", font: "Arial, Helvetica, sans-serif",
+    good: "#12875B", goodSoft: "#D6F2E4", warn: "#B45309", warnSoft: "#FCE9CF"
   };
   function pagePalette() {
     const cs = getComputedStyle(document.documentElement);
@@ -37,7 +38,8 @@
     return {
       dark, bg: v("--surface"), node: v("--surface-2"), ink: v("--ink"), muted: v("--muted"), line: v("--muted"),
       accent: v("--accent"), accentSoft: dark ? "#1D2F52" : "#DCE7FB", note: dark ? "#3A2E14" : "#FFF4DB",
-      noteLine: v("--t-data"), font: '"Be Vietnam Pro", system-ui, sans-serif'
+      noteLine: v("--t-data"), font: '"Be Vietnam Pro", system-ui, sans-serif',
+      good: v("--good"), goodSoft: dark ? "#153D2C" : "#D6F2E4", warn: v("--warn"), warnSoft: dark ? "#3D2A12" : "#FCE9CF"
     };
   }
   function isDark() {
@@ -51,6 +53,7 @@
       fontFamily: p.font,
       flowchart: { htmlLabels: false, curve: "basis", useMaxWidth: true, padding: 12, nodeSpacing: 36, rankSpacing: 42 },
       sequence: { mirrorActors: false, useMaxWidth: true, wrap: true, boxMargin: 8, messageMargin: 34 },
+      gantt: { barHeight: 26, barGap: 6, topPadding: 44, leftPadding: 170, gridLineStartPadding: 34, fontSize: 14, sectionFontSize: 14, numberSectionStyles: 2, useMaxWidth: true },
       themeVariables: {
         darkMode: p.dark, background: p.bg, fontFamily: p.font, fontSize: "14px",
         primaryColor: p.node, primaryTextColor: p.ink, primaryBorderColor: p.line, secondaryColor: p.node, tertiaryColor: p.bg,
@@ -58,7 +61,11 @@
         actorBkg: p.node, actorBorder: p.line, actorTextColor: p.ink, actorLineColor: p.line,
         signalColor: p.ink, signalTextColor: p.ink, labelBoxBkgColor: p.node, labelBoxBorderColor: p.line, labelTextColor: p.ink,
         loopTextColor: p.ink, noteBkgColor: p.note, noteBorderColor: p.noteLine, noteTextColor: p.ink,
-        activationBkgColor: p.accentSoft, activationBorderColor: p.accent, sequenceNumberColor: p.bg
+        activationBkgColor: p.accentSoft, activationBorderColor: p.accent, sequenceNumberColor: p.bg,
+        sectionBkgColor: p.bg, altSectionBkgColor: p.node, sectionBkgColor2: p.bg, gridColor: p.line, titleColor: p.ink,
+        taskBkgColor: p.node, taskBorderColor: p.line, taskTextColor: p.ink, taskTextLightColor: p.ink, taskTextDarkColor: p.ink,
+        taskTextOutsideColor: p.ink, activeTaskBkgColor: p.accentSoft, activeTaskBorderColor: p.accent,
+        doneTaskBkgColor: p.goodSoft, doneTaskBorderColor: p.good, critBkgColor: p.warnSoft, critBorderColor: p.warn, todayLineColor: p.warn
       }
     };
   }
@@ -100,6 +107,7 @@
   function diagramSrc(key) {
     if (key === "overview") return OVERVIEW;
     if (key === "guide") return GUIDE_TREE;
+    if (key === "plan") return PLAN;
     const [id, i] = key.split(":");
     return MOD_BY_ID[id] && MOD_BY_ID[id].diagrams[+i];
   }
@@ -129,13 +137,181 @@
     new MutationObserver(redo).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
 
-  function loadDone() {
-    try { return new Set(JSON.parse(localStorage.getItem(STORE_KEY) || "[]")); } catch (e) { return new Set(); }
+  /* ---------- trạng thái học ---------- */
+  const STATUSES = [
+    { id: "todo", label: "Chưa học", hint: "Chưa mở chủ đề này." },
+    { id: "doing", label: "Đang học", hint: "Đang đọc, xem sơ đồ, chạy code hoặc làm bài tập." },
+    { id: "done", label: "Đã xong", hint: "Giải thích được khái niệm, đã chạy code và tự làm lại với dữ liệu khác." },
+    { id: "review", label: "Cần ôn lại", hint: "Đã học nhưng làm lại sau 1–2 tuần thì chưa chắc." }
+  ];
+  const ST_LABEL = Object.fromEntries(STATUSES.map(x => [x.id, x.label]));
+  const PROGRESS_KEY = "dsml-roadmap-progress-v2";
+  const progress = loadProgress();
+  function loadProgress() {
+    let p = null;
+    try { p = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "null"); } catch (e) { p = null; }
+    if (!p || typeof p !== "object") p = {};
+    if (!p.items || typeof p.items !== "object") p.items = {};
+    if (!p.plan || typeof p.plan !== "object") p.plan = {};
+    try { // chuyển dữ liệu "Đã học" của phiên bản trước sang trạng thái "Đã xong"
+      const old = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
+      if (Array.isArray(old) && old.length) {
+        old.forEach(id => { if (!p.items[id]) p.items[id] = { s: "done", t: new Date().toISOString() }; });
+        localStorage.removeItem(STORE_KEY);
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify(p));
+      }
+    } catch (e) { /* bỏ qua */ }
+    return p;
   }
-  function saveDone() {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify([...done])); } catch (e) { /* bỏ qua */ }
+  const statusOf = id => (progress.items[id] && ST_LABEL[progress.items[id].s]) ? progress.items[id].s : "todo";
+  const statusDate = id => progress.items[id] && progress.items[id].t ? new Date(progress.items[id].t) : null;
+  const fmtDate = d => d ? d.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }) : "";
+  function saveLocal() { try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress)); } catch (e) { /* bỏ qua */ } }
+  function saveProgress() { saveLocal(); scheduleSync(); }
+  function setStatus(id, st) {
+    progress.items[id] = { s: st, t: new Date().toISOString() };
+    saveProgress();
+    refreshProgress();
   }
-  const done = loadDone();
+  function countStatus(mods) {
+    const c = { todo: 0, doing: 0, done: 0, review: 0 };
+    mods.forEach(m => { c[statusOf(m.id)]++; });
+    return c;
+  }
+  function stackedBar(c, total) {
+    return ["done", "doing", "review"].map(k => `<i class="seg-${k}" style="width:${(100 * c[k] / total).toFixed(2)}%"></i>`).join("");
+  }
+
+  /* Đồng bộ theo tài khoản (khi mở trong trang Artifact có lưu trữ); nếu không, chỉ lưu trong trình duyệt */
+  let syncRef = null, syncTimer = null, syncChain = Promise.resolve(), lastSynced = "";
+  const syncBody = () => JSON.stringify({ items: progress.items, plan: progress.plan });
+  function scheduleSync() {
+    if (!syncRef) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => { syncChain = syncChain.then(pushSync).catch(() => {}); }, 900);
+  }
+  async function pushSync() {
+    if (!syncRef) return;
+    const body = syncBody();
+    if (body === lastSynced) return;
+    try {
+      await syncRef.set({ items: progress.items, plan: progress.plan, updatedAt: new Date().toISOString() });
+      lastSynced = body;
+    } catch (e) {
+      if (e && e.code === "unavailable") { setTimeout(scheduleSync, 3000 + Math.random() * 2000); return; }
+      syncRef = null; setSyncNote(false);
+    }
+  }
+  function mergeRemote(data) {
+    let changed = false;
+    const items = (data && data.items) || {};
+    for (const [id, v] of Object.entries(items)) {
+      if (!MOD_BY_ID[id] || !v || !ST_LABEL[v.s]) continue;
+      const mine = progress.items[id];
+      if (!mine || String(v.t || "") > String(mine.t || "")) { progress.items[id] = { s: v.s, t: v.t }; changed = true; }
+    }
+    const plan = data && data.plan;
+    if (plan && plan.t && String(plan.t) > String(progress.plan.t || "")) { progress.plan = Object.assign({}, plan); changed = true; }
+    return changed;
+  }
+  function setSyncNote(synced) {
+    const el = document.getElementById("sync-note");
+    if (el) el.textContent = synced
+      ? "Trạng thái được lưu theo tài khoản của bạn và đồng bộ giữa các thiết bị."
+      : "Trạng thái được lưu trong trình duyệt này. Mở trên máy khác sẽ không thấy.";
+  }
+  async function initSync() {
+    if (!window.claude || typeof window.claude.use !== "function") return;
+    try {
+      const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+      if (!db || !user) return;
+      const uid = await user.id();
+      if (!uid) return;
+      const ref = db.doc("data/users/" + uid + "/progress");
+      const snap = await ref.get();
+      if (snap.exists) {
+        const d = snap.data();
+        lastSynced = JSON.stringify({ items: d.items, plan: d.plan });
+        if (mergeRemote(d)) { saveLocal(); refreshProgress(); syncPlanInputs(); }
+      }
+      syncRef = ref;
+      setSyncNote(true);
+      scheduleSync();
+      ref.onSnapshot(sn => {
+        if (!sn.exists || sn.metadata.hasPendingWrites) return;
+        if (mergeRemote(sn.data())) { saveLocal(); refreshProgress(); syncPlanInputs(); }
+      }, () => {});
+    } catch (e) { /* tiếp tục lưu trong trình duyệt */ }
+  }
+
+  /* Kế hoạch học: biểu đồ Gantt tự tính từ số giờ mỗi tuần và ngày bắt đầu */
+  const isoDay = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  function planSettings() {
+    const hpw = Math.min(60, Math.max(2, Math.round(+progress.plan.hpw || 10)));
+    const start = /^\d{4}-\d{2}-\d{2}$/.test(progress.plan.start || "") ? progress.plan.start : isoDay(new Date());
+    return { hpw, start };
+  }
+  function stageTag(s) {
+    const st = s.modules.map(m => statusOf(m.id));
+    if (st.every(x => x === "done")) return "done";
+    if (st.some(x => x === "review")) return "crit";
+    if (st.some(x => x !== "todo")) return "active";
+    return "";
+  }
+  function buildPlan() {
+    const { hpw, start } = planSettings();
+    let d = new Date(start + "T00:00:00");
+    return STAGES.map(s => {
+      const days = Math.max(3, Math.ceil(totalHours(s.modules) / hpw * 7));
+      const from = new Date(d);
+      d.setDate(d.getDate() + days);
+      return { s, from, to: new Date(d), days, tag: stageTag(s) };
+    });
+  }
+  const ganttText = t => t.replace(/[:;#,]/g, " ").replace(/&/g, "và").replace(/\s+/g, " ").trim();
+  function planSrc() {
+    const rows = buildPlan();
+    const spanDays = (rows[rows.length - 1].to - rows[0].from) / 864e5;
+    const lines = ["gantt", "  dateFormat YYYY-MM-DD", `  axisFormat ${spanDays > 120 ? "%m/%Y" : "%d/%m"}`];
+    let track = null;
+    rows.forEach(r => {
+      if (r.s.track !== track) { track = r.s.track; lines.push("  section " + ganttText(TRACKS[track])); }
+      const name = ganttText(`GĐ ${r.s.no} ${r.s.title}`).slice(0, 48);
+      lines.push(`  ${name} :${r.tag ? r.tag + ", " : ""}g${r.s.no}, ${isoDay(r.from)}, ${r.days}d`);
+    });
+    return lines.join("\n");
+  }
+  const PLAN = { title: "Kế hoạch học theo tuần, tô màu theo trạng thái của bạn", get src() { return planSrc(); } };
+  function planSummary() {
+    const { hpw } = planSettings();
+    const rows = buildPlan();
+    const end = rows[rows.length - 1].to;
+    const total = totalHours(ALL_MODS);
+    const left = ALL_MODS.reduce((a, m) => a + (statusOf(m.id) === "done" ? 0 : statusOf(m.id) === "doing" ? m.hours / 2 : m.hours), 0);
+    const finish = new Date(); finish.setDate(finish.getDate() + Math.ceil(left / hpw * 7));
+    return `Toàn bộ khoảng ${total} giờ, với ${hpw} giờ/tuần mất khoảng ${Math.ceil(total / hpw)} tuần, kết thúc theo kế hoạch ngày ${fmtDate(end)}. ` +
+      (left < total ? `Còn lại khoảng ${Math.round(left)} giờ: nếu giữ nhịp này từ hôm nay, bạn xong vào khoảng ${fmtDate(finish)}.` : "Bạn chưa đánh dấu chủ đề nào, hãy bắt đầu từ giai đoạn 0.");
+  }
+  let planTimer = null;
+  function refreshPlan() {
+    clearTimeout(planTimer);
+    planTimer = setTimeout(() => {
+      const fig = document.querySelector('figure.dgm[data-dgm="plan"]');
+      if (!fig) return;
+      fig.removeAttribute("data-done");
+      fig.querySelector(".dgm-src pre").textContent = PLAN.src;
+      const sum = document.getElementById("plan-summary");
+      if (sum) sum.textContent = planSummary();
+      renderFigures(fig.parentElement);
+    }, 250);
+  }
+  function syncPlanInputs() {
+    const { hpw, start } = planSettings();
+    const h = document.getElementById("plan-hpw"), d = document.getElementById("plan-start");
+    if (h) h.value = hpw;
+    if (d) d.value = start;
+    refreshPlan();
+  }
 
   function toast(msg, ms = 3200) {
     const t = document.createElement("div");
@@ -205,15 +381,15 @@
       return `<h4>Code mẫu</h4><div class="code"><div class="code-bar"><span>${esc(m.code.lang)}</span><button class="btn ghost small" data-copy="${m.id}" type="button">${ICON.copy} Sao chép</button></div><pre><code>${lines.join("\n")}</code></pre></div>`;
     })() : "";
     return `
-<article class="mod${done.has(m.id) ? " is-done" : ""}" id="m-${m.id}" data-track="${s.track}" data-level="${m.level}">
+<article class="mod" id="m-${m.id}" data-track="${s.track}" data-level="${m.level}" data-status="${statusOf(m.id)}">
   <div class="mod-head">
     <button class="mod-toggle" type="button" aria-expanded="false" aria-controls="b-${m.id}">
       <span class="mod-title"><h3>${esc(m.title)}</h3></span>
       <div class="mod-sum">${esc(m.summary)}</div>
-      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}</div>
+      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}<span class="st-since" data-since="${m.id}"></span></div>
     </button>
     <div class="mod-tools">
-      <label class="done-toggle"><input type="checkbox" id="done-${m.id}" data-done="${m.id}" ${done.has(m.id) ? "checked" : ""}><span class="lbl">Đã học</span></label>
+      <label class="st-pick" title="Đổi trạng thái học"><span class="dot" aria-hidden="true"></span><select id="st-${m.id}" data-status-of="${m.id}" aria-label="Trạng thái: ${esc(m.title)}">${STATUSES.map(o => `<option value="${o.id}"${statusOf(m.id) === o.id ? " selected" : ""}>${o.label}</option>`).join("")}</select></label>
       <button class="icon-btn" type="button" data-pdf-mod="${m.id}" title="Xuất chủ đề này ra PDF" aria-label="Xuất PDF: ${esc(m.title)}">${ICON.pdf}</button>
       ${ICON.chev}
     </div>
@@ -243,7 +419,7 @@
     <div class="stage-no">${s.no}</div>
     <h2>${esc(s.title)}</h2>
     <p class="stage-sub">${esc(s.subtitle)}</p>
-    <div class="stage-meta"><span><b>${esc(s.weeks)}</b></span><span>${s.modules.length} chủ đề · ~${totalHours(s.modules)} giờ</span><span>${TRACKS[s.track]}</span><span class="stage-done" data-stage-done="${s.id}"></span>
+    <div class="stage-meta"><span><b>${esc(s.weeks)}</b></span><span>${s.modules.length} chủ đề · ~${totalHours(s.modules)} giờ</span><span>${TRACKS[s.track]}</span><span class="stage-done"><span class="st-bar" data-stage-bar="${s.id}"></span><span data-stage-done="${s.id}"></span></span>
       <span class="stage-actions"><button class="btn small" type="button" data-pdf-stage="${s.id}">${ICON.pdf} PDF giai đoạn</button></span></div>
     <p class="stage-goal">${esc(s.goal)}</p>
   </div>
@@ -258,28 +434,58 @@
 
     $("#sidenav-list").innerHTML = STAGES.map(s => `
 <li class="st" data-track="${s.track}" data-nav-stage="${s.id}"><a href="#${s.id}">${s.no}. ${esc(s.title)}</a>
-  <ol>${s.modules.map(m => `<li><a href="#m-${m.id}" data-open="${m.id}" data-nav-mod="${m.id}">${esc(m.title)}</a></li>`).join("")}</ol></li>`).join("");
+  <ol>${s.modules.map(m => `<li><a href="#m-${m.id}" data-open="${m.id}" data-nav-mod="${m.id}"><i class="sdot" aria-hidden="true"></i>${esc(m.title)}</a></li>`).join("")}</ol></li>`).join("");
+    $("#status-legend").innerHTML = STATUSES.map(o => `<li data-status="${o.id}"><span class="pill"><i></i>${o.label}</span><span>${esc(o.hint)}</span></li>`).join("");
+    $("#plan-fig").innerHTML = figureHTML("plan", PLAN);
 
     $("#mobile-toc").innerHTML = `<option value="">Đi đến giai đoạn…</option>` + STAGES.map(s => `<option value="${s.id}">${s.no}. ${esc(s.title)}</option>`).join("");
     refreshProgress();
   }
 
   function refreshProgress() {
-    const n = ALL_MODS.filter(m => done.has(m.id)).length;
-    $("#stat-done").textContent = `${n}/${ALL_MODS.length}`;
-    $("#progress-bar").style.width = (100 * n / ALL_MODS.length) + "%";
+    const c = countStatus(ALL_MODS);
+    $("#stat-done").textContent = `${c.done}/${ALL_MODS.length}`;
+    $("#progress-bar").innerHTML = stackedBar(c, ALL_MODS.length);
+    $("#status-counts").innerHTML = STATUSES.map(o => `<span data-status="${o.id}"><i></i>${o.label} <b>${c[o.id]}</b></span>`).join("");
     STAGES.forEach(s => {
-      const k = s.modules.filter(m => done.has(m.id)).length;
+      const k = countStatus(s.modules);
+      const bar = document.querySelector(`[data-stage-bar="${s.id}"]`);
+      if (bar) bar.innerHTML = stackedBar(k, s.modules.length);
       const el = document.querySelector(`[data-stage-done="${s.id}"]`);
-      if (el) el.textContent = k ? `Đã học ${k}/${s.modules.length}` : "";
+      if (el) el.textContent = `Xong ${k.done}/${s.modules.length}` + (k.doing ? ` · đang học ${k.doing}` : "") + (k.review ? ` · cần ôn ${k.review}` : "");
       const nav = document.querySelector(`[data-nav-stage="${s.id}"]`);
-      if (nav) nav.classList.toggle("done", k === s.modules.length);
+      if (nav) nav.classList.toggle("done", k.done === s.modules.length);
     });
     ALL_MODS.forEach(m => {
+      const st = statusOf(m.id);
+      const card = document.getElementById("m-" + m.id);
+      if (card) card.dataset.status = st;
+      const sel = document.getElementById("st-" + m.id);
+      if (sel && sel.value !== st) sel.value = st;
       const a = document.querySelector(`[data-nav-mod="${m.id}"]`);
-      if (a) a.classList.toggle("is-done", done.has(m.id));
+      if (a) a.dataset.status = st;
+      const since = document.querySelector(`[data-since="${m.id}"]`);
+      if (since) {
+        const d = statusDate(m.id);
+        since.textContent = st === "doing" && d ? `Bắt đầu ${fmtDate(d)}` : st === "done" && d ? `Xong ${fmtDate(d)}` : st === "review" && d ? `Đánh dấu ôn ${fmtDate(d)}` : "";
+      }
     });
+    // Gợi ý chủ đề tiếp theo: ưu tiên chủ đề đang học, rồi cần ôn, rồi chủ đề chưa học đầu tiên theo thứ tự
+    const next = ALL_MODS.find(m => statusOf(m.id) === "doing") || ALL_MODS.find(m => statusOf(m.id) === "review") || ALL_MODS.find(m => statusOf(m.id) === "todo");
+    const nb = $("#next-btn");
+    if (nb) {
+      nb.hidden = !next;
+      if (next) {
+        const verb = statusOf(next.id) === "doing" ? "Học tiếp" : statusOf(next.id) === "review" ? "Ôn lại" : c.done || c.doing ? "Học tiếp" : "Bắt đầu";
+        nb.textContent = `${verb}: ${next.title}`;
+        nb.href = "#m-" + next.id;
+        nb.dataset.open = next.id;
+      }
+    }
+    if (typeof applyFilterRef === "function") applyFilterRef();
+    refreshPlan();
   }
+  let applyFilterRef = null;
 
   function setOpen(card, open) {
     const btn = card.querySelector(".mod-toggle");
@@ -318,12 +524,14 @@
       if (ps) { openExport({ scope: "pick", stages: [ps.dataset.pdfStage] }); return; }
     });
     document.addEventListener("change", e => {
-      const cb = e.target.closest("[data-done]");
-      if (!cb) return;
-      const id = cb.dataset.done;
-      cb.checked ? done.add(id) : done.delete(id);
-      document.getElementById("m-" + id).classList.toggle("is-done", cb.checked);
-      saveDone(); refreshProgress();
+      const sel = e.target.closest("[data-status-of]");
+      if (sel) { setStatus(sel.dataset.statusOf, sel.value); toast(`Đã đổi trạng thái: ${ST_LABEL[sel.value]}`, 1800); return; }
+      if (e.target.id === "plan-hpw" || e.target.id === "plan-start") {
+        const h = Math.min(60, Math.max(2, Math.round(+$("#plan-hpw").value || 10)));
+        const d = $("#plan-start").value;
+        progress.plan = { hpw: h, start: /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : planSettings().start, t: new Date().toISOString() };
+        saveProgress(); syncPlanInputs();
+      }
     });
     $("#toggle-all").addEventListener("click", () => {
       allOpen = !allOpen;
@@ -340,7 +548,14 @@
       document.querySelectorAll("[data-level-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
       applyFilter();
     }));
+    let stFilter = "all";
+    document.querySelectorAll("[data-status-filter]").forEach(b => b.addEventListener("click", () => {
+      stFilter = b.dataset.statusFilter;
+      document.querySelectorAll("[data-status-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      applyFilter();
+    }));
     q.addEventListener("input", applyFilter);
+    applyFilterRef = () => { if (stFilter !== "all") applyFilter(); };
     function norm(s) { return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d"); }
     const hay = Object.fromEntries(ALL_MODS.map(m => [m.id, norm([m.title, m.summary, m.concept, (m.tools || []).join(" "), m.example && m.example.domain, m.example && m.example.title].join(" "))]));
     function applyFilter() {
@@ -349,7 +564,7 @@
       STAGES.forEach(s => {
         let k = 0;
         s.modules.forEach(m => {
-          const ok = (level === "all" || String(m.level) === level) && terms.every(t => hay[m.id].includes(t));
+          const ok = (level === "all" || String(m.level) === level) && (stFilter === "all" || statusOf(m.id) === stFilter) && terms.every(t => hay[m.id].includes(t));
           document.getElementById("m-" + m.id).hidden = !ok;
           if (ok) k++;
         });
@@ -457,6 +672,10 @@ th{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#667281}
 .pdg{margin:4px 0 2px;padding:10px;border:1px solid #e1e6ec;border-radius:6px;text-align:center}
 .pdg svg{max-width:100%;max-height:860px;height:auto}
 .pdg-cap{font-size:11.5px;color:#667281;text-align:center;margin:4px 0 6px}
+.pst{display:inline-block;font-weight:600;font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor}
+.pst-todo{color:#667281}.pst-doing{color:#1F5FD1}.pst-done{color:#12875B}.pst-review{color:#B45309}
+.ptrack td{font-size:12px;padding:5px 8px}.ptrack .grp td{font-weight:700;background:#f3f5f7;border-left:4px solid var(--tc)}
+.ptrack .note{width:150px;border-bottom:1px dotted #aab3be}
 `;
 
   function pdfFigure(opt, key, d) {
@@ -467,7 +686,7 @@ th{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#667281}
     const list = (cls, title, arr) => arr && arr.length ? `<div class="${cls}"><h4 class="bk">${title}</h4><ul>${arr.map(x => `<li class="bk">${esc(x)}</li>`).join("")}</ul></div>` : "";
     let h = `<div class="mod" data-track="${m.stage.track}" data-anchor="${m.id}">
 <div class="hd bk"><i></i><h3>${esc(m.title)}</h3></div>
-<div class="meta bk">${LEVELS[m.level]} · khoảng ${m.hours} giờ · Giai đoạn ${m.stage.no}: ${esc(m.stage.title)}</div>
+<div class="meta bk">${LEVELS[m.level]} · khoảng ${m.hours} giờ · Giai đoạn ${m.stage.no}: ${esc(m.stage.title)} · Trạng thái: <b class="pst pst-${statusOf(m.id)}">${ST_LABEL[statusOf(m.id)]}</b></div>
 <p class="sum bk">${esc(m.summary)}</p>
 <h4 class="bk">Khái niệm</h4><p class="bk">${esc(m.concept)}</p>
 ${opt.diagrams ? m.diagrams.map((d, i) => pdfFigure(opt, m.id + ":" + i, d)).join("") : ""}
@@ -501,6 +720,16 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
 </div>` });
     }
     if (opt.toc && !single) units.push({ kind: "toc", newPage: true, html: null /* dựng sau khi có số trang */ });
+    if (opt.plan && !single) {
+      const c = countStatus(mods);
+      units.push({ kind: "plan", newPage: true, html: `<h2 class="sec-title bk">Kế hoạch học và theo dõi trạng thái</h2>
+<p class="sec-sub bk">${esc(planSummary())}</p>
+<p class="sec-sub bk">Trong phạm vi này: Đã xong ${c.done} · Đang học ${c.doing} · Cần ôn lại ${c.review} · Chưa học ${c.todo} (trên ${mods.length} chủ đề).</p>
+${opt.diagrams ? pdfFigure(opt, "plan", PLAN) : ""}
+<table class="ptrack"><thead><tr class="bk"><th>#</th><th>Chủ đề</th><th>Giờ</th><th>Trạng thái</th><th>Cập nhật</th><th>Ghi chú</th></tr></thead><tbody>
+${sel.stages.map(s => { const ms = s.modules.filter(m => sel.mods.has(m.id)); return ms.length ? `<tr class="bk grp" data-track="${s.track}"><td colspan="6">${s.no}. ${esc(s.title)}</td></tr>` + ms.map((m, i) => `<tr class="bk"><td>${s.no}.${i + 1}</td><td>${esc(m.title)}</td><td>${m.hours}</td><td><span class="pst pst-${statusOf(m.id)}">${ST_LABEL[statusOf(m.id)]}</span></td><td>${fmtDate(statusDate(m.id))}</td><td class="note"></td></tr>`).join("") : ""; }).join("")}
+</tbody></table>` });
+    }
     if (opt.guide && !single) {
       units.push({ kind: "guide", newPage: true, html: `<h2 class="sec-title bk">Chọn thuật toán nhanh</h2><p class="sec-sub bk">Bắt đầu từ nhu cầu, sau đó đọc chủ đề tương ứng.</p>
 ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.diagrams && GUIDE_TREE ? pdfFigure(opt, "guide", GUIDE_TREE) : ""}
@@ -566,6 +795,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
     try {
       if (opt.diagrams) {
         const keys = [];
+        if (opt.plan && sel.scope !== "mod") keys.push("plan");
         if (opt.guide && sel.scope !== "mod") { if (OVERVIEW) keys.push("overview"); if (GUIDE_TREE) keys.push("guide"); }
         ALL_MODS.filter(m => sel.mods.has(m.id)).forEach(m => m.diagrams.forEach((d, i) => keys.push(m.id + ":" + i)));
         opt.svgs = {};
@@ -765,13 +995,13 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       return { scope: "pick", label: st.length === 1 ? `Giai đoạn ${st[0].no}: ${st[0].title}` : `${st.length} giai đoạn đã chọn`, stages: st, mods: new Set(st.flatMap(s => s.modules.map(m => m.id))) };
     }
     if (v === "todo") {
-      const ms = ALL_MODS.filter(m => !done.has(m.id));
-      return { scope: "todo", label: "Các chủ đề chưa học", stages: STAGES, mods: new Set(ms.map(m => m.id)) };
+      const ms = ALL_MODS.filter(m => statusOf(m.id) !== "done");
+      return { scope: "todo", label: "Các chủ đề chưa xong", stages: STAGES, mods: new Set(ms.map(m => m.id)) };
     }
     return { scope: "all", label: "Toàn bộ lộ trình", stages: STAGES, mods: new Set(ALL_MODS.map(m => m.id)) };
   }
   function fileName(sel) {
-    const base = sel.scope === "mod" ? [...sel.mods][0] : sel.scope === "pick" && sel.stages.length === 1 ? "giai-doan-" + sel.stages[0].no : sel.scope === "todo" ? "chua-hoc" : "toan-bo";
+    const base = sel.scope === "mod" ? [...sel.mods][0] : sel.scope === "pick" && sel.stages.length === 1 ? "giai-doan-" + sel.stages[0].no : sel.scope === "todo" ? "chua-xong" : "toan-bo";
     return `ds-ml-roadmap-${base}.pdf`;
   }
 
@@ -781,7 +1011,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       cover: $("#o-cover").checked, toc: $("#o-toc").checked, guide: $("#o-guide").checked,
       code: $("#o-code").checked, res: $("#o-res").checked,
       quality: document.querySelector('input[name="quality"]:checked').value,
-      diagrams: $("#o-dgm").checked
+      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked
     };
     const status = $("#exp-status"), bar = $("#exp-bar"), go = $("#exp-go");
     busy = true; cancelFlag = false; go.disabled = true;
@@ -843,7 +1073,10 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
 
   renderHero();
   renderMain();
+  syncPlanInputs();
+  setSyncNote(false);
   document.querySelectorAll(".panel").forEach(renderFigures);
+  initSync();
   rerenderOnThemeChange();
   bindMain();
   renderExportDialog();
