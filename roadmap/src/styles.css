@@ -276,3 +276,16 @@ footer.foot { border-top: 1px solid var(--line); padding-block: 24px 40px; color
   a { color: inherit; }
   .res a::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
 }
+
+/* Sơ đồ Mermaid */
+.dgms { display: grid; gap: 14px; }
+.dgm { margin: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 12px 12px 8px; }
+.dgm-canvas { overflow-x: auto; text-align: center; min-height: 60px; }
+.dgm-canvas svg { max-width: 100%; height: auto; }
+.dgm-wait, .dgm-err { display: block; padding: 18px; color: var(--muted); font-size: 13px; }
+.dgm figcaption { font-size: 13px; color: var(--muted); text-align: center; margin-top: 6px; }
+.dgm-src { margin-top: 6px; font-size: 12.5px; }
+.dgm-src summary { cursor: pointer; color: var(--muted); width: max-content; }
+.dgm-src pre { margin: 8px 0 0; padding: 10px 12px; background: var(--code-bg); border-radius: 8px; overflow-x: auto; font: 12px/1.55 var(--f-mono); color: var(--code-ink); }
+.panel .dgm { margin-bottom: 16px; }
+@media print { .dgm-src { display: none; } .dgm { break-inside: avoid; } }

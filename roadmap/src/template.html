@@ -28,7 +28,7 @@
   <section class="hero wrap">
     <div class="eyebrow">Full Stack Data Science &amp; Machine Learning BootCamp</div>
     <h1>Lộ trình Data Science &amp; Machine Learning</h1>
-    <p class="lede">Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đang áp dụng nó ra sao. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
+    <p class="lede">Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đang áp dụng nó ra sao. Phần lớn chủ đề có sơ đồ luồng hoặc sequence diagram để thấy các bước và các bên tương tác. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
     <div class="stats">
       <div class="stat"><b id="stat-stages">0</b><span>giai đoạn</span></div>
       <div class="stat"><b id="stat-mods">0</b><span>chủ đề</span></div>
@@ -37,6 +37,7 @@
     </div>
     <div class="hero-actions">
       <a class="btn" href="#s0">Bắt đầu từ giai đoạn 0</a>
+      <a class="btn" href="#overview">Sơ đồ tổng quan</a>
       <a class="btn" href="#guide">Chọn thuật toán nhanh</a>
       <a class="btn" href="#s13">Xem case study của repo</a>
     </div>
@@ -53,9 +54,16 @@
     <div>
       <div class="mobile-toc"><select id="mobile-toc" aria-label="Đi đến giai đoạn"></select></div>
 
+      <section class="panel" id="overview">
+        <h2>Sơ đồ tổng quan</h2>
+        <p>Mũi tên cho biết giai đoạn nào cần học trước. Các ô tô màu là những mốc quan trọng nhất.</p>
+        <div id="overview-fig"></div>
+      </section>
+
       <section class="panel" id="guide">
         <h2>Chọn thuật toán nhanh</h2>
-        <p>Bắt đầu từ nhu cầu của bạn, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
+        <p>Bắt đầu từ nhu cầu của bạn, đi theo cây quyết định hoặc tra bảng, sau đó mở chủ đề tương ứng để xem điều kiện áp dụng và ví dụ.</p>
+        <div id="guide-fig"></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead>
@@ -114,6 +122,7 @@
         <label class="opt"><input type="checkbox" id="o-cover" checked><span>Trang bìa</span></label>
         <label class="opt"><input type="checkbox" id="o-toc" checked><span>Mục lục có số trang</span></label>
         <label class="opt"><input type="checkbox" id="o-guide" checked><span>Bảng chọn thuật toán nhanh</span></label>
+        <label class="opt"><input type="checkbox" id="o-dgm" checked><span>Sơ đồ (flowchart, sequence diagram)</span></label>
         <label class="opt"><input type="checkbox" id="o-code" checked><span>Code mẫu</span></label>
         <label class="opt"><input type="checkbox" id="o-res" checked><span>Tài liệu học và nguồn tham khảo</span></label>
       </fieldset>

@@ -14,11 +14,120 @@
   STAGES.forEach((s, i) => { s.no = i; s.modules.forEach(m => { m.stage = s; }); });
   const ALL_MODS = STAGES.flatMap(s => s.modules);
   const MOD_BY_ID = Object.fromEntries(ALL_MODS.map(m => [m.id, m]));
+  const DIAGRAMS = window.ROADMAP_DIAGRAMS || {};
+  ALL_MODS.forEach(m => { m.diagrams = DIAGRAMS[m.id] || []; });
+  const OVERVIEW = window.ROADMAP_OVERVIEW;
+  const GUIDE_TREE = window.ROADMAP_GUIDE_TREE;
 
   /* ---------- helpers ---------- */
   const $ = (sel, root = document) => root.querySelector(sel);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const totalHours = mods => mods.reduce((a, m) => a + (m.hours || 0), 0);
+
+  /* ---------- sơ đồ Mermaid ---------- */
+  const MERMAID_URL = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js";
+  const PDF_PALETTE = {
+    dark: false, bg: "#FFFFFF", node: "#EDF0F4", ink: "#111821", muted: "#677383", line: "#9AA5B1",
+    accent: "#1F5FD1", accentSoft: "#DCE7FB", note: "#FFF4DB", noteLine: "#C27400", font: "Arial, Helvetica, sans-serif"
+  };
+  function pagePalette() {
+    const cs = getComputedStyle(document.documentElement);
+    const v = n => cs.getPropertyValue(n).trim();
+    const dark = isDark();
+    return {
+      dark, bg: v("--surface"), node: v("--surface-2"), ink: v("--ink"), muted: v("--muted"), line: v("--muted"),
+      accent: v("--accent"), accentSoft: dark ? "#1D2F52" : "#DCE7FB", note: dark ? "#3A2E14" : "#FFF4DB",
+      noteLine: v("--t-data"), font: '"Be Vietnam Pro", system-ui, sans-serif'
+    };
+  }
+  function isDark() {
+    const t = document.documentElement.getAttribute("data-theme");
+    if (t) return t === "dark";
+    return window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  function mermaidConfig(p) {
+    return {
+      startOnLoad: false, securityLevel: "strict", theme: "base", htmlLabels: false,
+      fontFamily: p.font,
+      flowchart: { htmlLabels: false, curve: "basis", useMaxWidth: true, padding: 12, nodeSpacing: 36, rankSpacing: 42 },
+      sequence: { mirrorActors: false, useMaxWidth: true, wrap: true, boxMargin: 8, messageMargin: 34 },
+      themeVariables: {
+        darkMode: p.dark, background: p.bg, fontFamily: p.font, fontSize: "14px",
+        primaryColor: p.node, primaryTextColor: p.ink, primaryBorderColor: p.line, secondaryColor: p.node, tertiaryColor: p.bg,
+        mainBkg: p.node, nodeBorder: p.line, lineColor: p.line, textColor: p.ink, edgeLabelBackground: p.bg, clusterBkg: p.bg,
+        actorBkg: p.node, actorBorder: p.line, actorTextColor: p.ink, actorLineColor: p.line,
+        signalColor: p.ink, signalTextColor: p.ink, labelBoxBkgColor: p.node, labelBoxBorderColor: p.line, labelTextColor: p.ink,
+        loopTextColor: p.ink, noteBkgColor: p.note, noteBorderColor: p.noteLine, noteTextColor: p.ink,
+        activationBkgColor: p.accentSoft, activationBorderColor: p.accent, sequenceNumberColor: p.bg
+      }
+    };
+  }
+  function prepareSrc(src, p) {
+    return /^\s*flowchart/.test(src)
+      ? src + `\n  classDef hl fill:${p.accentSoft},stroke:${p.accent},stroke-width:2px,color:${p.ink}`
+      : src;
+  }
+  let mermaidReady = null;
+  function loadMermaid() {
+    if (window.mermaid) return Promise.resolve(window.mermaid);
+    if (mermaidReady) return mermaidReady;
+    mermaidReady = new Promise((res, rej) => {
+      const s = document.createElement("script");
+      s.src = MERMAID_URL;
+      s.onload = () => res(window.mermaid);
+      s.onerror = () => { mermaidReady = null; rej(new Error("Không tải được thư viện Mermaid")); };
+      document.head.appendChild(s);
+    });
+    return mermaidReady;
+  }
+  // Mermaid chỉ nên vẽ tuần tự, nên mọi lần vẽ đi qua một hàng đợi
+  let mermaidQueue = Promise.resolve(), mermaidSeq = 0;
+  const svgCache = new Map();
+  function renderMermaid(src, palette) {
+    const key = (palette.dark ? "D" : "L") + (palette === PDF_PALETTE ? "P" : "") + src;
+    if (svgCache.has(key)) return svgCache.get(key);
+    const job = mermaidQueue.then(async () => {
+      const m = await loadMermaid();
+      m.initialize(mermaidConfig(palette));
+      const { svg } = await m.render("mmd-" + (++mermaidSeq), prepareSrc(src, palette));
+      return svg;
+    });
+    mermaidQueue = job.catch(() => {});
+    svgCache.set(key, job);
+    job.catch(() => svgCache.delete(key));
+    return job;
+  }
+  function diagramSrc(key) {
+    if (key === "overview") return OVERVIEW;
+    if (key === "guide") return GUIDE_TREE;
+    const [id, i] = key.split(":");
+    return MOD_BY_ID[id] && MOD_BY_ID[id].diagrams[+i];
+  }
+  function figureHTML(key, d) {
+    return `<figure class="dgm" data-dgm="${key}">
+  <div class="dgm-canvas" role="img" aria-label="${esc(d.title)}"><span class="dgm-wait">Đang vẽ sơ đồ…</span></div>
+  <figcaption>${esc(d.title)}</figcaption>
+  <details class="dgm-src"><summary>Xem mã Mermaid</summary><pre>${esc(d.src)}</pre></details>
+</figure>`;
+  }
+  async function renderFigures(root) {
+    const figs = [...root.querySelectorAll("figure.dgm")].filter(f => f.dataset.done !== (isDark() ? "D" : "L"));
+    for (const fig of figs) {
+      const d = diagramSrc(fig.dataset.dgm);
+      const box = fig.querySelector(".dgm-canvas");
+      try {
+        box.innerHTML = await renderMermaid(d.src, pagePalette());
+        fig.dataset.done = isDark() ? "D" : "L";
+      } catch (err) {
+        box.innerHTML = `<p class="dgm-err">Không vẽ được sơ đồ (${esc(err.message || "lỗi")}). Mở "Xem mã Mermaid" để đọc nội dung.</p>`;
+      }
+    }
+  }
+  function rerenderOnThemeChange() {
+    const redo = () => { svgCache.clear(); document.querySelectorAll("figure.dgm[data-done]").forEach(f => f.removeAttribute("data-done")); document.querySelectorAll(".panel, .mod.open").forEach(renderFigures); };
+    try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redo); } catch (e) { /* trình duyệt cũ */ }
+    new MutationObserver(redo).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  }
 
   function loadDone() {
     try { return new Set(JSON.parse(localStorage.getItem(STORE_KEY) || "[]")); } catch (e) { return new Set(); }
@@ -101,7 +210,7 @@
     <button class="mod-toggle" type="button" aria-expanded="false" aria-controls="b-${m.id}">
       <span class="mod-title"><h3>${esc(m.title)}</h3></span>
       <div class="mod-sum">${esc(m.summary)}</div>
-      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}</div>
+      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}</div>
     </button>
     <div class="mod-tools">
       <label class="done-toggle"><input type="checkbox" id="done-${m.id}" data-done="${m.id}" ${done.has(m.id) ? "checked" : ""}><span class="lbl">Đã học</span></label>
@@ -111,6 +220,7 @@
   </div>
   <div class="mod-body" id="b-${m.id}" hidden>
     <h4>Khái niệm</h4><p>${esc(m.concept)}</p>
+    ${m.diagrams.length ? `<h4>Sơ đồ</h4><div class="dgms">${m.diagrams.map((d, i) => figureHTML(m.id + ":" + i, d)).join("")}</div>` : ""}
     <h4>Khi nào dùng & vì sao</h4>
     <div class="cols">
       <div class="col why"><h4>Lý do sử dụng</h4>${list(m.why)}</div>
@@ -140,6 +250,8 @@
   <div class="mods">${s.modules.map(modHTML).join("")}</div>
 </section>`).join("");
 
+    if (OVERVIEW) $("#overview-fig").innerHTML = figureHTML("overview", OVERVIEW);
+    if (GUIDE_TREE) $("#guide-fig").innerHTML = figureHTML("guide", GUIDE_TREE);
     $("#guide-body").innerHTML = GUIDE.map(([need, algo, id]) =>
       `<tr><td>${esc(need)}</td><td>${MOD_BY_ID[id] ? `<a href="#m-${id}" data-open="${id}">${esc(algo)}</a>` : esc(algo)}</td><td>${MOD_BY_ID[id] ? esc(MOD_BY_ID[id].stage.title) : ""}</td></tr>`).join("");
     $("#sources").innerHTML = SOURCES.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("");
@@ -175,6 +287,7 @@
     body.hidden = !open;
     btn.setAttribute("aria-expanded", String(open));
     card.classList.toggle("open", open);
+    if (open) renderFigures(card);
   }
 
   let allOpen = false;
@@ -341,8 +454,15 @@ th{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#667281}
 .res a{color:#1F5FD1;text-decoration:none}
 .res .u{color:#8894a2;font-size:11px;word-break:break-all}
 .src li{margin:4px 0;font-size:12.5px}
+.pdg{margin:4px 0 2px;padding:10px;border:1px solid #e1e6ec;border-radius:6px;text-align:center}
+.pdg svg{max-width:100%;max-height:860px;height:auto}
+.pdg-cap{font-size:11.5px;color:#667281;text-align:center;margin:4px 0 6px}
 `;
 
+  function pdfFigure(opt, key, d) {
+    const svg = opt.svgs && opt.svgs[key];
+    return svg ? `<h4 class="bk">Sơ đồ</h4><div class="pdg bk">${svg}</div><p class="pdg-cap bk">${esc(d.title)}</p>` : "";
+  }
   function pdfModHTML(m, opt) {
     const list = (cls, title, arr) => arr && arr.length ? `<div class="${cls}"><h4 class="bk">${title}</h4><ul>${arr.map(x => `<li class="bk">${esc(x)}</li>`).join("")}</ul></div>` : "";
     let h = `<div class="mod" data-track="${m.stage.track}" data-anchor="${m.id}">
@@ -350,6 +470,7 @@ th{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#667281}
 <div class="meta bk">${LEVELS[m.level]} · khoảng ${m.hours} giờ · Giai đoạn ${m.stage.no}: ${esc(m.stage.title)}</div>
 <p class="sum bk">${esc(m.summary)}</p>
 <h4 class="bk">Khái niệm</h4><p class="bk">${esc(m.concept)}</p>
+${opt.diagrams ? m.diagrams.map((d, i) => pdfFigure(opt, m.id + ":" + i, d)).join("") : ""}
 ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", m.when)}${list("k-not", "Khi nào không nên", m.whenNot)}`;
     if (m.example) h += `<h4 class="bk">Ví dụ ứng dụng thực tế</h4><div class="case bk"><div class="dm">${esc(m.example.domain)}</div><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>`;
     if (opt.code && m.code) {
@@ -382,6 +503,7 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
     if (opt.toc && !single) units.push({ kind: "toc", newPage: true, html: null /* dựng sau khi có số trang */ });
     if (opt.guide && !single) {
       units.push({ kind: "guide", newPage: true, html: `<h2 class="sec-title bk">Chọn thuật toán nhanh</h2><p class="sec-sub bk">Bắt đầu từ nhu cầu, sau đó đọc chủ đề tương ứng.</p>
+${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.diagrams && GUIDE_TREE ? pdfFigure(opt, "guide", GUIDE_TREE) : ""}
 <table><thead><tr class="bk"><th>Nhu cầu</th><th>Nên thử</th><th>Giai đoạn</th></tr></thead><tbody>${GUIDE.map(([a, b, id]) => `<tr class="bk"><td>${esc(a)}</td><td><b>${esc(b)}</b></td><td>${MOD_BY_ID[id] ? MOD_BY_ID[id].stage.no + ". " + esc(MOD_BY_ID[id].stage.title) : ""}</td></tr>`).join("")}</tbody></table>` });
     }
     sel.stages.forEach(s => {
@@ -442,6 +564,18 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
     const doc = frame.contentDocument;
     const root = doc.getElementById("root");
     try {
+      if (opt.diagrams) {
+        const keys = [];
+        if (opt.guide && sel.scope !== "mod") { if (OVERVIEW) keys.push("overview"); if (GUIDE_TREE) keys.push("guide"); }
+        ALL_MODS.filter(m => sel.mods.has(m.id)).forEach(m => m.diagrams.forEach((d, i) => keys.push(m.id + ":" + i)));
+        opt.svgs = {};
+        for (let i = 0; i < keys.length; i++) {
+          if (isCancelled()) throw new Error("cancelled");
+          onProgress(0, `vẽ sơ đồ ${i + 1}/${keys.length}`);
+          try { opt.svgs[keys[i]] = await renderMermaid(diagramSrc(keys[i]).src, PDF_PALETTE); }
+          catch (e) { /* bỏ qua sơ đồ lỗi, phần chữ vẫn xuất */ }
+        }
+      }
       const { units, mods } = buildUnits(sel, opt);
       const PAGE_W = 210, PAGE_H = 297, M_X = 12, M_TOP = 14, M_BOTTOM = 16;
       const CONTENT_W = PAGE_W - 2 * M_X, CONTENT_H = PAGE_H - M_TOP - M_BOTTOM;
@@ -646,7 +780,8 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
     const opt = {
       cover: $("#o-cover").checked, toc: $("#o-toc").checked, guide: $("#o-guide").checked,
       code: $("#o-code").checked, res: $("#o-res").checked,
-      quality: document.querySelector('input[name="quality"]:checked').value
+      quality: document.querySelector('input[name="quality"]:checked').value,
+      diagrams: $("#o-dgm").checked
     };
     const status = $("#exp-status"), bar = $("#exp-bar"), go = $("#exp-go");
     busy = true; cancelFlag = false; go.disabled = true;
@@ -708,6 +843,8 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
 
   renderHero();
   renderMain();
+  document.querySelectorAll(".panel").forEach(renderFigures);
+  rerenderOnThemeChange();
   bindMain();
   renderExportDialog();
 })();
