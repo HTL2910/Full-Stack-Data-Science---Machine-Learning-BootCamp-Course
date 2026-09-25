@@ -28,7 +28,7 @@
   <section class="hero wrap">
     <div class="eyebrow">Full Stack Data Science &amp; Machine Learning BootCamp</div>
     <h1>Lộ trình Data Science &amp; Machine Learning</h1>
-    <p class="lede">Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đang áp dụng nó ra sao. Phần lớn chủ đề có sơ đồ luồng hoặc sequence diagram để thấy các bước và các bên tương tác. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
+    <p class="lede">Từ toán và Python đến mô hình, LLM và triển khai. Mỗi chủ đề trả lời bốn câu hỏi: nó là gì, vì sao dùng, khi nào nên và không nên dùng, và doanh nghiệp đã áp dụng nó ra sao, kèm số liệu, nguồn và cả những thất bại. Phần lớn chủ đề có sơ đồ luồng hoặc sequence diagram để thấy các bước và các bên tương tác. Giai đoạn cuối áp dụng tất cả vào dự án Flight Fare Prediction có sẵn trong repo.</p>
     <div class="stats">
       <div class="stat"><b id="stat-stages">0</b><span>giai đoạn</span></div>
       <div class="stat"><b id="stat-mods">0</b><span>chủ đề</span></div>
@@ -41,6 +41,7 @@
       <a class="btn" href="#learn">Hướng dẫn học từ đầu</a>
       <a class="btn" href="#overview">Sơ đồ tổng quan</a>
       <a class="btn" href="#guide">Chọn thuật toán nhanh</a>
+      <a class="btn" href="#apps">Ứng dụng theo ngành</a>
       <a class="btn" href="#s13">Xem case study của repo</a>
     </div>
     <nav class="metro" id="metro" aria-label="Các giai đoạn"></nav>
@@ -121,6 +122,19 @@
         </div>
       </section>
 
+      <section class="panel" id="apps">
+        <h2>Ứng dụng thực tế theo ngành</h2>
+        <p>Các case doanh nghiệp đã công bố, gồm cả những thất bại lớn và bài học rút ra. Bấm tên chủ đề để xem chi tiết, cách làm và nguồn.</p>
+        <div class="apps-stats" id="apps-stats"></div>
+        <div class="apps-filter" id="apps-filter" role="toolbar" aria-label="Lọc theo ngành"></div>
+        <div class="table-wrap">
+          <table class="apps-table">
+            <thead><tr><th>Tổ chức</th><th>Ứng dụng</th><th>Kết quả</th><th>Chủ đề</th></tr></thead>
+            <tbody id="apps-body"></tbody>
+          </table>
+        </div>
+      </section>
+
       <div class="filters" role="toolbar" aria-label="Lọc chủ đề">
         <button class="chip" type="button" data-level-filter="all" aria-pressed="true">Tất cả</button>
         <button class="chip" type="button" data-level-filter="1" aria-pressed="false">Cơ bản</button>
@@ -178,6 +192,7 @@
         <label class="opt"><input type="checkbox" id="o-toc" checked><span>Mục lục có số trang</span></label>
         <label class="opt"><input type="checkbox" id="o-plan" checked><span>Kế hoạch học và bảng theo dõi trạng thái<small>Biểu đồ Gantt, trạng thái từng chủ đề và cột ghi chú để in</small></span></label>
         <label class="opt"><input type="checkbox" id="o-guide" checked><span>Bảng chọn thuật toán nhanh</span></label>
+        <label class="opt"><input type="checkbox" id="o-apps" checked><span>Case doanh nghiệp đã áp dụng<small>Trong từng chủ đề, kèm bảng tra theo ngành</small></span></label>
         <label class="opt"><input type="checkbox" id="o-dgm" checked><span>Sơ đồ (flowchart, sequence diagram)</span></label>
         <label class="opt"><input type="checkbox" id="o-code" checked><span>Code mẫu</span></label>
         <label class="opt"><input type="checkbox" id="o-res" checked><span>Tài liệu học và nguồn tham khảo</span></label>

@@ -4,6 +4,13 @@ Website roadmap tiếng Việt: 14 giai đoạn, 59 chủ đề, 42 sơ đồ Me
 Mỗi chủ đề gồm: khái niệm, lý do sử dụng, khi nào dùng / không nên dùng, ví dụ ứng dụng thực tế, code mẫu,
 lỗi thường gặp, công cụ và tài liệu học. Giai đoạn cuối là case study dự án `AI/Flight_Fare_Prediction` trong repo.
 
+## Ứng dụng thực tế
+
+109 case doanh nghiệp đã công bố (Netflix, Amazon, Airbnb, Uber, DoorDash, Stripe, Booking.com, Morgan Stanley,
+Klarna, Google, DeepMind, Grab, MoMo, VinAI…), gồm 14 thất bại kèm bài học (Zillow Offers, Google Flu Trends,
+công cụ tuyển dụng của Amazon, chatbot Air Canada…). Mỗi case có cách làm, kết quả đo được và nguồn.
+Xem trong từng chủ đề hoặc bảng **Ứng dụng thực tế theo ngành**. Dữ liệu nằm ở `src/data-6-applications.js`.
+
 ## Học từ đầu và theo dõi trạng thái
 
 - Trên website, mục **Hướng dẫn học từ đầu** gồm sáu bước học, định nghĩa bốn trạng thái, bảng dự án ở các mốc

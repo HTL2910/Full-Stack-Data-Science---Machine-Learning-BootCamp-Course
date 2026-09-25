@@ -16,6 +16,21 @@
   const MOD_BY_ID = Object.fromEntries(ALL_MODS.map(m => [m.id, m]));
   const DIAGRAMS = window.ROADMAP_DIAGRAMS || {};
   ALL_MODS.forEach(m => { m.diagrams = DIAGRAMS[m.id] || []; });
+  const APPS = window.ROADMAP_APPS || {};
+  ALL_MODS.forEach(m => { m.apps = APPS[m.id] || []; });
+  const ALL_APPS = ALL_MODS.flatMap(m => m.apps.map(a => Object.assign({ mod: m }, a)));
+  const SECTORS = [
+    ["Tài chính & thanh toán", ["Tài chính", "Ngân hàng", "Thanh toán", "Fintech", "Fintech Việt Nam", "Ngân hàng đầu tư", "Tín dụng"]],
+    ["Thương mại, bán lẻ & marketing", ["Bán lẻ", "Thương mại điện tử", "Marketing", "Quảng cáo"]],
+    ["Giao thông & giao nhận", ["Gọi xe", "Giao đồ ăn", "Logistics", "Siêu ứng dụng Đông Nam Á"]],
+    ["Du lịch, hàng không & bất động sản", ["Du lịch", "Hàng không", "Bất động sản"]],
+    ["Giải trí & mạng xã hội", ["Giải trí", "Âm nhạc", "Mạng xã hội", "Game"]],
+    ["Y tế & khoa học", ["Y tế", "Khoa học", "Sinh học", "Hàng không vũ trụ", "Nghiên cứu"]],
+    ["Sản xuất & năng lượng", ["Sản xuất ô tô", "Năng lượng"]],
+    ["Công nghệ, tìm kiếm & AI", ["Công nghệ", "AI", "AI Việt Nam", "Tìm kiếm", "Phần mềm", "Email", "Văn bản", "Ngôn ngữ", "Thị giác máy"]],
+    ["Giáo dục, nhân sự & khu vực công", ["Giáo dục", "Tuyển dụng", "Chính trị"]]
+  ];
+  const sectorOf = ind => (SECTORS.find(([, list]) => list.includes(ind)) || ["Khác"])[0];
   const OVERVIEW = window.ROADMAP_OVERVIEW;
   const GUIDE_TREE = window.ROADMAP_GUIDE_TREE;
 
@@ -359,6 +374,17 @@
     copy: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>'
   };
 
+  function appHTML(a) {
+    return `<article class="app${a.kind === "fail" ? " app-fail" : ""}">
+  <div class="app-top"><span class="app-org">${esc(a.org)}</span><span class="app-ind">${esc(a.ind)}</span>${a.kind === "fail" ? `<span class="app-flag">Thất bại · bài học</span>` : ""}</div>
+  <h5>${esc(a.title)}</h5>
+  <p>${esc(a.text)}</p>
+  <p class="app-res"><b>${a.kind === "fail" ? "Hậu quả" : "Kết quả"}:</b> ${esc(a.result)}</p>
+  ${a.lesson ? `<p class="app-lesson"><b>Bài học:</b> ${esc(a.lesson)}</p>` : ""}
+  <a class="app-src" href="${esc(a.src[1])}" target="_blank" rel="noopener">Nguồn: ${esc(a.src[0])}</a>
+</article>`;
+  }
+
   const lvlDots = n => `<span class="lvl"><i>${[1, 2, 3].map(k => `<b class="${k <= n ? "on" : ""}"></b>`).join("")}</i>${LEVELS[n]}</span>`;
 
   /* ---------- trang chính ---------- */
@@ -386,7 +412,7 @@
     <button class="mod-toggle" type="button" aria-expanded="false" aria-controls="b-${m.id}">
       <span class="mod-title"><h3>${esc(m.title)}</h3></span>
       <div class="mod-sum">${esc(m.summary)}</div>
-      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}<span class="st-since" data-since="${m.id}"></span></div>
+      <div class="meta-row">${lvlDots(m.level)}<span>~${m.hours} giờ</span>${m.example ? `<span>Case: ${esc(m.example.domain)}</span>` : ""}${m.diagrams.length ? `<span>${m.diagrams.length} sơ đồ</span>` : ""}${m.apps.length ? `<span>${m.apps.length} case doanh nghiệp</span>` : ""}<span class="st-since" data-since="${m.id}"></span></div>
     </button>
     <div class="mod-tools">
       <label class="st-pick" title="Đổi trạng thái học"><span class="dot" aria-hidden="true"></span><select id="st-${m.id}" data-status-of="${m.id}" aria-label="Trạng thái: ${esc(m.title)}">${STATUSES.map(o => `<option value="${o.id}"${statusOf(m.id) === o.id ? " selected" : ""}>${o.label}</option>`).join("")}</select></label>
@@ -404,6 +430,7 @@
       <div class="col not"><h4>Khi nào không nên</h4>${list(m.whenNot)}</div>
     </div>
     ${m.example ? `<h4>Ví dụ ứng dụng thực tế</h4><div class="case"><span class="tag">${esc(m.example.domain)}</span><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>` : ""}
+    ${m.apps.length ? `<h4>Doanh nghiệp đã áp dụng</h4><div class="apps">${m.apps.map(appHTML).join("")}</div>` : ""}
     ${code}
     ${m.pitfalls && m.pitfalls.length ? `<h4>Lỗi thường gặp</h4><ul class="list">${m.pitfalls.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
     ${m.tools && m.tools.length ? `<h4>Công cụ</h4><div class="tools">${m.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
@@ -430,6 +457,7 @@
     if (GUIDE_TREE) $("#guide-fig").innerHTML = figureHTML("guide", GUIDE_TREE);
     $("#guide-body").innerHTML = GUIDE.map(([need, algo, id]) =>
       `<tr><td>${esc(need)}</td><td>${MOD_BY_ID[id] ? `<a href="#m-${id}" data-open="${id}">${esc(algo)}</a>` : esc(algo)}</td><td>${MOD_BY_ID[id] ? esc(MOD_BY_ID[id].stage.title) : ""}</td></tr>`).join("");
+    renderAppsIndex("all");
     $("#sources").innerHTML = SOURCES.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("");
 
     $("#sidenav-list").innerHTML = STAGES.map(s => `
@@ -440,6 +468,23 @@
 
     $("#mobile-toc").innerHTML = `<option value="">Đi đến giai đoạn…</option>` + STAGES.map(s => `<option value="${s.id}">${s.no}. ${esc(s.title)}</option>`).join("");
     refreshProgress();
+  }
+
+  function renderAppsIndex(filter) {
+    const fails = ALL_APPS.filter(a => a.kind === "fail");
+    const sectorsUsed = [...new Set(ALL_APPS.map(a => sectorOf(a.ind)))];
+    $("#apps-stats").innerHTML = `<span><b>${ALL_APPS.length}</b> case đã công bố</span><span><b>${new Set(ALL_APPS.map(a => a.org)).size}</b> tổ chức</span><span><b>${sectorsUsed.length}</b> nhóm ngành</span><span><b>${fails.length}</b> thất bại có bài học</span>`;
+    $("#apps-filter").innerHTML = [["all", "Tất cả"], ...sectorsUsed.map(x => [x, x]), ["fail", "Chỉ thất bại"]]
+      .map(([k, l]) => `<button class="chip" type="button" data-sector="${esc(k)}" aria-pressed="${k === filter}">${esc(l)}</button>`).join("");
+    const rows = ALL_APPS.filter(a => filter === "all" || (filter === "fail" ? a.kind === "fail" : sectorOf(a.ind) === filter));
+    const groups = {};
+    rows.forEach(a => { (groups[sectorOf(a.ind)] = groups[sectorOf(a.ind)] || []).push(a); });
+    $("#apps-body").innerHTML = Object.entries(groups).map(([g, list]) =>
+      `<tr class="grp"><td colspan="4">${esc(g)} <span>${list.length}</span></td></tr>` + list.map(a => `<tr${a.kind === "fail" ? ' class="is-fail"' : ""}>
+  <td><b>${esc(a.org)}</b>${a.kind === "fail" ? '<span class="app-flag">Thất bại</span>' : ""}</td>
+  <td>${esc(a.title)}</td>
+  <td>${esc(a.result)}</td>
+  <td><a href="#m-${a.mod.id}" data-open="${a.mod.id}">${esc(a.mod.title)}</a></td></tr>`).join("")).join("");
   }
 
   function refreshProgress() {
@@ -518,6 +563,8 @@
         try { navigator.clipboard.writeText(src).then(() => toast("Đã sao chép code"), fallback); } catch (err) { fallback(); }
         return;
       }
+      const sec = t.closest("[data-sector]");
+      if (sec) { renderAppsIndex(sec.dataset.sector); return; }
       const pm = t.closest("[data-pdf-mod]");
       if (pm) { openExport({ scope: "mod", modId: pm.dataset.pdfMod }); return; }
       const ps = t.closest("[data-pdf-stage]");
@@ -557,7 +604,7 @@
     q.addEventListener("input", applyFilter);
     applyFilterRef = () => { if (stFilter !== "all") applyFilter(); };
     function norm(s) { return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d"); }
-    const hay = Object.fromEntries(ALL_MODS.map(m => [m.id, norm([m.title, m.summary, m.concept, (m.tools || []).join(" "), m.example && m.example.domain, m.example && m.example.title].join(" "))]));
+    const hay = Object.fromEntries(ALL_MODS.map(m => [m.id, norm([m.title, m.summary, m.concept, (m.tools || []).join(" "), m.example && m.example.domain, m.example && m.example.title, m.apps.map(a => [a.org, a.ind, a.title].join(" ")).join(" ")].join(" "))]));
     function applyFilter() {
       const terms = norm(q.value.trim()).split(/\s+/).filter(Boolean);
       let shown = 0;
@@ -676,6 +723,13 @@ th{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#667281}
 .pst-todo{color:#667281}.pst-doing{color:#1F5FD1}.pst-done{color:#12875B}.pst-review{color:#B45309}
 .ptrack td{font-size:12px;padding:5px 8px}.ptrack .grp td{font-weight:700;background:#f3f5f7;border-left:4px solid var(--tc)}
 .ptrack .note{width:150px;border-bottom:1px dotted #aab3be}
+.papp{border:1px solid #d9dfe6;border-left:4px solid #12875B;border-radius:6px;padding:8px 11px;margin:0 0 8px;font-size:12.5px}
+.papp.fail{border-left-color:#B45309}
+.papp p{margin:3px 0 0;color:#3b4552}
+.pa-top{font-size:11px;color:#667281}.pa-top b{color:#1a212b}
+.pa-flag{color:#B45309;font-weight:700}
+.pa-t{font-family:"Bricolage Grotesque","Be Vietnam Pro",Arial,sans-serif;font-weight:700;font-size:14px;margin-top:2px}
+.pa-src{font-size:11px}.pa-src a{color:#1F5FD1;text-decoration:none}
 `;
 
   function pdfFigure(opt, key, d) {
@@ -692,6 +746,13 @@ th{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#667281}
 ${opt.diagrams ? m.diagrams.map((d, i) => pdfFigure(opt, m.id + ":" + i, d)).join("") : ""}
 ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", m.when)}${list("k-not", "Khi nào không nên", m.whenNot)}`;
     if (m.example) h += `<h4 class="bk">Ví dụ ứng dụng thực tế</h4><div class="case bk"><div class="dm">${esc(m.example.domain)}</div><h5>${esc(m.example.title)}</h5><p>${esc(m.example.text)}</p></div>`;
+    if (opt.apps && m.apps.length) {
+      h += `<h4 class="bk">Doanh nghiệp đã áp dụng</h4>` + m.apps.map(a => `<div class="papp bk${a.kind === "fail" ? " fail" : ""}">
+<div class="pa-top"><b>${esc(a.org)}</b> · ${esc(a.ind)}${a.kind === "fail" ? ' · <span class="pa-flag">Thất bại / bài học</span>' : ""}</div>
+<div class="pa-t">${esc(a.title)}</div><p>${esc(a.text)}</p>
+<p><b>${a.kind === "fail" ? "Hậu quả" : "Kết quả"}:</b> ${esc(a.result)}</p>${a.lesson ? `<p><b>Bài học:</b> ${esc(a.lesson)}</p>` : ""}
+<p class="pa-src">Nguồn: <a href="${esc(a.src[1])}">${esc(a.src[0])}</a></p></div>`).join("");
+    }
     if (opt.code && m.code) {
       const lines = highlight(m.code.src, m.code.lang);
       h += `<h4 class="bk">Code mẫu (${esc(m.code.lang)})</h4><div class="code">${lines.map(l => `<div class="ln bk">${l || " "}</div>`).join("")}</div>`;
@@ -728,6 +789,16 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
 ${opt.diagrams ? pdfFigure(opt, "plan", PLAN) : ""}
 <table class="ptrack"><thead><tr class="bk"><th>#</th><th>Chủ đề</th><th>Giờ</th><th>Trạng thái</th><th>Cập nhật</th><th>Ghi chú</th></tr></thead><tbody>
 ${sel.stages.map(s => { const ms = s.modules.filter(m => sel.mods.has(m.id)); return ms.length ? `<tr class="bk grp" data-track="${s.track}"><td colspan="6">${s.no}. ${esc(s.title)}</td></tr>` + ms.map((m, i) => `<tr class="bk"><td>${s.no}.${i + 1}</td><td>${esc(m.title)}</td><td>${m.hours}</td><td><span class="pst pst-${statusOf(m.id)}">${ST_LABEL[statusOf(m.id)]}</span></td><td>${fmtDate(statusDate(m.id))}</td><td class="note"></td></tr>`).join("") : ""; }).join("")}
+</tbody></table>` });
+    }
+    if (opt.apps && !single) {
+      const list = ALL_APPS.filter(a => sel.mods.has(a.mod.id));
+      const groups = {};
+      list.forEach(a => { (groups[sectorOf(a.ind)] = groups[sectorOf(a.ind)] || []).push(a); });
+      if (list.length) units.push({ kind: "apps", newPage: true, html: `<h2 class="sec-title bk">Ứng dụng thực tế theo ngành</h2>
+<p class="sec-sub bk">${list.length} case đã được công bố, ${list.filter(a => a.kind === "fail").length} trong số đó là thất bại kèm bài học. Chi tiết và nguồn nằm trong từng chủ đề.</p>
+<table class="ptrack"><thead><tr class="bk"><th>Tổ chức</th><th>Ứng dụng</th><th>Kết quả</th><th>Chủ đề</th></tr></thead><tbody>
+${Object.entries(groups).map(([g, l]) => `<tr class="bk grp"><td colspan="4" style="border-left-color:#1a212b">${esc(g)}</td></tr>` + l.map(a => `<tr class="bk"><td><b>${esc(a.org)}</b>${a.kind === "fail" ? '<br><span class="pst pst-review">Thất bại</span>' : ""}</td><td>${esc(a.title)}</td><td>${esc(a.result)}</td><td>${esc(a.mod.title)}</td></tr>`).join("")).join("")}
 </tbody></table>` });
     }
     if (opt.guide && !single) {
@@ -1011,7 +1082,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       cover: $("#o-cover").checked, toc: $("#o-toc").checked, guide: $("#o-guide").checked,
       code: $("#o-code").checked, res: $("#o-res").checked,
       quality: document.querySelector('input[name="quality"]:checked').value,
-      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked
+      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked, apps: $("#o-apps").checked
     };
     const status = $("#exp-status"), bar = $("#exp-bar"), go = $("#exp-go");
     busy = true; cancelFlag = false; go.disabled = true;
