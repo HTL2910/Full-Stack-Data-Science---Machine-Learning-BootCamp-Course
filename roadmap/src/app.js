@@ -5,7 +5,7 @@
   const GUIDE = window.ROADMAP_GUIDE || [];
   const SOURCES = window.ROADMAP_SOURCES || [];
   const TRACKS = {
-    found: "Nền tảng", data: "Dữ liệu", ml: "Machine Learning", dl: "Deep Learning & GenAI", ops: "MLOps & Sản phẩm"
+    found: "Nền tảng", data: "Dữ liệu", ml: "Machine Learning", dl: "Deep Learning & GenAI", ops: "MLOps & Sản phẩm", web: "Full-stack Web"
   };
   const LEVELS = { 1: "Cơ bản", 2: "Trung cấp", 3: "Nâng cao" };
   const IN_FRAME = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
@@ -27,7 +27,7 @@
     ["Giải trí & mạng xã hội", ["Giải trí", "Âm nhạc", "Mạng xã hội", "Game"]],
     ["Y tế & khoa học", ["Y tế", "Khoa học", "Sinh học", "Hàng không vũ trụ", "Nghiên cứu"]],
     ["Sản xuất & năng lượng", ["Sản xuất ô tô", "Năng lượng"]],
-    ["Công nghệ, tìm kiếm & AI", ["Công nghệ", "AI", "AI Việt Nam", "Tìm kiếm", "Phần mềm", "Email", "Văn bản", "Ngôn ngữ", "Thị giác máy"]],
+    ["Công nghệ, tìm kiếm & AI", ["Công nghệ", "AI", "AI Việt Nam", "Tìm kiếm", "Phần mềm", "An ninh mạng", "Email", "Văn bản", "Ngôn ngữ", "Thị giác máy"]],
     ["Giáo dục, nhân sự & khu vực công", ["Giáo dục", "Tuyển dụng", "Chính trị"]]
   ];
   const sectorOf = ind => (SECTORS.find(([, list]) => list.includes(ind)) || ["Khác"])[0];
@@ -371,17 +371,21 @@
     setTimeout(() => t.remove(), ms);
   }
 
-  /* Tô màu cú pháp đơn giản cho python / sql / bash / yaml / dockerfile */
+  /* Tô màu cú pháp đơn giản cho python / sql / bash / yaml / dockerfile / ts / prisma / html */
   const KW = {
     python: "and as assert async await break class continue def del elif else except False finally for from global if import in is lambda None nonlocal not or pass raise return True try while with yield",
     sql: "select from where group by order having join left right inner outer on as with and or not null is in case when then else end limit distinct count sum avg max min over partition filter current_date interval union all insert update delete create table config materialized ref",
     bash: "cd git pip python docker source export echo run build",
     yaml: "name on jobs runs-on steps uses run schedule cron",
-    dockerfile: "FROM WORKDIR COPY RUN EXPOSE CMD ENV ARG"
+    dockerfile: "FROM WORKDIR COPY RUN EXPOSE CMD ENV ARG",
+    ts: "import export from default const let var function return async await if else for of in new try catch finally throw type interface extends implements class typeof as satisfies null undefined true false while switch case break continue",
+    prisma: "generator datasource model enum provider url output",
+    html: ""
   };
+  const COMMENT_RE = { sql: /--.*$/, ts: /\/\/.*$/, prisma: /\/\/.*$/, html: /<!--.*$/ };
   function highlight(src, lang) {
     const kw = new Set((KW[lang] || "").split(" ").map(w => lang === "sql" ? w.toLowerCase() : w));
-    const commentRe = lang === "sql" ? /--.*$/ : /#.*$/;
+    const commentRe = COMMENT_RE[lang] || /#.*$/;
     const out = [];
     for (const line of src.split("\n")) {
       let html = "", i = 0;
@@ -971,7 +975,7 @@ body{width:720px;font:13.5px/1.6 "Be Vietnam Pro",Arial,sans-serif;color:#1a212b
 h1,h2,h3,h4,h5{font-family:"Bricolage Grotesque","Be Vietnam Pro",Arial,sans-serif;margin:0;letter-spacing:-.01em}
 .unit{display:none;padding:2px 0 6px}
 .unit.on{display:block}
-[data-track=found]{--tc:#2B63D9}[data-track=data]{--tc:#C27400}[data-track=ml]{--tc:#12875B}[data-track=dl]{--tc:#B8327F}[data-track=ops]{--tc:#6B55C9}
+[data-track=found]{--tc:#2B63D9}[data-track=data]{--tc:#C27400}[data-track=ml]{--tc:#12875B}[data-track=dl]{--tc:#B8327F}[data-track=ops]{--tc:#6B55C9}[data-track=web]{--tc:#0E8A8A}
 .cover{height:1000px;display:flex;flex-direction:column;padding:40px 8px 0}
 .cover .eb{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:#667281;font-weight:600}
 .cover h1{font-size:50px;line-height:1.04;font-weight:800;margin-top:14px;max-width:560px}

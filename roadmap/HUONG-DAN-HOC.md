@@ -4,8 +4,8 @@ Tài liệu này đi kèm website [roadmap/index.html](index.html). Website có 
 code mẫu, ô chọn trạng thái và xuất PDF. File này dùng để theo dõi tiến độ ngay trên GitHub: sửa cột **Trạng thái**
 trong bảng cuối file rồi commit.
 
-Tổng cộng **14 giai đoạn, 59 chủ đề, khoảng 585 giờ học**.
-Với 10 giờ/tuần là khoảng 59 tuần; 20 giờ/tuần là khoảng 30 tuần.
+Tổng cộng **19 giai đoạn, 82 chủ đề, khoảng 829 giờ học**.
+Với 10 giờ/tuần là khoảng 83 tuần; 20 giờ/tuần là khoảng 42 tuần.
 
 ## 1. Mục tiêu: hiểu đủ để làm chủ AI
 
@@ -120,6 +120,22 @@ sequenceDiagram
    <details><summary>Đáp án</summary>Cần sửa. 10^6 tổ hợp × 5 fold là quá lớn. Dùng RandomizedSearch hoặc Optuna với số lần thử giới hạn, và làm tốt đặc trưng trước khi tuning.</details>
 24. AI đề xuất: Dùng t-SNE giảm xuống 2 chiều rồi đưa vào mô hình phân loại.
    <details><summary>Đáp án</summary>Bác bỏ. t-SNE dùng để trực quan hoá, không có phép transform ổn định cho dữ liệu mới và làm méo khoảng cách. Dùng PCA hoặc giữ nguyên đặc trưng cho mô hình.</details>
+25. AI đề xuất: Tải danh sách chuyến bay trong useEffect rồi setState, mảng dependency để trống. `useEffect(() => { fetch('/api/flights').then(r => r.json()).then(setFlights); }, []);`
+   <details><summary>Đáp án</summary>Cần sửa. Chạy được nhưng không có xử lý lỗi, không huỷ request, và trong React Router framework mode việc tải dữ liệu trang nên nằm trong loader (chạy trên server, có kiểu, tự làm mới sau action).</details>
+26. AI đề xuất: Lưu JWT trong localStorage để giữ đăng nhập cho tiện.
+   <details><summary>Đáp án</summary>Bác bỏ. Script độc hại (XSS) đọc được localStorage. Dùng cookie session HttpOnly, Secure, SameSite=Lax.</details>
+27. AI đề xuất: Kiểm tra đăng nhập ở loader của layout cha là đủ bảo vệ mọi route con.
+   <details><summary>Đáp án</summary>Cần sửa. Loader của các route lồng nhau chạy song song, redirect ở loader cha không chặn loader con. Từ React Router v8 dùng middleware; và mọi truy vấn vẫn phải lọc theo chủ sở hữu.</details>
+28. AI đề xuất: Tìm kiếm theo tên bằng raw SQL cho nhanh. `db.$queryRawUnsafe(`SELECT * FROM "User" WHERE name = '${q}'`)`
+   <details><summary>Đáp án</summary>Bác bỏ. Ghép chuỗi input vào SQL gây SQL injection (OWASP A05:2025). Dùng $queryRaw dạng template (tự tham số hoá) hoặc truy vấn Prisma thường.</details>
+29. AI đề xuất: Trên production, chạy prisma migrate dev để áp thay đổi schema mới.
+   <details><summary>Đáp án</summary>Bác bỏ. migrate dev dành cho máy dev: có thể tạo migration mới và yêu cầu reset database. Production dùng prisma migrate deploy với các migration đã commit và đã review.</details>
+30. AI đề xuất: Hiển thị câu trả lời của LLM bằng dangerouslySetInnerHTML để giữ định dạng in đậm.
+   <details><summary>Đáp án</summary>Bác bỏ. Output LLM có thể chứa HTML/script do prompt injection, gây XSS. Hiển thị dạng text hoặc dùng trình render markdown có sanitize.</details>
+31. AI đề xuất: Đặt API key vào VITE_OPENAI_KEY để gọi LLM từ component.
+   <details><summary>Đáp án</summary>Bác bỏ. Biến có tiền tố VITE_ được đưa vào bundle gửi xuống trình duyệt; ai cũng lấy được key. Gọi LLM ở server (action/loader) và giới hạn chi phí.</details>
+32. AI đề xuất: Dùng import { json } from '@remix-run/node' và useLoaderData từ react-router-dom.
+   <details><summary>Đáp án</summary>Cần sửa. Đây là API của Remix v2 và React Router v6, đều đã hết hỗ trợ. Với React Router v8 dùng gói react-router, trả object thường từ loader và dùng loaderData có kiểu.</details>
 
 ## 2. Sáu bước học từ con số 0
 
@@ -130,6 +146,8 @@ sequenceDiagram
    giờ mỗi tuần và ngày bắt đầu để biểu đồ Gantt tự tính lịch.
 3. **Học theo thứ tự giai đoạn.** Giai đoạn 0 → 6 là phần lõi bắt buộc. Sau đó chọn nhánh: dữ liệu bảng và dự báo
    (7, 8), AI và LLM (9, 10), hoặc triển khai (11, 12). Giai đoạn 13 áp dụng tất cả vào dự án của repo.
+   Muốn tự làm sản phẩm web quanh mô hình thì học mảng Full-stack (14 → 18: Web, React, Remix / React Router, Prisma,
+   production); có thể bắt đầu ngay sau giai đoạn 2 và học song song.
 4. **Mỗi chủ đề đi qua sáu việc:** đọc khái niệm → xem sơ đồ và tự vẽ lại → chạy code mẫu (Jupyter/Colab) →
    dùng prompt mẫu nhờ AI làm lại với dữ liệu khác rồi tự kiểm chứng → làm tình huống luyện phản biện →
    tự giải thích dùng khi nào, không dùng khi nào, vì sao, và AI hay sai ở đâu.
@@ -178,6 +196,13 @@ flowchart TD
   S3 --> S12["12 · Big Data"]
   S11 --> S13["13 · Case study repo"]:::hl
   S12 --> S13
+  S2 --> S14["14 · Nền tảng Web"]
+  S14 --> S15["15 · React"]
+  S15 --> S16["16 · React Router (Remix)"]
+  S3 --> S17["17 · Prisma và DB"]
+  S16 --> S18["18 · Full-stack và AI"]:::hl
+  S17 --> S18
+  S11 --> S18
   classDef hl fill:#DCE7FB,stroke:#1F5FD1,stroke-width:2px
 ```
 
@@ -207,6 +232,12 @@ gantt
   GĐ 11 MLOps và Triển khai :g11, 2027-09-17, 30d
   GĐ 12 Big Data và Data Engineering cho DS :g12, 2027-10-17, 14d
   GĐ 13 Case study Flight Fare Prediction (repo này) :g13, 2027-10-31, 19d
+  section Full-stack Web
+  GĐ 14 Nền tảng Web :g14, 2027-11-19, 41d
+  GĐ 15 React :g15, 2027-12-30, 35d
+  GĐ 16 Remix / React Router framework :g16, 2028-02-03, 31d
+  GĐ 17 Prisma và cơ sở dữ liệu cho ứng dụng :g17, 2028-03-05, 23d
+  GĐ 18 Full-stack production và tích hợp AI :g18, 2028-03-28, 42d
 ```
 
 ## 5. Dự án ở các mốc
@@ -380,3 +411,61 @@ Khi dữ liệu không còn vừa một máy. Thời lượng 3 tuần, khoảng
 | 13.1 | Dự án hiện tại làm gì | Cơ bản | 3 | ⬜ Chưa học |  |  |
 | 13.2 | Các vấn đề phát hiện được và cách sửa | Trung cấp | 4 | ⬜ Chưa học |  |  |
 | 13.3 | Lộ trình nâng cấp thành dự án portfolio | Nâng cao | 20 | ⬜ Chưa học |  |  |
+
+### Giai đoạn 14. Nền tảng Web
+
+Hiểu trình duyệt, HTTP và ngôn ngữ của web trước khi dùng framework. Thời lượng 4–5 tuần, khoảng 58 giờ. Mục tiêu: Đọc hiểu một request/response, dựng giao diện có ngữ nghĩa và dễ tiếp cận, viết JavaScript bất đồng bộ và TypeScript an toàn kiểu.
+
+| # | Chủ đề | Trình độ | Giờ | Trạng thái | Ngày | Ghi chú |
+|---|---|---|---|---|---|---|
+| 14.1 | HTTP, trình duyệt và cách web hoạt động | Cơ bản | 10 | ⬜ Chưa học |  |  |
+| 14.2 | HTML ngữ nghĩa, CSS layout và accessibility | Cơ bản | 14 | ⬜ Chưa học |  |  |
+| 14.3 | JavaScript hiện đại | Cơ bản | 20 | ⬜ Chưa học |  |  |
+| 14.4 | TypeScript và kiểm tra dữ liệu lúc chạy | Trung cấp | 14 | ⬜ Chưa học |  |  |
+
+### Giai đoạn 15. React
+
+Xây giao diện từ component và state. Thời lượng 5–6 tuần, khoảng 50 giờ. Mục tiêu: Viết component rõ ràng, quản lý state đúng chỗ, biết khi nào không cần useEffect, dùng tính năng React 19 và viết test cho giao diện.
+
+| # | Chủ đề | Trình độ | Giờ | Trạng thái | Ngày | Ghi chú |
+|---|---|---|---|---|---|---|
+| 15.1 | Component, props, state và JSX | Cơ bản | 14 | ⬜ Chưa học |  |  |
+| 15.2 | Hooks và useEffect: dùng khi nào, tránh khi nào | Trung cấp | 10 | ⬜ Chưa học |  |  |
+| 15.3 | Quản lý state và dữ liệu từ server | Trung cấp | 10 | ⬜ Chưa học |  |  |
+| 15.4 | React 19: Actions, Server Components, React Compiler | Nâng cao | 8 | ⬜ Chưa học |  |  |
+| 15.5 | Test giao diện: Vitest và Testing Library | Trung cấp | 8 | ⬜ Chưa học |  |  |
+
+### Giai đoạn 16. Remix / React Router framework
+
+Full-stack với loader, action và form theo chuẩn web. Thời lượng 5–6 tuần, khoảng 44 giờ. Mục tiêu: Xây ứng dụng full-stack bằng React Router framework mode (hậu thân của Remix): route lồng nhau, loader/action, form, xử lý lỗi, xác thực, chọn cách render và deploy.
+
+| # | Chủ đề | Trình độ | Giờ | Trạng thái | Ngày | Ghi chú |
+|---|---|---|---|---|---|---|
+| 16.1 | Từ Remix đến React Router v8: route lồng nhau | Trung cấp | 8 | ⬜ Chưa học |  |  |
+| 16.2 | Loader, action và form: luồng dữ liệu full-stack | Trung cấp | 12 | ⬜ Chưa học |  |  |
+| 16.3 | Pending UI, optimistic UI, streaming và error boundary | Nâng cao | 8 | ⬜ Chưa học |  |  |
+| 16.4 | Session, xác thực, phân quyền và middleware | Nâng cao | 10 | ⬜ Chưa học |  |  |
+| 16.5 | Cách render, deploy và chọn framework | Trung cấp | 6 | ⬜ Chưa học |  |  |
+
+### Giai đoạn 17. Prisma và cơ sở dữ liệu cho ứng dụng
+
+Mô hình dữ liệu, migration và truy vấn an toàn kiểu. Thời lượng 3–4 tuần, khoảng 32 giờ. Mục tiêu: Thiết kế schema quan hệ cho ứng dụng, quản lý migration, truy vấn bằng Prisma Client an toàn kiểu, và tránh các lỗi hiệu năng, bảo mật phổ biến.
+
+| # | Chủ đề | Trình độ | Giờ | Trạng thái | Ngày | Ghi chú |
+|---|---|---|---|---|---|---|
+| 17.1 | Thiết kế cơ sở dữ liệu cho ứng dụng | Trung cấp | 8 | ⬜ Chưa học |  |  |
+| 17.2 | Prisma schema và migration | Trung cấp | 8 | ⬜ Chưa học |  |  |
+| 17.3 | Truy vấn bằng Prisma Client | Trung cấp | 8 | ⬜ Chưa học |  |  |
+| 17.4 | Hiệu năng và an toàn: N+1, index, kết nối, raw SQL | Nâng cao | 8 | ⬜ Chưa học |  |  |
+
+### Giai đoạn 18. Full-stack production và tích hợp AI
+
+Bảo mật, test, deploy và đưa mô hình ML/LLM vào sản phẩm web. Thời lượng 4–5 tuần, khoảng 60 giờ. Mục tiêu: Đưa ứng dụng full-stack lên production an toàn, có test và giám sát, và tích hợp mô hình ML (FastAPI) cùng tính năng LLM vào giao diện.
+
+| # | Chủ đề | Trình độ | Giờ | Trạng thái | Ngày | Ghi chú |
+|---|---|---|---|---|---|---|
+| 18.1 | Bảo mật web theo OWASP Top 10:2025 | Nâng cao | 10 | ⬜ Chưa học |  |  |
+| 18.2 | Chiến lược test và E2E với Playwright | Trung cấp | 8 | ⬜ Chưa học |  |  |
+| 18.3 | Deploy, migration và giám sát production | Trung cấp | 8 | ⬜ Chưa học |  |  |
+| 18.4 | Tích hợp mô hình ML và LLM vào web app | Nâng cao | 10 | ⬜ Chưa học |  |  |
+| 18.5 | Dự án: Flight Fare full-stack với React Router, Prisma và FastAPI | Nâng cao | 24 | ⬜ Chưa học |  |  |

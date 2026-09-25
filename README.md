@@ -27,7 +27,7 @@ Repo gồm hai phần:
 
 ## Lộ trình Data Science & Machine Learning
 
-Toàn bộ lộ trình gồm **14 giai đoạn, 59 chủ đề, khoảng 585 giờ học**. Học 10 giờ/tuần thì mất khoảng 59 tuần; 20 giờ/tuần thì khoảng 30 tuần.
+Phần Data Science & ML gồm **14 giai đoạn (0–13), 59 chủ đề, khoảng 585 giờ học**. Mảng Full-stack Web (giai đoạn 14–18, xem [bên dưới](#mảng-full-stack-web-react--remix--prisma)) thêm 23 chủ đề, khoảng 244 giờ. Tổng cộng **19 giai đoạn, 82 chủ đề, khoảng 829 giờ**. Chỉ học phần DS & ML với 10 giờ/tuần thì mất khoảng 59 tuần; 20 giờ/tuần thì khoảng 30 tuần.
 
 ```mermaid
 flowchart TD
@@ -67,12 +67,31 @@ flowchart TD
 | 12 | Big Data & Data Engineering cho DS | 3 tuần | 2 | ~20 | 2 | 3 |
 | 13 | Case study: Flight Fare Prediction (repo này) | 1–2 tuần | 3 | ~27 | 3 | 1 |
 
+### Mảng Full-stack Web: React · Remix · Prisma
+
+Năm giai đoạn cho người muốn tự làm sản phẩm web quanh mô hình, hoặc theo nhánh nghề **Full-stack Web**. Có thể bắt đầu ngay sau giai đoạn 2 (Python, Git) và học song song với phần ML. Nội dung cập nhật theo phiên bản 9/2026:
+
+- **Remix đã gộp vào React Router.** Từ 11/2024, Remix v2 trở thành "framework mode" của React Router v7. React Router v8 (6/2026) là bản hiện hành: chỉ hỗ trợ ESM, bật middleware mặc định, bỏ gói `react-router-dom`; Remix v2 và React Router v6 đã hết hỗ trợ. Remix 3 là dự án khác, không dùng React, đang beta. Vì vậy lộ trình dạy loader, action, form, route lồng nhau theo React Router v8.
+- **React 19**: Actions, `useActionState`, `useOptimistic`, Server Components; React Compiler 1.0 (10/2025).
+- **Prisma ORM 7** (11/2025): bỏ engine Rust, dùng runtime TypeScript, cấu hình trong `prisma.config.ts`.
+- **Bảo mật theo OWASP Top 10:2025.**
+
+| GĐ | Giai đoạn | Thời lượng | Chủ đề | Giờ | Sơ đồ | Case doanh nghiệp |
+|---|---|---|---|---|---|---|
+| 14 | Nền tảng Web: HTTP, HTML/CSS, JavaScript, TypeScript | 4–5 tuần | 4 | ~58 | 1 | 2 |
+| 15 | React: component, hook, state, React 19, test | 5–6 tuần | 5 | ~50 | 2 | 1 |
+| 16 | Remix / React Router framework: route, loader/action, pending UI, auth, render | 5–6 tuần | 5 | ~44 | 3 | 2 |
+| 17 | Prisma và cơ sở dữ liệu cho ứng dụng | 3–4 tuần | 4 | ~32 | 2 | 2 |
+| 18 | Full-stack production và tích hợp AI: bảo mật, E2E, deploy, gắn mô hình ML và LLM | 4–5 tuần | 5 | ~60 | 3 | 4 |
+
+Dự án cuối (giai đoạn 18) biến Flight Fare Prediction thành ứng dụng full-stack: giao diện React Router, lưu lịch sử dự đoán bằng Prisma, mô hình chạy sau FastAPI, tất cả chạy bằng docker compose và có CI.
+
 ### Mỗi chủ đề có gì
 
 - **Khái niệm**: giải thích bằng tiếng Việt, kèm mức độ (cơ bản, trung cấp, nâng cao) và số giờ ước tính.
-- **Sơ đồ Mermaid**: flowchart hoặc sequence diagram cho các bước và các bên tương tác. Tổng cộng 42 sơ đồ.
+- **Sơ đồ Mermaid**: flowchart hoặc sequence diagram cho các bước và các bên tương tác. Tổng cộng 53 sơ đồ.
 - **Lý do sử dụng, khi nào dùng, khi nào không nên dùng.**
-- **Ví dụ ứng dụng** và **case doanh nghiệp đã công bố**: 109 case của Netflix, Amazon, Airbnb, Uber, Stripe, Booking.com, Morgan Stanley, Grab, MoMo, VinAI… Trong đó có 14 thất bại kèm bài học (Zillow Offers, Google Flu Trends, công cụ tuyển dụng của Amazon, chatbot Air Canada…). Mỗi case có link nguồn.
+- **Ví dụ ứng dụng** và **case doanh nghiệp đã công bố**: 120 case của Netflix, Amazon, Airbnb, Uber, Stripe, Booking.com, Morgan Stanley, Grab, MoMo, VinAI… Trong đó có 19 thất bại kèm bài học (Zillow Offers, Google Flu Trends, công cụ tuyển dụng của Amazon, chatbot Air Canada, GitLab xoá nhầm database, Knight Capital deploy lỗi…). Mỗi case có link nguồn.
 - **Code mẫu** (Python, SQL, Docker, YAML), **lỗi thường gặp**, **công cụ** và **tài liệu học**.
 - **Làm việc với AI**:
   - prompt mẫu cụ thể, có bối cảnh và tiêu chí kiểm tra;
@@ -91,7 +110,7 @@ flowchart TD
   - trang nhớ tab và giai đoạn bạn mở lần trước, và link dạng `#m-rag` mở thẳng đúng chủ đề.
 
 - **Chọn nhánh nghề**:
-  - bản đồ 10 nhánh chia thành 4 họ (phân tích, hạ tầng, sản phẩm AI, nghiên cứu);
+  - bản đồ 11 nhánh chia thành 5 họ (phân tích, hạ tầng, sản phẩm AI, nghiên cứu, phát triển web);
   - chọn theo sở thích, bảng so sánh nhanh;
   - trang chi tiết từng nhánh: câu hỏi cốt lõi, mức toán và kỹ thuật phần mềm cần có, cây kỹ năng, dự án mốc, thứ tự học, công cụ ổn định và công cụ thay đổi nhanh, case có số liệu, bảng phản biện khi AI viết code cho nhánh đó, thị trường Việt Nam;
   - năm khối nền chung cho mọi nhánh, thị trường 2025–2026 (toàn cầu và Việt Nam), vòng phỏng vấn, sơ đồ chuyển nhánh;
@@ -104,11 +123,11 @@ flowchart TD
   - 10 câu hỏi kiểm tra mọi đề xuất của AI;
   - những quyết định không giao cho AI;
   - ví dụ prompt mơ hồ và prompt cụ thể;
-  - **24 tình huống luyện phản biện**: bạn chọn Chấp nhận, Cần sửa hoặc Bác bỏ rồi xem đáp án, có tính điểm.
+  - **32 tình huống luyện phản biện**: bạn chọn Chấp nhận, Cần sửa hoặc Bác bỏ rồi xem đáp án, có tính điểm.
 - **Hướng dẫn học từ đầu**: sáu bước học, dự án cần làm ở mỗi mốc, và biểu đồ Gantt tự tính lịch theo số giờ học mỗi tuần.
 - **Trạng thái học** cho từng chủ đề: Chưa học, Đang học, Đã xong, Cần ôn lại. Trạng thái hiện trên thẻ chủ đề, mục lục, thanh tiến độ và biểu đồ Gantt. Nút đầu trang gợi ý chủ đề nên học tiếp.
 - **Chọn thuật toán nhanh**: cây quyết định và bảng tra "nhu cầu → thuật toán".
-- **Ứng dụng thực tế theo ngành**: bảng tra 109 case, lọc theo 9 nhóm ngành hoặc chỉ xem thất bại.
+- **Ứng dụng thực tế theo ngành**: bảng tra 120 case, lọc theo 9 nhóm ngành hoặc chỉ xem thất bại.
 - **Tìm kiếm và lọc** theo từ khoá, tên doanh nghiệp, trình độ và trạng thái.
 - **Xuất PDF khổ A4**. Có thể xuất toàn bộ lộ trình, từng giai đoạn, từng chủ đề hoặc chỉ các chủ đề chưa xong. File PDF gồm:
   - bìa và mục lục bấm được;
@@ -131,10 +150,11 @@ roadmap/
     ├── data-2-ml.js            # GĐ 4–7: feature engineering, ML, đánh giá, không giám sát
     ├── data-3-dl.js            # GĐ 8–10: chuỗi thời gian, deep learning, NLP & GenAI
     ├── data-4-mlops.js         # GĐ 11–13: MLOps, big data, case study
-    ├── data-5-diagrams.js      # 42 sơ đồ Mermaid
-    ├── data-6-applications.js  # 109 case doanh nghiệp có nguồn
-    ├── data-7-ai.js            # làm việc với AI cho 59 chủ đề, 24 tình huống phản biện, số liệu nghiên cứu
-    ├── data-8-branches.js      # 10 nhánh nghề, khối nền chung, thị trường, phỏng vấn, chuyển nhánh
+    ├── data-5-diagrams.js      # sơ đồ tổng quan, cây chọn thuật toán, sơ đồ theo chủ đề
+    ├── data-6-applications.js  # case doanh nghiệp có nguồn
+    ├── data-7-ai.js            # làm việc với AI cho từng chủ đề, tình huống phản biện, số liệu nghiên cứu
+    ├── data-8-branches.js      # 10 nhánh nghề AI và dữ liệu, khối nền chung, thị trường, phỏng vấn, chuyển nhánh
+    ├── data-9-fullstack.js     # GĐ 14–18: Web, React, React Router (Remix), Prisma, production; nhánh Full-stack
     ├── template.html, styles.css, app.js
 ```
 

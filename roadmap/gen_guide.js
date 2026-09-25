@@ -8,7 +8,7 @@ global.window = {};
 fs.readdirSync(path.join(dir, "src")).filter(f => /^data-.*\.js$/.test(f)).sort()
   .forEach(f => eval(fs.readFileSync(path.join(dir, "src", f), "utf8")));
 const R = window.ROADMAP, LV = { 1: "Cơ bản", 2: "Trung cấp", 3: "Nâng cao" };
-const TR = { found: "Nền tảng", data: "Dữ liệu", ml: "Machine Learning", dl: "Deep Learning và GenAI", ops: "MLOps và Sản phẩm" };
+const TR = { found: "Nền tảng", data: "Dữ liệu", ml: "Machine Learning", dl: "Deep Learning và GenAI", ops: "MLOps và Sản phẩm", web: "Full-stack Web" };
 const hours = ms => ms.reduce((a, m) => a + m.hours, 0);
 const all = R.flatMap(s => s.modules), total = hours(all);
 const clean = t => t.replace(/[:;#,]/g, " ").replace(/&/g, "và").replace(/\s+/g, " ").trim();
@@ -105,6 +105,8 @@ ${window.ROADMAP_QUIZ.map((q, i) => `${i + 1}. AI đề xuất: ${q.ai}${q.code 
    giờ mỗi tuần và ngày bắt đầu để biểu đồ Gantt tự tính lịch.
 3. **Học theo thứ tự giai đoạn.** Giai đoạn 0 → 6 là phần lõi bắt buộc. Sau đó chọn nhánh: dữ liệu bảng và dự báo
    (7, 8), AI và LLM (9, 10), hoặc triển khai (11, 12). Giai đoạn 13 áp dụng tất cả vào dự án của repo.
+   Muốn tự làm sản phẩm web quanh mô hình thì học mảng Full-stack (14 → 18: Web, React, Remix / React Router, Prisma,
+   production); có thể bắt đầu ngay sau giai đoạn 2 và học song song.
 4. **Mỗi chủ đề đi qua sáu việc:** đọc khái niệm → xem sơ đồ và tự vẽ lại → chạy code mẫu (Jupyter/Colab) →
    dùng prompt mẫu nhờ AI làm lại với dữ liệu khác rồi tự kiểm chứng → làm tình huống luyện phản biện →
    tự giải thích dùng khi nào, không dùng khi nào, vì sao, và AI hay sai ở đâu.
