@@ -31,6 +31,33 @@
     ["Giáo dục, nhân sự & khu vực công", ["Giáo dục", "Tuyển dụng", "Chính trị"]]
   ];
   const sectorOf = ind => (SECTORS.find(([, list]) => list.includes(ind)) || ["Khác"])[0];
+  const AI = window.ROADMAP_AI || {};
+  ALL_MODS.forEach(m => { m.ai = AI[m.id] || null; });
+  const QUIZ = (window.ROADMAP_QUIZ || []).filter(q => MOD_BY_ID[q.mod]);
+  const EVIDENCE = window.ROADMAP_AI_EVIDENCE || [];
+  const ANS_LABEL = { accept: "Chấp nhận", fix: "Cần sửa", reject: "Bác bỏ" };
+  const QUIZ_KEY = "dsml-roadmap-quiz-v1";
+  const quizAns = (() => { try { return JSON.parse(localStorage.getItem(QUIZ_KEY) || "{}") || {}; } catch (e) { return {}; } })();
+  const AI_FLOW = {
+    title: "Quy trình làm việc với AI: bạn đóng khung và quyết định, AI đề xuất và viết nháp",
+    src: `sequenceDiagram
+  participant B as Bạn
+  participant AI as Trợ lý AI
+  participant C as Code và dữ liệu
+  B->>B: Đóng khung mục tiêu, dữ liệu có lúc dự đoán, metric, ràng buộc
+  B->>AI: Hỏi 2–3 phương án kèm đánh đổi, chưa cần code
+  AI-->>B: Phương án và giả định
+  B->>AI: Phản biện - giả định nào sai thì phương án hỏng?
+  B->>B: Chọn phương án (quyết định của bạn)
+  B->>AI: Yêu cầu code cho một bước nhỏ, nêu rõ thư viện và phiên bản
+  AI-->>B: Code nháp
+  B->>C: Đọc từng dòng, chạy trên dữ liệu nhỏ, so với baseline
+  alt Kết quả hợp lý và bạn giải thích được
+    B->>C: Commit kèm test
+  else Có dấu hiệu sai
+    B->>AI: Gửi lỗi và output, hỏi nguyên nhân, không nhận bản sửa mù
+  end`
+  };
   const OVERVIEW = window.ROADMAP_OVERVIEW;
   const GUIDE_TREE = window.ROADMAP_GUIDE_TREE;
 
@@ -123,6 +150,7 @@
     if (key === "overview") return OVERVIEW;
     if (key === "guide") return GUIDE_TREE;
     if (key === "plan") return PLAN;
+    if (key === "aiflow") return AI_FLOW;
     const [id, i] = key.split(":");
     return MOD_BY_ID[id] && MOD_BY_ID[id].diagrams[+i];
   }
@@ -156,7 +184,7 @@
   const STATUSES = [
     { id: "todo", label: "Chưa học", hint: "Chưa mở chủ đề này." },
     { id: "doing", label: "Đang học", hint: "Đang đọc, xem sơ đồ, chạy code hoặc làm bài tập." },
-    { id: "done", label: "Đã xong", hint: "Giải thích được khái niệm, đã chạy code và tự làm lại với dữ liệu khác." },
+    { id: "done", label: "Đã xong", hint: "Giải thích được khái niệm, tự chạy và sửa được code, chỉ ra được lỗi AI hay mắc ở chủ đề này." },
     { id: "review", label: "Cần ôn lại", hint: "Đã học nhưng làm lại sau 1–2 tuần thì chưa chắc." }
   ];
   const ST_LABEL = Object.fromEntries(STATUSES.map(x => [x.id, x.label]));
@@ -374,6 +402,46 @@
     copy: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>'
   };
 
+  function aiHTML(m) {
+    const a = m.ai;
+    if (!a) return "";
+    const li = arr => arr && arr.length ? `<ul>${arr.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "<p>—</p>";
+    const qs = QUIZ.map((q, i) => [q, i]).filter(([q]) => q.mod === m.id);
+    return `<h4>Làm việc với AI trong chủ đề này</h4>
+<div class="ai-box">
+  <div class="ai-prompt"><div class="ai-prompt-bar"><span>Prompt mẫu: cụ thể, có bối cảnh, có tiêu chí kiểm tra</span><button class="btn ghost small" type="button" data-copy-prompt="${m.id}">${ICON.copy} Sao chép</button></div><p>${esc(a.p)}</p></div>
+  <div class="ai-cols">
+    <div class="ai-col flags"><h5>Dấu hiệu AI đang sai</h5>${li(a.flags)}</div>
+    <div class="ai-col ask"><h5>Hỏi lại AI để phản biện</h5>${li(a.ask)}</div>
+    <div class="ai-col check"><h5>Tự kiểm chứng</h5>${li(a.check)}</div>
+    <div class="ai-col decide"><h5>Bạn tự quyết, không giao cho AI</h5>${li(a.decide)}</div>
+  </div>
+  ${qs.map(([q, i]) => quizHTML(q, i, false)).join("")}
+</div>`;
+  }
+  function quizHTML(q, i, showMod) {
+    const mine = quizAns[i];
+    return `<div class="quiz" data-quiz="${i}">
+  <div class="quiz-h">Luyện phản biện${showMod ? ` · <a href="#m-${q.mod}" data-open="${q.mod}">${esc(MOD_BY_ID[q.mod].title)}</a>` : ""}</div>
+  <p><b>AI đề xuất:</b> ${esc(q.ai)}</p>
+  ${q.code ? `<pre class="quiz-code">${esc(q.code)}</pre>` : ""}
+  <div class="quiz-btns" role="group" aria-label="Bạn đánh giá đề xuất này thế nào?">
+    ${["accept", "fix", "reject"].map(k => `<button class="chip" type="button" data-quiz-ans="${k}" aria-pressed="${mine === k}">${ANS_LABEL[k]}</button>`).join("")}
+  </div>
+  <div class="quiz-res"${mine ? "" : " hidden"}>${mine ? quizResult(q, mine) : ""}</div>
+</div>`;
+  }
+  function quizResult(q, mine) {
+    const ok = mine === q.ans;
+    return `<p class="${ok ? "q-ok" : "q-no"}">${ok ? "Đúng" : "Chưa đúng"}: đáp án là <b>${ANS_LABEL[q.ans]}</b>.</p><p>${esc(q.why)}</p>`;
+  }
+  function refreshQuizScore() {
+    const done = QUIZ.map((q, i) => [q, quizAns[i]]).filter(([, a]) => a);
+    const ok = done.filter(([q, a]) => q.ans === a).length;
+    const el = document.getElementById("quiz-score");
+    if (el) el.textContent = done.length ? `Bạn đã làm ${done.length}/${QUIZ.length} tình huống, đúng ${ok}.` : `${QUIZ.length} tình huống. Chọn đánh giá của bạn trước khi xem đáp án.`;
+  }
+
   function appHTML(a) {
     return `<article class="app${a.kind === "fail" ? " app-fail" : ""}">
   <div class="app-top"><span class="app-org">${esc(a.org)}</span><span class="app-ind">${esc(a.ind)}</span>${a.kind === "fail" ? `<span class="app-flag">Thất bại · bài học</span>` : ""}</div>
@@ -433,6 +501,7 @@
     ${m.apps.length ? `<h4>Doanh nghiệp đã áp dụng</h4><div class="apps">${m.apps.map(appHTML).join("")}</div>` : ""}
     ${code}
     ${m.pitfalls && m.pitfalls.length ? `<h4>Lỗi thường gặp</h4><ul class="list">${m.pitfalls.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+    ${aiHTML(m)}
     ${m.tools && m.tools.length ? `<h4>Công cụ</h4><div class="tools">${m.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
     ${m.resources && m.resources.length ? `<h4>Tài liệu học</h4><ul class="res">${m.resources.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("")}</ul>` : ""}
   </div>
@@ -458,6 +527,10 @@
     $("#guide-body").innerHTML = GUIDE.map(([need, algo, id]) =>
       `<tr><td>${esc(need)}</td><td>${MOD_BY_ID[id] ? `<a href="#m-${id}" data-open="${id}">${esc(algo)}</a>` : esc(algo)}</td><td>${MOD_BY_ID[id] ? esc(MOD_BY_ID[id].stage.title) : ""}</td></tr>`).join("");
     renderAppsIndex("all");
+    $("#ai-evidence").innerHTML = EVIDENCE.map(e => `<div class="ev"><b>${esc(e.n)}</b><p>${esc(e.t)}</p><a href="${esc(e.src[1])}" target="_blank" rel="noopener">${esc(e.src[0])}</a></div>`).join("");
+    $("#ai-flow").innerHTML = figureHTML("aiflow", AI_FLOW);
+    $("#ai-quiz").innerHTML = QUIZ.map((q, i) => quizHTML(q, i, true)).join("");
+    refreshQuizScore();
     $("#sources").innerHTML = SOURCES.map(([l, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join("");
 
     $("#sidenav-list").innerHTML = STAGES.map(s => `
@@ -561,6 +634,25 @@
           toast("Đã chọn đoạn code, nhấn Ctrl+C để sao chép");
         };
         try { navigator.clipboard.writeText(src).then(() => toast("Đã sao chép code"), fallback); } catch (err) { fallback(); }
+        return;
+      }
+      const qa = t.closest("[data-quiz-ans]");
+      if (qa) {
+        const i = +qa.closest("[data-quiz]").dataset.quiz;
+        quizAns[i] = qa.dataset.quizAns;
+        try { localStorage.setItem(QUIZ_KEY, JSON.stringify(quizAns)); } catch (err) { /* bỏ qua */ }
+        document.querySelectorAll(`[data-quiz="${i}"]`).forEach(box => {
+          box.querySelectorAll("[data-quiz-ans]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.quizAns === quizAns[i])));
+          const res = box.querySelector(".quiz-res");
+          res.innerHTML = quizResult(QUIZ[i], quizAns[i]); res.hidden = false;
+        });
+        refreshQuizScore();
+        return;
+      }
+      const cpp = t.closest("[data-copy-prompt]");
+      if (cpp) {
+        const txt = MOD_BY_ID[cpp.dataset.copyPrompt].ai.p;
+        try { navigator.clipboard.writeText(txt).then(() => toast("Đã sao chép prompt"), () => toast("Không sao chép được, hãy bôi đen đoạn prompt")); } catch (err) { toast("Không sao chép được, hãy bôi đen đoạn prompt"); }
         return;
       }
       const sec = t.closest("[data-sector]");
@@ -730,6 +822,12 @@ th{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#667281}
 .pa-flag{color:#B45309;font-weight:700}
 .pa-t{font-family:"Bricolage Grotesque","Be Vietnam Pro",Arial,sans-serif;font-weight:700;font-size:14px;margin-top:2px}
 .pa-src{font-size:11px}.pa-src a{color:#1F5FD1;text-decoration:none}
+.pai-p{background:#eef3fd;border:1px solid #cfdcf6;border-radius:6px;padding:8px 10px;font-size:12.5px;margin-bottom:6px}
+.pai-g{margin-top:4px}.pai-h{font-weight:700;font-size:11.5px;color:#3b4552}
+.pquiz{border:1px dashed #aab3be;border-radius:6px;padding:8px 10px;margin-top:8px;font-size:12.5px}
+.pquiz pre{font:10.5px/1.5 "JetBrains Mono",Consolas,monospace;background:#f6f8fa;padding:6px;border-radius:4px;white-space:pre-wrap;margin:4px 0}
+.pev{font-size:12.5px;padding:6px 0;border-bottom:1px solid #e7ebf0}.pev b{font-family:"Bricolage Grotesque",Arial,sans-serif;font-size:16px;margin-right:6px}
+.pchk{padding-left:20px;font-size:12.5px}.pchk li{margin:3px 0}
 `;
 
   function pdfFigure(opt, key, d) {
@@ -752,6 +850,12 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
 <div class="pa-t">${esc(a.title)}</div><p>${esc(a.text)}</p>
 <p><b>${a.kind === "fail" ? "Hậu quả" : "Kết quả"}:</b> ${esc(a.result)}</p>${a.lesson ? `<p><b>Bài học:</b> ${esc(a.lesson)}</p>` : ""}
 <p class="pa-src">Nguồn: <a href="${esc(a.src[1])}">${esc(a.src[0])}</a></p></div>`).join("");
+    }
+    if (opt.ai && m.ai) {
+      const a = m.ai, li = (t, arr) => arr && arr.length ? `<div class="pai-g"><div class="pai-h bk">${t}</div><ul>${arr.map(x => `<li class="bk">${esc(x)}</li>`).join("")}</ul></div>` : "";
+      h += `<h4 class="bk">Làm việc với AI</h4><div class="pai-p bk"><b>Prompt mẫu:</b> ${esc(a.p)}</div>` +
+        li("Dấu hiệu AI đang sai", a.flags) + li("Hỏi lại AI để phản biện", a.ask) + li("Tự kiểm chứng", a.check) + li("Bạn tự quyết", a.decide) +
+        QUIZ.filter(q => q.mod === m.id).map(q => `<div class="pquiz bk"><b>Luyện phản biện, AI đề xuất:</b> ${esc(q.ai)}${q.code ? `<pre>${esc(q.code)}</pre>` : ""}<div><b>Đáp án: ${ANS_LABEL[q.ans]}.</b> ${esc(q.why)}</div></div>`).join("");
     }
     if (opt.code && m.code) {
       const lines = highlight(m.code.src, m.code.lang);
@@ -781,6 +885,14 @@ ${list("k-why", "Lý do sử dụng", m.why)}${list("k-when", "Khi nào dùng", 
 </div>` });
     }
     if (opt.toc && !single) units.push({ kind: "toc", newPage: true, html: null /* dựng sau khi có số trang */ });
+    if (opt.ai && !single) {
+      units.push({ kind: "ai", newPage: true, html: `<h2 class="sec-title bk">Học để làm chủ AI</h2>
+<p class="sec-sub bk">Mục tiêu của bộ tài liệu: hiểu đủ nền tảng để giao việc cho AI rõ ràng, tự kiểm chứng kết quả, ra quyết định và phản biện được đề xuất của AI.</p>
+${EVIDENCE.map(e => `<div class="pev bk"><b>${esc(e.n)}</b> ${esc(e.t)} <span class="pa-src">(${esc(e.src[0])})</span></div>`).join("")}
+${opt.diagrams ? pdfFigure(opt, "aiflow", AI_FLOW) : ""}
+<h4 class="bk" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#667281;margin:14px 0 6px">10 câu hỏi kiểm tra mọi đề xuất của AI</h4>
+<ol class="pchk">${[...document.querySelectorAll("#ai-checklist li")].map(li => `<li class="bk">${esc(li.textContent)}</li>`).join("")}</ol>` });
+    }
     if (opt.plan && !single) {
       const c = countStatus(mods);
       units.push({ kind: "plan", newPage: true, html: `<h2 class="sec-title bk">Kế hoạch học và theo dõi trạng thái</h2>
@@ -867,6 +979,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       if (opt.diagrams) {
         const keys = [];
         if (opt.plan && sel.scope !== "mod") keys.push("plan");
+        if (opt.ai && sel.scope !== "mod") keys.push("aiflow");
         if (opt.guide && sel.scope !== "mod") { if (OVERVIEW) keys.push("overview"); if (GUIDE_TREE) keys.push("guide"); }
         ALL_MODS.filter(m => sel.mods.has(m.id)).forEach(m => m.diagrams.forEach((d, i) => keys.push(m.id + ":" + i)));
         opt.svgs = {};
@@ -1082,7 +1195,7 @@ ${opt.diagrams && OVERVIEW ? pdfFigure(opt, "overview", OVERVIEW) : ""}${opt.dia
       cover: $("#o-cover").checked, toc: $("#o-toc").checked, guide: $("#o-guide").checked,
       code: $("#o-code").checked, res: $("#o-res").checked,
       quality: document.querySelector('input[name="quality"]:checked').value,
-      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked, apps: $("#o-apps").checked
+      diagrams: $("#o-dgm").checked, plan: $("#o-plan").checked, apps: $("#o-apps").checked, ai: $("#o-ai").checked
     };
     const status = $("#exp-status"), bar = $("#exp-bar"), go = $("#exp-go");
     busy = true; cancelFlag = false; go.disabled = true;

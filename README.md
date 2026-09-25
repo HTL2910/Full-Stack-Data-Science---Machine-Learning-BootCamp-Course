@@ -1,14 +1,24 @@
 # Full Stack Data Science & Machine Learning BootCamp Course
 
-Repo học tập theo khoá Udemy **Full Stack Data Science & Machine Learning BootCamp**. Repo gồm hai phần:
+Repo học tập theo khoá Udemy **Full Stack Data Science & Machine Learning BootCamp**.
 
-1. **[Lộ trình Data Science & Machine Learning](roadmap/)**: website tiếng Việt, học từ con số 0 đến triển khai mô hình. Có theo dõi trạng thái học và xuất PDF.
+**Mục tiêu của bộ tài liệu:** hiểu đủ nền tảng để dùng AI viết code đúng hướng, không mơ hồ. Cụ thể là giao việc cho AI rõ ràng, tự kiểm chứng code AI viết, tự ra quyết định, và phản biện khi AI đề xuất sai. Các nghiên cứu gần đây cho thấy AI chỉ giúp khi người dùng hiểu việc mình đang làm:
+
+- Lập trình viên giàu kinh nghiệm chậm hơn 19% khi dùng AI, dù tin mình nhanh hơn ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)).
+- 66% lập trình viên gặp code AI "gần đúng nhưng chưa hẳn" ([Stack Overflow Survey 2025](https://survey.stackoverflow.co/2025/ai)).
+- 19,7% package mà AI đề xuất không tồn tại ([USENIX Security 2025](https://www.helpnetsecurity.com/2025/04/14/package-hallucination-slopsquatting-malicious-code/)).
+- Người mới dùng AI để hỏi khái niệm hiểu bài tốt hơn hẳn người giao hết việc viết code cho AI ([Anthropic, 2026](https://www.anthropic.com/research/AI-assistance-coding-skills)).
+
+Repo gồm hai phần:
+
+1. **[Lộ trình Data Science & Machine Learning](roadmap/)**: website tiếng Việt, học từ con số 0 đến triển khai mô hình. Mỗi chủ đề có hướng dẫn làm việc với AI, có theo dõi trạng thái học và xuất PDF.
 2. **[Flight Fare Prediction](AI/Flight_Fare_Prediction/)**: dự án dự đoán giá vé máy bay, gồm notebook phân tích, huấn luyện mô hình và web app Flask.
 
 ## Bắt đầu nhanh
 
 | Bạn muốn | Mở |
 |---|---|
+| Học cách làm việc với AI và luyện phản biện | Mục **Học để làm chủ AI** trong website, hoặc mục 1 của [`HUONG-DAN-HOC.md`](roadmap/HUONG-DAN-HOC.md) |
 | Xem lộ trình học đầy đủ | [`roadmap/index.html`](roadmap/index.html): tải về rồi mở bằng trình duyệt, không cần server |
 | Biết nên học gì trước, mỗi tuần học bao nhiêu | [`roadmap/HUONG-DAN-HOC.md`](roadmap/HUONG-DAN-HOC.md) |
 | Theo dõi tiến độ ngay trên GitHub | Bảng trạng thái cuối file [`HUONG-DAN-HOC.md`](roadmap/HUONG-DAN-HOC.md) |
@@ -63,9 +73,23 @@ flowchart TD
 - **Lý do sử dụng, khi nào dùng, khi nào không nên dùng.**
 - **Ví dụ ứng dụng** và **case doanh nghiệp đã công bố**: 109 case của Netflix, Amazon, Airbnb, Uber, Stripe, Booking.com, Morgan Stanley, Grab, MoMo, VinAI… Trong đó có 14 thất bại kèm bài học (Zillow Offers, Google Flu Trends, công cụ tuyển dụng của Amazon, chatbot Air Canada…). Mỗi case có link nguồn.
 - **Code mẫu** (Python, SQL, Docker, YAML), **lỗi thường gặp**, **công cụ** và **tài liệu học**.
+- **Làm việc với AI**:
+  - prompt mẫu cụ thể, có bối cảnh và tiêu chí kiểm tra;
+  - dấu hiệu AI đang đề xuất sai;
+  - câu hỏi để phản biện AI;
+  - cách tự kiểm chứng;
+  - những quyết định bạn phải tự đưa ra.
 
 ### Tính năng của website
 
+- **Học để làm chủ AI**:
+  - 6 số liệu nghiên cứu về hiệu quả và rủi ro khi dùng AI viết code;
+  - 3 mức hiểu cần đạt ở mỗi chủ đề;
+  - sơ đồ quy trình làm việc với AI;
+  - 10 câu hỏi kiểm tra mọi đề xuất của AI;
+  - những quyết định không giao cho AI;
+  - ví dụ prompt mơ hồ và prompt cụ thể;
+  - **24 tình huống luyện phản biện**: bạn chọn Chấp nhận, Cần sửa hoặc Bác bỏ rồi xem đáp án, có tính điểm.
 - **Hướng dẫn học từ đầu**: sáu bước học, dự án cần làm ở mỗi mốc, và biểu đồ Gantt tự tính lịch theo số giờ học mỗi tuần.
 - **Trạng thái học** cho từng chủ đề: Chưa học, Đang học, Đã xong, Cần ôn lại. Trạng thái hiện trên thẻ chủ đề, mục lục, thanh tiến độ và biểu đồ Gantt. Nút đầu trang gợi ý chủ đề nên học tiếp.
 - **Chọn thuật toán nhanh**: cây quyết định và bảng tra "nhu cầu → thuật toán".
@@ -94,6 +118,7 @@ roadmap/
     ├── data-4-mlops.js         # GĐ 11–13: MLOps, big data, case study
     ├── data-5-diagrams.js      # 42 sơ đồ Mermaid
     ├── data-6-applications.js  # 109 case doanh nghiệp có nguồn
+    ├── data-7-ai.js            # làm việc với AI cho 59 chủ đề, 24 tình huống phản biện, số liệu nghiên cứu
     ├── template.html, styles.css, app.js
 ```
 
